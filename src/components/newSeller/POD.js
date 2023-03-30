@@ -181,6 +181,7 @@ const POD = ({route}) => {
         .then(function (response) {
           console.log('POST RD Data Submitted', response.data);
           alert('Your Data has submitted');
+          navigation.navigate('Main');
         })
         .catch(function (error) {
           console.log(error.response.data);

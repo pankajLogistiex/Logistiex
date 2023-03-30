@@ -1082,10 +1082,11 @@ const ShipmentBarcode = ({route}) => {
                   borderRadius: 5,
                   flex: 1,
                 }}>
-                <Text style={{fontSize: 18, fontWeight: '500'}}>
+                <Text style={{fontSize: 18, fontWeight: '500', maxWidth: '70%'}} numberOfLines={1} ellipsizeMode='tail'>
                   shipment ID:{' '}
                 </Text>
-                <Text style={{fontSize: 18, fontWeight: '500'}}>{barcode}</Text>
+                <Text style={{fontSize: 18, fontWeight: '500', maxWidth: '30%'}} numberOfLines={1} ellipsizeMode='tail'>
+                  {barcode}</Text>
                 {/* <View style={{ flex: 1,
                 alignItems: 'center',
                 justifyContent: 'center',}}>
