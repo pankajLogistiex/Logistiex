@@ -25,6 +25,7 @@ export default function MyTrip({ navigation, route }) {
   const [loading, setLoading] = useState(true);
   const [pendingPickup, setPendingPickup] = useState(0);
   const [pendingDelivery, setPendingDelivery] = useState(0);
+  const [pendingHandover, setPendingHanddover] = useState(0);
   const [isFocused, setIsFocused] = useState(false);
   // const [label, setLabel] = useState('Input vehicle KMs');
   const focus = useIsFocused();
@@ -95,6 +96,16 @@ useEffect(() => {
             setPendingDelivery(results.rows.length);
         });
     });
+    db.transaction(tx => {
+      tx.executeSql(
+        'SELECT * FROM SellerMainScreenDetails WHERE shipmentAction="Seller Delivery" AND handoverStatus="pendingHandover"',
+        [],
+        (tx1, results) => {
+          setPendingHanddover(results.rows.length);
+        },
+      );
+    });
+
   }, []);
   const requestCameraPermission = async () => {
     try {
@@ -234,32 +245,38 @@ useEffect(() => {
   currentDate.setHours(0, 0, 0, 0);
   currentDate = currentDate.valueOf();
   const submitStartTrip = () =>  {
-    (async() => {
-      await axios.post('https://bkedtest.logistiex.com/UserTripInfo/userTripDetails', {
-        tripID : tripID, 
-        userID : userId, 
-        date : currentDate, 
-        startTime : new Date().valueOf(),
-        vehicleNumber : vehicle, 
-        startKilometer : startkm, 
-        startVehicleImageUrl : startImageUrl
-      })
-      .then(function (res) {
-        if(res.data.msg=="TripID already exists"){
-          getTripDetails(tripID);
-          setMessage(2);
-        }
-        else {
-          getTripDetails(tripID);
-          setMessage(1);
-          navigation.navigate('Main',{tripID:tripID});
-        }
-        setShowModal(true);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-    })();
+    if(pendingHandover!==0){
+      alert("Please complete handover before Start a trip");
+      navigation.navigate('Main');
+    }
+    else{
+      (async() => {
+        await axios.post('https://bkedtest.logistiex.com/UserTripInfo/userTripDetails', {
+          tripID : tripID, 
+          userID : userId, 
+          date : currentDate, 
+          startTime : new Date().valueOf(),
+          vehicleNumber : vehicle, 
+          startKilometer : startkm, 
+          startVehicleImageUrl : startImageUrl
+        })
+        .then(function (res) {
+          if(res.data.msg=="TripID already exists"){
+            getTripDetails(tripID);
+            setMessage(2);
+          }
+          else {
+            getTripDetails(tripID);
+            setMessage(1);
+            navigation.navigate('Main',{tripID:tripID});
+          }
+          setShowModal(true);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      })();
+    }
   }
 
   const handleInputChange = (value) => {
@@ -310,28 +327,19 @@ useEffect(() => {
                   <Box justifyContent="space-between" py={10} px={6} bg="#fff" rounded="xl" width={"90%"} maxWidth="100%" _text={{fontWeight: "medium",}}>
                   <ScrollView>
                   <VStack space={6}>
+                    <View flexDirection="column">
+                      <Text style={{fontSize:16, fontWeight:'500',color: 'gray'}} mb={1}>Vehicle Number:</Text>
                       <Input disabled selectTextOnFocus={false} editable={false} backgroundColor='gray.300' value={vehicle} size="lg" type={"number"} placeholder="Vehicle Number" />
-                      {/* <TextInput keyboardType="numeric" value={startkm} onChangeText={(e)=>handleInputChange(e)} size="lg" type={"number"} placeholder="Start km"/>                       */}
-                      <View style={ {
-                      paddingTop: 18,
-                      paddingBottom: 10,
-                      }}>
-                    <Text style={{
-                    position: 'absolute',
-                    left: 0,
-                    top: 18,
-                    fontSize: 12,
-                    color: '#aaa',
-                  }}>
-                  {startkm ? 'Start Km' : ' '}
-                  </Text>
-                  <Input keyboardType="numeric" value={startkm} onChangeText={setStartKm} size="lg" type={"number"} placeholder="Start km" style={{fontSize: 18,
-                  color: '#000',
-                  paddingVertical: 6,
-                  paddingHorizontal: 12,
-                  borderWidth: 1,
-                  borderColor: '#ccc',
-                  borderRadius: 4,}} />
+                      </View>
+                      <View flexDirection="column">
+                      <Text style={{fontSize:16, fontWeight:'500',color: 'gray'}} mb={1}>Start KMs:</Text>
+                    <Input keyboardType="numeric" value={startkm} onChangeText={setStartKm} size="lg" type={"number"} placeholder="Start km" style={{fontSize: 18,
+                    color: '#000',
+                    paddingVertical: 6,
+                    paddingHorizontal: 12,
+                    borderWidth: 1,
+                    borderColor: '#ccc',
+                    borderRadius: 4,}} />
                   </View>
                       <Button py={3} variant='outline' _text={{ color: 'white', fontSize: 20 }} onPress={takeStartPhoto}>
                       {uploadStatus === 'idle' && <MaterialIcons name="cloud-upload" size={22} color="gray">  Image</MaterialIcons>}
@@ -384,29 +392,24 @@ useEffect(() => {
               </Modal>
               <Box justifyContent="space-between" py={10} px={6} bg="#fff" rounded="xl" width={"90%"} maxWidth="100%" _text={{ fontWeight: "medium", }}>
                 <VStack space={6}>
+                  <View flexDirection="column">
+                  <Text style={{fontSize:16, fontWeight:'500',color: 'gray'}} mb={1}>Vehicle Number:</Text>
                   <Input disabled selectTextOnFocus={false} editable={false} backgroundColor='gray.300' value={vehicle} size="lg" type={"number"} placeholder="Vehicle Number" />
+                  </View>
+                  <View flexDirection="column">
+                  <Text style={{fontSize:16, fontWeight:'500',color: 'gray'}} mb={1}>Start KMs:</Text>
                   <Input selectTextOnFocus={false} editable={false} disabled backgroundColor='gray.300' value={startkm} size="lg" type={"number"} placeholder="Start Km" />
-                  <View style={ {
-                  paddingTop: 18,
-                paddingBottom: 10,
-                }}>
-              <Text style={{
-              position: 'absolute',
-              left: 0,
-              top: 18,
-              fontSize: 12,
-              color: '#aaa',
-            }}>
-            {endkm ? 'End KMs' : ' '}
-            </Text>
-            <Input value={endkm} keyboardType="numeric" onChangeText={setEndkm} size="lg" type={"number"} placeholder="Input End KMs" style={{fontSize: 18,
-            color: '#000',
-            paddingVertical: 6,
-            paddingHorizontal: 12,
-            borderWidth: 1,
-            borderColor: '#ccc',
-            borderRadius: 4,}} />
-              </View>
+                  </View>
+                  <View flexDirection="column">
+                  <Text style={{fontSize:16, fontWeight:'500',color: 'gray'}} mb={1}>End KMs:</Text>
+                  <Input value={endkm} keyboardType="numeric" onChangeText={setEndkm} size="lg" type={"number"} placeholder="Input End KMs" style={{fontSize: 18,
+                  color: '#000',
+                  paddingVertical: 6,
+                  paddingHorizontal: 12,
+                  borderWidth: 1,
+                  borderColor: '#ccc',
+                  borderRadius: 4,}} />
+                </View>
                   <Button py={3} variant='outline' _text={{ color: 'white', fontSize: 20 }} onPress={takeEndPhoto}>
                     {uploadStatus === 'idle' && <MaterialIcons name="cloud-upload" size={22} color="gray">  Image</MaterialIcons>}
                     {uploadStatus === 'uploading' && <ActivityIndicator size="small" color="gray" />}

@@ -718,7 +718,7 @@ const SellerHandoverSelection = ({route}) => {
                   </View>
                 </View>
               </ScrollView>
-              {notPicked11 != route.params.Reverse ? (
+              {pending !== 0 ? (
                 <View
                   style={{
                     flexDirection: 'row',
@@ -736,7 +736,8 @@ const SellerHandoverSelection = ({route}) => {
                       />
                     }
                     onPress={() => setModalVisible(true)}
-                    style={{backgroundColor: '#004aad', width: '48%'}}>
+                    style={{backgroundColor: '#004aad', width: '48%'}}
+                    disabled={pending !== route.params.Forward}>
                     Close Delivery
                   </Button>
                   <Button

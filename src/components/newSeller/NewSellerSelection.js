@@ -768,7 +768,7 @@ const NewSellerSelection = ({route}) => {
                   </View>
                 </View>
               </ScrollView>
-              {notPicked11 != route.params.Forward ? (
+              {pending!==0 ? (
                 <View
                   style={{
                     flexDirection: 'row',
@@ -786,7 +786,8 @@ const NewSellerSelection = ({route}) => {
                       />
                     }
                     onPress={() => setModalVisible(true)}
-                    style={{backgroundColor: '#004aad', width: '48%'}}>
+                    style={{backgroundColor: '#004aad', width: '48%'}}
+                    disabled={pending !== route.params.Forward}>
                     Close Pickup
                   </Button>
                   <Button
