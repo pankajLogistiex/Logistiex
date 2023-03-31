@@ -66,6 +66,7 @@ const ShipmentBarcode = ({route}) => {
   const [showCloseBagModal11, setShowCloseBagModal11] = useState(false);
   const [bagSeal, setBagSeal] = useState('');
   const [check11, setCheck11] = useState(0);
+  const [pdCheck, setPDCheck] = useState(false);
 
   const buttonColor = acceptedArray.length === 0 ? 'gray.300' : '#004aad';
 
@@ -118,12 +119,12 @@ var dingAccept = new Sound(dingAccept11, error => {
     return;
   }
   // if loaded successfully
-  console.log(
-    'duration in seconds: ' +
-      dingAccept.getDuration() +
-      'number of channels: ' +
-      dingAccept.getNumberOfChannels(),
-  );
+  // console.log(
+  //   'duration in seconds: ' +
+  //     dingAccept.getDuration() +
+  //     'number of channels: ' +
+  //     dingAccept.getNumberOfChannels(),
+  // );
 });
 
   useEffect(() => {
@@ -139,12 +140,12 @@ var dingAccept = new Sound(dingAccept11, error => {
       return;
     }
     // if loaded successfully
-    console.log(
-      'duration in seconds: ' +
-      dingReject.getDuration() +
-        'number of channels: ' +
-        dingReject.getNumberOfChannels(),
-    );
+    // console.log(
+    //   'duration in seconds: ' +
+    //   dingReject.getDuration() +
+    //     'number of channels: ' +
+    //     dingReject.getNumberOfChannels(),
+    // );
   });
   
     useEffect(() => {
@@ -186,7 +187,37 @@ var dingAccept = new Sound(dingAccept11, error => {
   //   partialClose112();
   // }, []);
 
+  const check121 =()=>{
+    db.transaction(tx => {
+      tx.executeSql(
+        'SELECT * FROM closeBag1 WHERE  consignorCode=? And status="scanPending"',
+        [route.params.consignorCode],
+        (tx1, results) => {
+          if(results.rows.length>0){
+          setPDCheck(true);
+          }else{
+            setPDCheck(false);
+          }
+        },
+      );
+    });
+  }
   const displayDataSPScan = async () => {
+
+    // db.transaction(tx => {
+    //   tx.executeSql(
+    //     'SELECT * FROM closeBag1 WHERE  consignorCode=? And status="scanPending"',
+    //     [route.params.consignorCode],
+    //     (tx1, results) => {
+    //       if(results.rows.length>0){
+    //       setPDCheck(true);
+    //       }else{
+    //         setPDCheck(false);
+    //       }
+    //     },
+    //   );
+    // });
+
     db.transaction(tx => {
       tx.executeSql(
         'SELECT * FROM SellerMainScreenDetails where shipmentAction="Seller Pickup" AND consignorCode=?  AND status="accepted"',
@@ -218,6 +249,7 @@ var dingAccept = new Sound(dingAccept11, error => {
 
   const partialClose112 = () => {
     console.log('partialClose popup shown11');
+  
     if (newaccepted + newrejected === route.params.Forward) {
       console.log(newaccepted);
       // sendSmsOtp();
@@ -296,7 +328,8 @@ var dingAccept = new Sound(dingAccept11, error => {
   };
 
   function handleButtonPress11(item) {
-    if (item === 'Partial Dispatch') {
+    console.log("partial button 121"+item);
+    if (item === 'PCR1') {
       setDropDownValue11('');
       setModalVisible11(false);
       navigation.navigate('Dispatch', {
@@ -388,6 +421,7 @@ var dingAccept = new Sound(dingAccept11, error => {
               ToastAndroid.show('Bag closed successfully', ToastAndroid.SHORT);
               console.log(results11);
               setBarcode('');
+              setCheck11(0);
               setText11('');
               viewDetailBag();
             },
@@ -454,6 +488,7 @@ var dingAccept = new Sound(dingAccept11, error => {
               console.log(results11);
               setBarcode('');
                 setText11('');
+                setCheck11(0);
               viewDetailBag();
             },
             error => {
@@ -507,6 +542,15 @@ var dingAccept = new Sound(dingAccept11, error => {
     });
   };
   const updateDetails2 = () => {
+    // Vibration.vibrate(200);
+    // dingAccept.play(success => {
+    //   if (success) {
+    //     // Vibration.vibrate(800);
+    //     console.log('successfully finished playing');
+    //   } else {
+    //     console.log('playback failed due to audio decoding errors');
+    //   }
+    // });
     console.log('scan ' + barcode.toString());
     setAcceptedArray([...acceptedArray, barcode.toString()]);
     console.log(acceptedArray);
@@ -528,6 +572,15 @@ var dingAccept = new Sound(dingAccept11, error => {
 
           if (results.rowsAffected > 0) {
             console.log(barcode + 'accepted');
+            Vibration.vibrate(200);
+            dingAccept.play(success => {
+              if (success) {
+                // Vibration.vibrate(800);
+                console.log('successfully finished playing');
+              } else {
+                console.log('playback failed due to audio decoding errors');
+              }
+            });
             displayDataSPScan();
             // ToastAndroid.show(barcode + ' Accepted',ToastAndroid.SHORT);
           } else {
@@ -789,16 +842,16 @@ var barcode11=barcode;
       // Vibration.vibrate(100);
       // RNBeep.beep();
       setCheck11(1);
-      Vibration.vibrate(100);
-      dingAccept.play(success => {
-        if (success) {
-          setCheck11(1);
-          // Vibration.vibrate(100);
-          console.log('successfully finished playing');
-        } else {
-          console.log('playback failed due to audio decoding errors');
-        }
-      });
+      // Vibration.vibrate(100);
+      // Vibration.vibrate(200);
+      //       dingAccept.play(success => {
+      //         if (success) {
+      //           // Vibration.vibrate(800);
+      //           console.log('successfully finished playing');
+      //         } else {
+      //           console.log('playback failed due to audio decoding errors');
+      //         }
+      //       });
       ToastAndroid.show(barcode + ' Accepted', ToastAndroid.SHORT);
       updateDetails2();
       displayDataSPScan();
@@ -879,7 +932,7 @@ var barcode11=barcode;
           <Modal.Body>
             {PartialCloseData &&
               PartialCloseData.map((d, index) =>
-                newaccepted === 0 && d.reasonName === 'Partial Dispatch' ? (
+                newaccepted === 0 && pdCheck && d.reasonName === 'Partial Dispatch' ? (
                   <Button
                     h="12"
                     paddingBottom={5}

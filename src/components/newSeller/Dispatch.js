@@ -51,7 +51,7 @@ const Dispatch = ({route}) => {
           //  sealID = 'SI001004';
           db.transaction(tx => {
             tx.executeSql(
-              'SELECT bagId, AcceptedList FROM closeBag1 WHERE consignorCode=? AND bagSeal = ?',
+              'SELECT bagId, AcceptedList FROM closeBag1 WHERE consignorCode=? AND bagSeal = ? And status="Scanned"',
               [route.params.consignorCode,sealID],
               (tx, results) => {
                 console.log(results);
@@ -111,16 +111,31 @@ const Dispatch = ({route}) => {
           displayDataSPScan();
       }, [scanned]);
 
+      const updateBags = () => {
+        console.log('dispatch 45456');
+        db.transaction((tx) => {
+          tx.executeSql('UPDATE closeBag1 SET status="dispatched"  WHERE status="Scanned" AND consignorCode=?  ', [route.params.consignorCode], (tx1, results) => {
+            if (results.rowsAffected > 0) {
+              ToastAndroid.show('Bags Dispatch Successfully',ToastAndroid.SHORT);
+              console.log('Bags Dispatch');
+  
+            } else {
+              console.log('failed to dispatch bags ');
+            }
+          },
+        );
+      });
+    };
 
       const displayDataSPScan = async () => {
         console.log('consignor code' + route.params.consignorCode);
         db.transaction(tx => {
           tx.executeSql(
-            'SELECT * FROM closeBag1 WHERE  consignorCode=?',
+            'SELECT * FROM closeBag1 WHERE  consignorCode=? And status <> "dispatched"',
             [route.params.consignorCode],
             (tx1, results) => {
               setEligibleBags(results.rows.length);
-              setPending(results.rows.length - scanned);
+              // setPending(results.rows.length - scanned);
             },
           );
         });
@@ -367,7 +382,7 @@ const Dispatch = ({route}) => {
           <View style={{width: '90%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', marginTop: 10 }}>
             {/* <Center> */}
 
-            <Button  w="45%" size="lg" style={{backgroundColor:'#004aad', color:'#fff'}}  title="Dispatch" onPress={()=>{navigation.goBack();}}>Dispatch</Button>
+            <Button  w="45%" size="lg" style={{backgroundColor:'#004aad', color:'#fff'}}  title="Dispatch" onPress={()=>{updateBags();navigation.goBack();}}>Dispatch</Button>
             {/* </Center> */}
             <Button  w="45%" size="lg" style={{backgroundColor:'#004aad', color:'#fff'}}  title="Scan" onPress={()=>{setShowCloseBagModal11(true);}}>Scan</Button>
           </View>
