@@ -44,7 +44,7 @@ export default function Main({navigation, route}) {
   const [shr1, setShr1] = useState(0);
 
 
-  const [spts1, setSpts1] = useState(0);
+  const [sdts, setSdts] = useState(0);
   const [spc1, setSpc1] = useState(0);
   const [spp1, setSpp1] = useState(0);
   const [spnp1, setSpnp1] = useState(0);
@@ -157,8 +157,8 @@ export default function Main({navigation, route}) {
     // setSpr(1);
     // await AsyncStorage.setItem('refresh11', 'notrefresh');
     db.transaction(tx => {
-      tx.executeSql('SELECT * FROM SyncSellerPickUp', [], (tx1, results) => {
-        setSpts(results.rows.length);
+      tx.executeSql('SELECT COUNT(DISTINCT consignorCode) as count FROM SellerMainScreenDetails WHERE shipmentAction="Seller Pickup"', [], (tx1, results) => {
+        setSpts(results.rows.item(0).count);
       });
     });
     db.transaction(tx => {
@@ -229,8 +229,8 @@ export default function Main({navigation, route}) {
       // setSpr1(1);
       await AsyncStorage.setItem('refresh11', 'notrefresh');
       db.transaction(tx => {
-        tx.executeSql('SELECT * FROM SyncSellerPickUp', [], (tx1, results) => {
-          setShts(results.rows.length);
+        tx.executeSql('SELECT COUNT(DISTINCT consignorCode) as count FROM SellerMainScreenDetails WHERE shipmentAction="Seller Delivery"', [], (tx1, results) => {
+          setShts(results.rows.item(0).count);
         });
       });
       db.transaction(tx => {
@@ -282,13 +282,13 @@ export default function Main({navigation, route}) {
     // setSpr1(1);
     await AsyncStorage.setItem('refresh11', 'notrefresh');
     db.transaction(tx => {
-      tx.executeSql('SELECT * FROM SyncSellerPickUp', [], (tx1, results) => {
-        setSpts(results.rows.length);
+      tx.executeSql('SELECT COUNT(DISTINCT consignorCode) as count FROM SellerMainScreenDetails WHERE shipmentAction="Seller Delivery"', [], (tx1, results) => {
+        setSdts(results.rows.item(0).count);
       });
     });
     db.transaction(tx => {
       tx.executeSql(
-        'SELECT * FROM SellerMainScreenDetails WHERE shipmentAction="Seller Delivery" AND status IS NULL',
+        'SELECT * FROM SellerMainScreenDetails WHERE shipmentAction="Seller Delivery" AND handoverStatus="accepted"',
         [],
         (tx1, results) => {
           setSpp1(results.rows.length);
@@ -497,7 +497,7 @@ export default function Main({navigation, route}) {
     },
     {
       title: 'Seller Deliveries',
-      totalUsers: spts,
+      totalUsers: sdts,
       pendingOrder: spp1,
       completedOrder: spc1,
       rejectedOrder: spr1,
