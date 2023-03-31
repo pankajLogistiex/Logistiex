@@ -327,6 +327,9 @@ useEffect(() => {
                   <Box justifyContent="space-between" py={10} px={6} bg="#fff" rounded="xl" width={"90%"} maxWidth="100%" _text={{fontWeight: "medium",}}>
                   <ScrollView>
                   <VStack space={6}>
+                  <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                  <Text style={{fontSize:16, fontWeight:'500',color: 'gray'}} mb={2}>Start Your Trip</Text>
+                  </View>                    
                     <View flexDirection="column">
                       <Text style={{fontSize:16, fontWeight:'500',color: 'gray'}} mb={1}>Vehicle Number:</Text>
                       <Input disabled selectTextOnFocus={false} editable={false} backgroundColor='gray.300' value={vehicle} size="lg" type={"number"} placeholder="Vehicle Number" />
@@ -391,7 +394,10 @@ useEffect(() => {
                 </Modal.Content>
               </Modal>
               <Box justifyContent="space-between" py={10} px={6} bg="#fff" rounded="xl" width={"90%"} maxWidth="100%" _text={{ fontWeight: "medium", }}>
-                <VStack space={6}>
+                <VStack space={6}> 
+                <View style={{justifyContent: 'center', alignItems: 'center'}}>
+                  <Text style={{fontSize:16, fontWeight:'500',color: 'gray'}} mb={2}>Trip Started</Text>
+                  </View> 
                   <View flexDirection="column">
                   <Text style={{fontSize:16, fontWeight:'500',color: 'gray'}} mb={1}>Vehicle Number:</Text>
                   <Input disabled selectTextOnFocus={false} editable={false} backgroundColor='gray.300' value={vehicle} size="lg" type={"number"} placeholder="Vehicle Number" />
