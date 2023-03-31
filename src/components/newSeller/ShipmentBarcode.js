@@ -24,6 +24,8 @@ import {
   Alert,
   TextInput,
 } from 'react-native';
+import Sound from 'react-native-sound';
+import HapticFeedback from 'react-native-haptic-feedback';
 import {Center} from 'native-base';
 import {useNavigation} from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -38,6 +40,9 @@ import GetLocation from 'react-native-get-location';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import OTPTextInput from 'react-native-otp-textinput';
 
+import dingReject11 from '../../assets/rejected_sound.mp3';
+
+import dingAccept11 from '../../assets/beep_accepted.mp3';
 const db = openDatabase({
   name: 'rn_sqlite',
 });
@@ -60,8 +65,12 @@ const ShipmentBarcode = ({route}) => {
   const [showCloseBagModal, setShowCloseBagModal] = useState(false);
   const [showCloseBagModal11, setShowCloseBagModal11] = useState(false);
   const [bagSeal, setBagSeal] = useState('');
+  const [check11, setCheck11] = useState(0);
+  const [pdCheck, setPDCheck] = useState(false);
 
   const buttonColor = acceptedArray.length === 0 ? 'gray.300' : '#004aad';
+
+  const buttonColorRejected = check11 === 0 ? 'gray.300' : '#004aad';
   var otpInput = useRef(null);
   const [name, setName] = useState('');
   const [inputOtp, setInputOtp] = useState('');
@@ -76,16 +85,79 @@ const ShipmentBarcode = ({route}) => {
   const currentDate = new Date().toISOString().slice(0, 10);
   let serialNo = 0;
 
+
+const [text11,setText11]=useState('');
+    const buttonColor11 = text11.length === 1 ? '#004aad' : 'white';
+    const [isPressed, setIsPressed] = useState(false);
+
   const [scanned, setScanned] = useState(true);
   const scannerRef = useRef(null);
+
+  // const acceptSound = new Sound('accept.mp3', Sound.MAIN_BUNDLE);
+  // const rejectSound = new Sound('reject.mp3', Sound.MAIN_BUNDLE);
+  
+  const vibrateDevice = (type) => {
+    const options = {
+      enableVibrateFallback: true,
+      ignoreAndroidSystemSettings: false,
+    };
+    HapticFeedback.trigger(type, options);
+  };
 
   const reloadScanner = () => {
     if (scannerRef.current) {
       scannerRef.current.reactivate();
     }
   };
+
+
+  Sound.setCategory('Playback');
+
+var dingAccept = new Sound(dingAccept11, error => {
+  if (error) {
+    console.log('failed to load the sound', error);
+    return;
+  }
+  // if loaded successfully
+  // console.log(
+  //   'duration in seconds: ' +
+  //     dingAccept.getDuration() +
+  //     'number of channels: ' +
+  //     dingAccept.getNumberOfChannels(),
+  // );
+});
+
+  useEffect(() => {
+    dingAccept.setVolume(1);
+    return () => {
+      dingAccept.release();
+    };
+  }, []);
+
+  var dingReject = new Sound(dingReject11, error => {
+    if (error) {
+      console.log('failed to load the sound', error);
+      return;
+    }
+    // if loaded successfully
+    // console.log(
+    //   'duration in seconds: ' +
+    //   dingReject.getDuration() +
+    //     'number of channels: ' +
+    //     dingReject.getNumberOfChannels(),
+    // );
+  });
+  
+    useEffect(() => {
+      dingReject.setVolume(1);
+      return () => {
+        dingReject.release();
+      };
+    }, []);
+
   useEffect(() => {
     reloadScanner();
+    // Sound.setCategory('Playback');
   }, []);
   const DisplayData11 = async () => {
     db.transaction(tx => {
@@ -107,6 +179,7 @@ const ShipmentBarcode = ({route}) => {
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       displayDataSPScan();
+      Sound.setCategory('Playback');
     });
     return unsubscribe;
   }, [navigation]);
@@ -114,7 +187,37 @@ const ShipmentBarcode = ({route}) => {
   //   partialClose112();
   // }, []);
 
+  const check121 =()=>{
+    db.transaction(tx => {
+      tx.executeSql(
+        'SELECT * FROM closeBag1 WHERE  consignorCode=? And status="scanPending"',
+        [route.params.consignorCode],
+        (tx1, results) => {
+          if(results.rows.length>0){
+          setPDCheck(true);
+          }else{
+            setPDCheck(false);
+          }
+        },
+      );
+    });
+  }
   const displayDataSPScan = async () => {
+
+    // db.transaction(tx => {
+    //   tx.executeSql(
+    //     'SELECT * FROM closeBag1 WHERE  consignorCode=? And status="scanPending"',
+    //     [route.params.consignorCode],
+    //     (tx1, results) => {
+    //       if(results.rows.length>0){
+    //       setPDCheck(true);
+    //       }else{
+    //         setPDCheck(false);
+    //       }
+    //     },
+    //   );
+    // });
+
     db.transaction(tx => {
       tx.executeSql(
         'SELECT * FROM SellerMainScreenDetails where shipmentAction="Seller Pickup" AND consignorCode=?  AND status="accepted"',
@@ -146,6 +249,7 @@ const ShipmentBarcode = ({route}) => {
 
   const partialClose112 = () => {
     console.log('partialClose popup shown11');
+  
     if (newaccepted + newrejected === route.params.Forward) {
       console.log(newaccepted);
       // sendSmsOtp();
@@ -224,7 +328,8 @@ const ShipmentBarcode = ({route}) => {
   };
 
   function handleButtonPress11(item) {
-    if (item === 'Partial Dispatch') {
+    console.log("partial button 121"+item);
+    if (item === 'PCR1') {
       setDropDownValue11('');
       setModalVisible11(false);
       navigation.navigate('Dispatch', {
@@ -315,6 +420,9 @@ const ShipmentBarcode = ({route}) => {
               console.log('\n Data Added to local db successfully closeBag');
               ToastAndroid.show('Bag closed successfully', ToastAndroid.SHORT);
               console.log(results11);
+              setBarcode('');
+              setCheck11(0);
+              setText11('');
               viewDetailBag();
             },
             error => {
@@ -378,6 +486,9 @@ const ShipmentBarcode = ({route}) => {
               console.log('\n Data Added to local db successfully closeBag');
               ToastAndroid.show('Bag closed successfully', ToastAndroid.SHORT);
               console.log(results11);
+              setBarcode('');
+                setText11('');
+                setCheck11(0);
               viewDetailBag();
             },
             error => {
@@ -431,6 +542,15 @@ const ShipmentBarcode = ({route}) => {
     });
   };
   const updateDetails2 = () => {
+    // Vibration.vibrate(200);
+    // dingAccept.play(success => {
+    //   if (success) {
+    //     // Vibration.vibrate(800);
+    //     console.log('successfully finished playing');
+    //   } else {
+    //     console.log('playback failed due to audio decoding errors');
+    //   }
+    // });
     console.log('scan ' + barcode.toString());
     setAcceptedArray([...acceptedArray, barcode.toString()]);
     console.log(acceptedArray);
@@ -452,6 +572,15 @@ const ShipmentBarcode = ({route}) => {
 
           if (results.rowsAffected > 0) {
             console.log(barcode + 'accepted');
+            Vibration.vibrate(200);
+            dingAccept.play(success => {
+              if (success) {
+                // Vibration.vibrate(800);
+                console.log('successfully finished playing');
+              } else {
+                console.log('playback failed due to audio decoding errors');
+              }
+            });
             displayDataSPScan();
             // ToastAndroid.show(barcode + ' Accepted',ToastAndroid.SHORT);
           } else {
@@ -486,14 +615,11 @@ const ShipmentBarcode = ({route}) => {
     });
   };
 
-  const rejectDetails2 = () => {
-    console.log('scan 45456');
-
-    db.transaction(tx => {
-      tx.executeSql(
-        'UPDATE SellerMainScreenDetails SET status="rejected" ,rejectionReasonL1=?  WHERE status="accepted" AND consignorCode=? AND (awbNo=? OR clientRefId=? OR clientShipmentReferenceNumber=?) ',
-        [DropDownValue, route.params.consignorCode, barcode, barcode, barcode],
-        (tx1, results) => {
+    const rejectDetails2 = () => {
+      console.log('scan 45456');
+var barcode11=barcode;
+      db.transaction((tx) => {
+        tx.executeSql('UPDATE SellerMainScreenDetails SET status="rejected" ,rejectionReasonL1=?  WHERE status="accepted" AND consignorCode=? AND (awbNo=? OR clientRefId=? OR clientShipmentReferenceNumber=?) ', [DropDownValue,route.params.consignorCode, barcode11,barcode11,barcode11], (tx1, results) => {
           let temp = [];
           // ContinueHandle11();
           // console.log("ddsds4545",tx1);
@@ -502,18 +628,33 @@ const ShipmentBarcode = ({route}) => {
           console.log(results);
           if (results.rowsAffected > 0) {
             // ContinueHandle11();
-            console.log(barcode + 'rejected');
-            ToastAndroid.show(barcode + ' Rejected', ToastAndroid.SHORT);
-            Vibration.vibrate(100);
-            RNBeep.beep();
+            console.log(barcode11 + 'rejected');
+            ToastAndroid.show(barcode11 + ' Rejected', ToastAndroid.SHORT);
+            setCheck11(0);
+            // Vibration.vibrate(100);
+            Vibration.vibrate(200);
+            dingAccept.play(success => {
+              if (success) {
+                // Vibration.vibrate(800);
+                console.log('successfully finished playing');
+              } else {
+                console.log('playback failed due to audio decoding errors');
+              }
+            });
+    //         RNBeep.beep();
+
+    //         rejectSound.play();
+    // vibrateDevice(HapticFeedback.FeedbackTypes.notificationError);
+
             setDropDownValue('');
             console.log(acceptedArray);
-            const newArray = acceptedArray.filter(item => item !== barcode);
+            const newArray = acceptedArray.filter(item => item !== barcode11);
             console.log(newArray);
             setAcceptedArray(newArray);
+            setBarcode('');
             displayDataSPScan();
           } else {
-            console.log(barcode + 'failed to reject item locally');
+            console.log(barcode11 + 'failed to reject item locally');
           }
           console.log(results.rows.length);
           for (let i = 0; i < results.rows.length; ++i) {
@@ -606,11 +747,31 @@ const ShipmentBarcode = ({route}) => {
                       'Scanning wrong product',
                       ToastAndroid.SHORT,
                     );
+                    setCheck11(0);
+                    Vibration.vibrate(800);
+                    dingReject.play(success => {
+                      if (success) {
+                        
+                        console.log('successfully finished playing');
+                      } else {
+                        console.log('playback failed due to audio decoding errors');
+                      }
+                    });
+                    setBarcode('');
                   } else {
-                    ToastAndroid.show(
-                      data + ' already scanned',
-                      ToastAndroid.SHORT,
-                    );
+                    ToastAndroid.show(data + ' already scanned',ToastAndroid.SHORT);
+                    Vibration.vibrate(800);
+                    setCheck11(0);
+                    dingReject.play(success => {
+                      if (success) {
+                        
+                        console.log('successfully finished playing');
+                      } else {
+                        console.log('playback failed due to audio decoding errors');
+                      }
+                    });
+                    setBarcode('');
+
                   }
                 },
               );
@@ -636,35 +797,61 @@ const ShipmentBarcode = ({route}) => {
     });
   };
 
-  const updateCategories1 = data => {
-    db.transaction(tx => {
-      tx.executeSql(
-        'UPDATE categories set ScanStatus=?, UploadStatus=? where clientShipmentReferenceNumber=?',
-        [1, 1, data],
-        (tx, results) => {
-          console.log('Results', results.rowsAffected);
-        },
-      );
-    });
-  };
-  const onSuccess = e => {
-    console.log(e.data, 'barcode');
-    setBarcode(e.data);
-    getCategories(e.data);
-  };
-  const onSuccess11 = e => {
-    Vibration.vibrate(100);
-    RNBeep.beep();
-    console.log(e.data, 'sealID');
-    // getCategories(e.data);
-    setBagSeal(e.data);
-  };
+    const updateCategories1 = (data) => {
+      db.transaction((tx) => {
+        tx.executeSql(
+          'UPDATE categories set ScanStatus=?, UploadStatus=? where clientShipmentReferenceNumber=?',
+          [1, 1, data],
+          (tx, results) => {
+            console.log('Results', results.rowsAffected);
+          }
+        );
+      });
+    };
+    const onSuccess = e => {
+      console.log(e.data, 'barcode');
+      setBarcode(e.data);
+      setText11(e.data);
+      getCategories(e.data);
+    };
+    const onSuccess11 = e => {
+      // Vibration.vibrate(100);
+      // RNBeep.beep();
+      Vibration.vibrate(100);
+      dingAccept.play(success => {
+        if (success) {
+          
+          console.log('successfully finished playing');
+        } else {
+          console.log('playback failed due to audio decoding errors');
+        }
+      });
+      console.log(e.data, 'sealID');
+      // getCategories(e.data);
+      setBagSeal(e.data);
+    };
+    const onSucessThroughButton=(data21)=>{
+      console.log(data21, 'barcode');
+      setBarcode(data21);
+      getCategories(data21);
+    };
 
   useEffect(() => {
     if (len) {
       // ContinueHandle();
-      Vibration.vibrate(100);
-      RNBeep.beep();
+      // Vibration.vibrate(100);
+      // RNBeep.beep();
+      setCheck11(1);
+      // Vibration.vibrate(100);
+      // Vibration.vibrate(200);
+      //       dingAccept.play(success => {
+      //         if (success) {
+      //           // Vibration.vibrate(800);
+      //           console.log('successfully finished playing');
+      //         } else {
+      //           console.log('playback failed due to audio decoding errors');
+      //         }
+      //       });
       ToastAndroid.show(barcode + ' Accepted', ToastAndroid.SHORT);
       updateDetails2();
       displayDataSPScan();
@@ -745,7 +932,7 @@ const ShipmentBarcode = ({route}) => {
           <Modal.Body>
             {PartialCloseData &&
               PartialCloseData.map((d, index) =>
-                newaccepted === 0 && d.reasonName === 'Partial Dispatch' ? (
+                newaccepted === 0 && pdCheck && d.reasonName === 'Partial Dispatch' ? (
                   <Button
                     h="12"
                     paddingBottom={5}
@@ -759,8 +946,9 @@ const ShipmentBarcode = ({route}) => {
                         d.reasonID === DropDownValue11 ? '#6666FF' : '#C8C8C8',
                       opacity: 0.4,
                     }}
-                    title={d.reasonName}>
+                    title={d.reasonName} onPress={() => ToastAndroid.show("No bags for dispatch",ToastAndroid.SHORT)} >
                     {' '}
+                    {/* onPress={() => ToastAndroid.show("No bags for dispatch",ToastAndroid.SHORT)}  */}
                     <Text
                       style={{
                         color:
@@ -1072,20 +1260,28 @@ const ShipmentBarcode = ({route}) => {
         <View>
           <View style={{backgroundColor: 'white'}}>
             <View style={{alignItems: 'center', marginTop: 15}}>
-              <View
-                style={{
-                  backgroundColor: 'lightgray',
-                  padding: 10,
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  width: '90%',
-                  borderRadius: 5,
-                  flex: 1,
-                }}>
-                <Text style={{fontSize: 18, fontWeight: '500'}}>
-                  shipment ID:{' '}
-                </Text>
-                <Text style={{fontSize: 18, fontWeight: '500'}}>{barcode}</Text>
+              <View style={{backgroundColor: 'lightgrey', padding:0, flexDirection: 'row', justifyContent: 'space-between', width: '90%', borderRadius: 10, flex:1}}>
+
+              <Input placeholder="Shipment ID"  value={text11} onChangeText={(text)=>{ setText11(text);}}  style={{
+fontSize: 18, fontWeight: '500',
+width: 320,
+backgroundColor:'lightgrey',
+}} />
+
+<TouchableOpacity style={{flex:1,backgroundColor:'lightgrey',paddingTop:8}} onPress={()=>onSucessThroughButton(text11)}>
+  <Center>
+
+  <MaterialIcons name="send" size={30} color="#004aad" />
+  </Center>
+</TouchableOpacity>
+
+{/* <MaterialIcons name="send" size={30} color="green" /> */}
+
+
+{/* <Button flex="1" mt={2} bg={buttonColor11} onPress={() => { }}>Submit</Button>
+                <Text style={{fontSize: 18, fontWeight: '500'}}>shipment ID: </Text>
+                {/* <MaterialIcons name="send" size={24} color={onPress ? 'black' : 'gray'} /> */}
+                {/* <Text style={{fontSize: 18, fontWeight: '500'}}>{barcode}</Text> */} 
                 {/* <View style={{ flex: 1,
                 alignItems: 'center',
                 justifyContent: 'center',}}>
@@ -1104,10 +1300,10 @@ const ShipmentBarcode = ({route}) => {
               </View>
               <Button
                 title="Reject Shipment"
-                onPress={() => setModalVisible(true)}
+                onPress={() =>{ check11===0 ? ToastAndroid.show("No Shipment to Reject",ToastAndroid.SHORT) :setModalVisible(true)}}
                 w="90%"
                 size="lg"
-                bg="#004aad"
+                bg={buttonColorRejected}
                 mb={4}
                 mt={4}>
                 Reject Shipment
