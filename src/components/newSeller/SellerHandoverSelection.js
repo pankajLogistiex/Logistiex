@@ -25,6 +25,7 @@ import {
   TouchableWithoutFeedbackBase,
   ToastAndroid,
   Linking,
+  ActivityIndicator
 } from 'react-native';
 import Lottie from 'lottie-react-native';
 import {ProgressBar} from '@react-native-community/progress-bar-android';
@@ -70,6 +71,7 @@ const SellerHandoverSelection = ({route}) => {
   const [rejectionCode, setRejectionCode]=useState("")
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     current_location();
@@ -264,6 +266,7 @@ const SellerHandoverSelection = ({route}) => {
         [route.params.consignorCode],
         (tx1, results) => {
           setPending(results.rows.length);
+          setLoading(false);
         },
       );
     });
@@ -386,6 +389,9 @@ const SellerHandoverSelection = ({route}) => {
 
   return (
     <NativeBaseProvider>
+      {loading ? 
+        <ActivityIndicator size="large" color="blue" style={{marginTop: 44}} />
+      :
       <View>
         <Modal>
           <Modal.Content
@@ -718,7 +724,7 @@ const SellerHandoverSelection = ({route}) => {
                   </View>
                 </View>
               </ScrollView>
-              {notPicked11 != route.params.Reverse ? (
+              {pending !== 0 ? (
                 <View
                   style={{
                     flexDirection: 'row',
@@ -736,7 +742,8 @@ const SellerHandoverSelection = ({route}) => {
                       />
                     }
                     onPress={() => setModalVisible(true)}
-                    style={{backgroundColor: '#004aad', width: '48%'}}>
+                    style={{backgroundColor: '#004aad', width: '48%'}}
+                    disabled={pending !== route.params.Forward}>
                     Close Delivery
                   </Button>
                   <Button
@@ -793,6 +800,8 @@ const SellerHandoverSelection = ({route}) => {
           </View>
         </ScrollView>
       </View>
+      }
+      
     </NativeBaseProvider>
   );
 };
