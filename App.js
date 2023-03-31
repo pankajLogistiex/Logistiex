@@ -408,7 +408,7 @@ console.log(userId)
   };
 
   /*              Press (Ctrl + k + 2) keys together for better API tables view in App.js (VSCode) */
-
+  
   // Table 1
   const createTables1 = () => {
     db.transaction(txn => {
