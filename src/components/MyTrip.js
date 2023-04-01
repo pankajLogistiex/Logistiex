@@ -25,7 +25,7 @@ export default function MyTrip({ navigation, route }) {
   const [loading, setLoading] = useState(true);
   const [pendingPickup, setPendingPickup] = useState(0);
   const [pendingDelivery, setPendingDelivery] = useState(0);
-  const [pendingHandover, setPendingHanddover] = useState(0);
+  const [pendingHandover, setPendingHandover] = useState(0);
   const [isFocused, setIsFocused] = useState(false);
   // const [label, setLabel] = useState('Input vehicle KMs');
   const focus = useIsFocused();
@@ -84,7 +84,7 @@ export default function MyTrip({ navigation, route }) {
       getTripDetails();
     }
   }, [focus]);
-useEffect(() => {
+  const loadDetails = async () => {
     db.transaction((tx) => {
       tx.executeSql('SELECT * FROM SellerMainScreenDetails WHERE shipmentAction="Seller Pickup" AND status IS NULL', [], (tx1, results) => {
           setPendingPickup(results.rows.length);
@@ -98,15 +98,21 @@ useEffect(() => {
     });
     db.transaction(tx => {
       tx.executeSql(
-        'SELECT * FROM SellerMainScreenDetails WHERE shipmentAction="Seller Delivery" AND handoverStatus="pendingHandover"',
+        'SELECT * FROM SellerMainScreenDetails WHERE shipmentAction="Seller Delivery" AND handoverStatus IS NULL',
         [],
         (tx1, results) => {
-          setPendingHanddover(results.rows.length);
+          setPendingHandover(results.rows.length);
         },
       );
     });
-
-  }, []);
+  }
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      loadDetails();
+    });
+    return unsubscribe;
+  }, [navigation]);
+  
   const requestCameraPermission = async () => {
     try {
       const granted = await PermissionsAndroid.request(
