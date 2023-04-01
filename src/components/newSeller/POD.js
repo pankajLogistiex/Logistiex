@@ -139,24 +139,24 @@ const POD = ({route}) => {
   };
 
   const submitForm11 = () => {
-    // console.log('========postRD Data==========', {
-    //   runsheetNo: runsheetNo,
-    //   expected: route.params.Forward,
-    //   accepted: route.params.accepted,
-    //   rejected: route.params.rejected,
-    //   nothandedOver: newNotPicked,
-    //   feUserID: route.params.userId,
-    //   receivingTime: new Date().valueOf(),
-    //   latitude: route.params.latitude,
-    //   longitude: route.params.longitude,
-    //   receiverMobileNo: mobileNumber,
-    //   receiverName: name,
-    //   consignorAction: 'Seller Pickup',
-    //   consignorCode: route.params.consignorCode,
-    //   acceptedShipments: acceptedArray,
-    //   rejectedShipments: rejectedArray,
-    //   nothandedOverShipments: notPickedArray,
-    // });
+    console.log('========postRD Data==========', {
+      runsheetNo: runsheetNo,
+      expected: route.params.Forward,
+      accepted: newaccepted,
+      rejected: newrejected,
+      nothandedOver: newNotPicked,
+      feUserID: route.params.userId,
+      receivingTime: new Date().valueOf(),
+      latitude: route.params.latitude,
+      longitude: route.params.longitude,
+      receiverMobileNo: mobileNumber,
+      receiverName: name,
+      consignorAction: 'Seller Pickup',
+      consignorCode: route.params.consignorCode,
+      acceptedShipments: acceptedArray,
+      rejectedShipments: rejectedArray,
+      nothandedOverShipments: notPickedArray,
+    });
 
     try {
       axios
@@ -187,9 +187,8 @@ const POD = ({route}) => {
           console.log(error.response.data);
           alert(error.response.data.msg);
         });
-    }
-    catch (error) {
-      console.log("===try catch post rd error====", error);
+    } catch (error) {
+      console.log('===try catch post rd error====', error);
     }
   };
 

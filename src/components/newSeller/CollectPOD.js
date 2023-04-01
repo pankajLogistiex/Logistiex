@@ -35,7 +35,7 @@ import {openDatabase} from 'react-native-sqlite-storage';
 const db = openDatabase({
   name: 'rn_sqlite',
 });
-const CollectPOD = ({ route }) => {
+const CollectPOD = ({route}) => {
   var otpInput = useRef(null);
   const navigation = useNavigation();
   const [name, setName] = useState(route.params.contactPersonName);
@@ -52,9 +52,13 @@ const CollectPOD = ({ route }) => {
   const PartialClose =
     'https://bkedtest.logistiex.com/ADupdatePrams/getPartialClosureReasons';
   const [timer, setTimer] = useState(60);
-  const [newaccepted, setnewAccepted] = useState(route.params.accepted +route.params.tagged);
+  const [newaccepted, setnewAccepted] = useState(
+    route.params.accepted + route.params.tagged,
+  );
   const [newrejected, setnewRejected] = useState(route.params.rejected);
-  const [newNotDelivered, setNewNotDelivered] = useState(route.params.notDelivered);
+  const [newNotDelivered, setNewNotDelivered] = useState(
+    route.params.notDelivered,
+  );
   const [acceptedArray, setAcceptedArray] = useState([]);
   const [rejectedArray, setRejectedArray] = useState([]);
   const [notDeliveredArray, setNotDeliveredArray] = useState([]);
@@ -111,7 +115,7 @@ const CollectPOD = ({ route }) => {
   const displayDataSPScan = async () => {
     db.transaction(tx => {
       tx.executeSql(
-        'SELECT * FROM SellerMainScreenDetails where shipmentAction="Seller Delivery" AND consignorCode=?  AND status="accepted OR status="tagged"',
+        'SELECT * FROM SellerMainScreenDetails where shipmentAction="Seller Delivery" AND consignorCode=? AND (status="accepted" OR status="tagged")',
         [route.params.consignorCode],
         (tx1, results) => {
           setnewAccepted(results.rows.length);
@@ -153,7 +157,7 @@ const CollectPOD = ({ route }) => {
       );
     });
   };
-console.log(acceptedArray);
+
   const submitForm11 = () => {
     console.log('=======post rd delivery====', {
       runsheetNo: runsheetNo,
@@ -177,8 +181,8 @@ console.log(acceptedArray);
       .post('https://bkedtest.logistiex.com/SellerMainScreen/postRD', {
         runsheetNo: runsheetNo,
         expected: route.params.Forward,
-        accepted: route.params.accepted + route.params.tagged,
-        rejected: route.params.rejected,
+        accepted: newaccepted,
+        rejected: newrejected,
         nothandedOver: newNotDelivered,
         feUserID: route.params.userId,
         receivingTime: new Date().valueOf(),
@@ -193,9 +197,9 @@ console.log(acceptedArray);
         nothandedOverShipments: notDeliveredArray,
       })
       .then(function (response) {
-        console.log("POST RD Data Submitted", response.data);
+        console.log('POST RD Data Submitted', response.data);
         alert('Your Data has submitted');
-        navigation.navigate('Main')
+        navigation.navigate('Main');
       })
       .catch(function (error) {
         console.log(error.response.data);
@@ -203,7 +207,6 @@ console.log(acceptedArray);
   };
 
   const sendSmsOtp = async () => {
-    console.log(mobileNumber);
     const response = await axios
       .post('https://bkedtest.logistiex.com/SMS/msg', {
         mobileNumber: mobileNumber,
