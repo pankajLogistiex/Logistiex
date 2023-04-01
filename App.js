@@ -166,7 +166,6 @@ function StackNavigators({navigation}) {
   useEffect(() => {
     (async () => {
       if (userId) {
-        loadAPI_Data10();
         loadAPI_Data1();
         loadAPI_Data2();
         loadAPI_Data3();
@@ -185,7 +184,6 @@ function StackNavigators({navigation}) {
   // Sync button function
   const pull_API_Data = () => {
     console.log('api pull');
-    loadAPI_Data10();
     loadAPI_Data1();
     loadAPI_Data2();
     loadAPI_Data3();
@@ -597,18 +595,18 @@ function StackNavigators({navigation}) {
                     '',
                     0,
                     res.data.data[i].actionTime,
-                    null,
-                    // res.data.data[i].shipmentStatus == 'PUS' ||
-                    // res.data.data[i].shipmentStatus == 'PUC' ||
-                    // res.data.data[i].shipmentStatus == 'DLR' ||
-                    // res.data.data[i].shipmentStatus == 'RDS'
-                    //   ? 'accepted'
-                    //   : res.data.data[i].shipmentStatus == 'PUR' ||
-                    //     res.data.data[i].shipmentStatus == 'RDR' ||
-                    //     res.data.data[i].shipmentStatus == 'UDU' ||
-                    //     res.data.data[i].shipmentStatus == 'PUF'
-                    //   ? 'rejected'
-                    //   : null,
+                    res.data.data[i].shipmentStatus == 'PUS' ||
+                    res.data.data[i].shipmentStatus == 'PUC' ||
+                    res.data.data[i].shipmentStatus == 'DLR' ||
+                    res.data.data[i].shipmentStatus == 'RDS'
+                      ? 'accepted'
+                      : res.data.data[i].shipmentStatus == 'PUR' ||
+                        res.data.data[i].shipmentStatus == 'RDR' ||
+                        res.data.data[i].shipmentStatus == 'UDU' ||
+                        res.data.data[i].shipmentStatus == 'PUF'
+                      ? 'rejected'
+                      : null,
+                    // null,
                     null,
                     null,
                     null,
@@ -633,125 +631,6 @@ function StackNavigators({navigation}) {
           },
         );
     })();
-  };
-
-  const createTables10 = () => {
-    db.transaction(txn => {
-      txn.executeSql('DROP TABLE IF EXISTS SellerMainScreenDetailsRTO', []);
-      txn.executeSql(
-        `CREATE TABLE IF NOT EXISTS SellerMainScreenDetailsRTO( 
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        clientShipmentReferenceNumber VARCHAR(200),
-        clientRefId VARCHAR(200),
-        awbNo VARCHAR(200),
-        consignorCode VARCHAR(200),
-        packagingStatus VARCHAR(200),
-        packagingId VARCHAR(200),
-        runSheetNumber VARCHAR(200),
-        shipmentStatus VARCHAR(200),
-        shipmentAction VARCHAR(200),
-        rejectedReason VARCHAR(200),
-        actionTime VARCHAR(200),
-        status VARCHAR(200)
-      )`,
-        [],
-        (sqlTxn, res) => {
-          // console.log("table created successfully details213 ");
-          // loadAPI_Data();
-        },
-        error => {
-          console.log('error on creating table ' + error.message);
-        },
-      );
-    });
-  };
-  const loadAPI_Data10 = () => {
-    // setIsLoading(!isLoading);
-    (async () => {
-      await axios
-        .get(
-          `https://bkedtest.logistiex.com/SellerMainScreen/workload/${userId}`,
-        )
-        .then(
-          res => {
-            createTables10();
-            // console.log('Table10 API OK 123: ' + res.data.data.length);
-            for (let i = 0; i < res.data.data.length; i++) {
-              // console.log(res.data.data[i].consignorCode);
-              if (res.data.data[i].shipmentStatus === 'RTO') {
-                db.transaction(txn => {
-                  txn.executeSql(
-                    `INSERT OR REPLACE INTO SellerMainScreenDetailsRTO( 
-              clientShipmentReferenceNumber ,
-              clientRefId ,
-              awbNo ,
-              consignorCode ,
-              packagingStatus ,
-              packagingId ,
-              runSheetNumber ,
-              shipmentStatus ,
-              shipmentAction ,
-              rejectedReason ,
-              actionTime ,
-              status 
-            ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)`,
-                    [
-                      res.data.data[i].clientShipmentReferenceNumber,
-                      res.data.data[i].clientRefId,
-                      res.data.data[i].awbNo,
-                      res.data.data[i].consignorCode,
-                      res.data.data[i].packagingStatus,
-                      res.data.data[i].packagingId,
-                      res.data.data[i].runSheetNumber,
-                      res.data.data[i].shipmentStatus,
-                      res.data.data[i].shipmentAction,
-                      res.data.data[i].rejectedReason,
-                      res.data.data[i].actionTime,
-                      'Rejected',
-                    ],
-                    (sqlTxn, _res) => {
-                      // console.log(`\n Data Added to local db successfully 213`);
-                      // console.log(res);
-                    },
-                    error => {
-                      console.log('error on adding data ' + error.message);
-                    },
-                  );
-                });
-              }
-            }
-            viewDetails10();
-            // setIsLoading(false);
-          },
-          error => {
-            console.log(error);
-          },
-        );
-    })();
-  };
-  const viewDetails10 = () => {
-    db.transaction(tx => {
-      tx.executeSql(
-        'SELECT * FROM SellerMainScreenDetailsRTO',
-        [],
-        (tx1, results) => {
-          let temp = [];
-          for (let i = 0; i < results.rows.length; ++i) {
-            temp.push(results.rows.item(i));
-            // var address121 = results.rows.item(i).consignorAddress;
-            // var address_json = JSON.parse(address121);
-            // console.log(typeof (address_json));
-            // console.log("Address from local db : " + address_json.consignorAddress1 + " " + address_json.consignorAddress2);
-            // ToastAndroid.show('consignorName:' + results.rows.item(i).consignorName + "\n" + 'PRSNumber : ' + results.rows.item(i).PRSNumber, ToastAndroid.SHORT);
-            // ToastAndroid.show("Sync Successful"+ results.rows.item(i).clientShipmentReferenceNumber,ToastAndroid.SHORT);
-          }
-          // ToastAndroid.show('Sync Successful', ToastAndroid.SHORT);
-          // m++;
-          // console.log("Data from Local Database1 : \n ", JSON.stringify(temp, null, 4));
-          // console.log('Table2 DB OK :', temp.length);
-        },
-      );
-    });
   };
 
   // Table 3
