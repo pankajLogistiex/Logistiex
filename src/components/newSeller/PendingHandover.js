@@ -144,7 +144,11 @@ const PendingHandover = ({route}) => {
         setDropDownValue(item);
       }
       const pendingHandover11 = ()=>{
-        console.log("ok"+consignorCode,DropDownValue);
+        console.log("ok"+consignorCode,DropDownValue,DropDownValue,
+        new Date().valueOf(),
+        latitude,
+        longitude,
+        consignorCode);
         db.transaction(tx => {
             tx.executeSql(
               'UPDATE SellerMainScreenDetails SET handoverStatus="pendingHandover" , rejectedReasonL1=?, eventTime=?, latitude=?, longitude=? WHERE shipmentAction="Seller Delivery" AND handoverStatus IS Null And consignorCode=?',
