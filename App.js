@@ -43,7 +43,6 @@ import Dispatch from './src/components/newSeller/Dispatch';
 import MapScreen from './src/components/MapScreen';
 import Reject from './src/components/RejectReason';
 import POD from './src/components/newSeller/POD';
-import StartTrip from './src/components/StartTrip';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   TouchableOpacity,
@@ -61,12 +60,10 @@ import axios from 'axios';
 import {openDatabase} from 'react-native-sqlite-storage';
 import NewSellerAdditionNotification from './src/components/NewSellerAdditionNotification';
 import StartEndDetails from './src/components/StartEndDetails';
-import EndTrip from './src/components/EndTrip';
 import SellerSelection from './src/components/newSeller/SellerSelection';
 import UpdateSellerCloseReasonCode from './src/components/newSeller/UpdateSellerCloseReasonCode';
 import CloseReasonCode from './src/components/newSeller/CloseReasonCode';
 import ReturnHandoverRejectionTag from './src/components/newSeller/ReturnHandoverRejectionTag';
-import CloseTrip from './src/components/newSeller/CloseTrip';
 import HandoverShipmentRTO from './src/components/newSeller/HandoverShipmentRTO';
 import {LogBox} from 'react-native';
 import MyTrip from './src/components/MyTrip';
@@ -152,24 +149,6 @@ function StackNavigators({navigation}) {
       console.log(e);
     }
   };
-  const getDataTrip = async () => {
-    try {
-      const StartEndTrip = await AsyncStorage.getItem('@StartEndTrip');
-      if (StartEndTrip !== null) {
-        const data = JSON.parse(StartEndTrip);
-        // setTripValue(data);
-        // console.log(data, 'startEnddata')
-        // await AsyncStorage.setItem('@StartEndTrip', JSON.stringify(data));
-        // await AsyncStorage.removeItem('@StartEndTrip');
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  };
-
-  useEffect(() => {
-    getDataTrip();
-  }, []);
 
   useEffect(() => {
     // This useEffect  is use to hide warnings in mobile screen .
@@ -261,7 +240,7 @@ function StackNavigators({navigation}) {
         console.log(e);
       });
   };
-console.log(userId)
+  console.log(userId);
   async function postSPSCalling(row) {
     console.log('===========row=========', {
       clientShipmentReferenceNumber: row.clientShipmentReferenceNumber,
@@ -316,7 +295,7 @@ console.log(userId)
       })
       .then(response => {
         console.log('sync Successfully pushed');
-        console.log(response)
+        console.log(response);
         db.transaction(tx => {
           tx.executeSql(
             'UPDATE SellerMainScreenDetails SET syncStatus="done" WHERE clientShipmentReferenceNumber = ?',
@@ -408,7 +387,7 @@ console.log(userId)
   };
 
   /*              Press (Ctrl + k + 2) keys together for better API tables view in App.js (VSCode) */
-  
+
   // Table 1
   const createTables1 = () => {
     db.transaction(txn => {
@@ -1267,27 +1246,6 @@ console.log(userId)
         <Stack.Screen
           name="CloseReasonCode"
           component={CloseReasonCode}
-          options={{
-            headerTitle: props => (
-              <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
-                  Notification
-                </Heading>
-              </NativeBaseProvider>
-            ),
-            headerLeft: () => (
-              <MaterialIcons
-                name="menu"
-                style={{fontSize: 30, marginLeft: 10, color: 'white'}}
-                onPress={() => navigation.toggleDrawer()}
-              />
-            ),
-          }}
-        />
-
-        <Stack.Screen
-          name="CloseTrip"
-          component={CloseTrip}
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
@@ -2543,48 +2501,6 @@ console.log(userId)
         />
 
         <Stack.Screen
-          name="StartTrip"
-          component={StartTrip}
-          options={{
-            headerTitle: props => (
-              <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
-                  Start Trip
-                </Heading>
-              </NativeBaseProvider>
-            ),
-            headerLeft: () => (
-              <MaterialIcons
-                name="menu"
-                style={{fontSize: 30, marginLeft: 10, color: 'white'}}
-                onPress={() => navigation.toggleDrawer()}
-              />
-            ),
-          }}
-        />
-
-        <Stack.Screen
-          name="EndTrip"
-          component={EndTrip}
-          options={{
-            headerTitle: props => (
-              <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
-                  End Trip
-                </Heading>
-              </NativeBaseProvider>
-            ),
-            headerLeft: () => (
-              <MaterialIcons
-                name="menu"
-                style={{fontSize: 30, marginLeft: 10, color: 'white'}}
-                onPress={() => navigation.toggleDrawer()}
-              />
-            ),
-          }}
-        />
-
-        <Stack.Screen
           name="MyTrip"
           component={MyTrip}
           options={{
@@ -2679,7 +2595,6 @@ function CustomDrawerContent({navigation}) {
   const [email, SetEmail] = useState('');
   const [name, setName] = useState('');
   const [id, setId] = useState('');
-  const [tripValue, setTripValue] = useState('My Trip');
   const [tripData, setTripData] = useState([]);
   const getData = async () => {
     try {
@@ -2697,55 +2612,8 @@ function CustomDrawerContent({navigation}) {
     } catch (e) {
       console.log(e);
     }
-    // try {
-    //   const StartEndTrip = await AsyncStorage.getItem('@StartEndTrip');
-    //   if (StartEndTrip !== null) {
-    //     const data = JSON.parse(StartEndTrip);
-    //     setTripValue(data);
-    //   }
-    // } catch (e) {
-    //   console.log(e);
-    // }
-  };
-  let current = new Date();
-  let tripid = current.toString();
-  let dateStart = 0;
-  let dateEnd = tripid.indexOf(
-    ' ',
-    tripid.indexOf(' ', tripid.indexOf(' ') + 1) + 1,
-  );
-  let date = dateEnd
-    ? tripid.substring(dateStart, dateEnd + 5)
-    : 'No match found';
-  const fetchData = () => {
-    if (id) {
-      axios
-        .get('https://bkedtest.logistiex.com/UserTripInfo/getUserTripInfo', {
-          params: {
-            tripID: id + '_' + date,
-          },
-        })
-        .then(response => {
-          setTripData(response.data.res_data);
-        })
-        .catch(error => {
-          console.log(error, 'error');
-        });
-    }
   };
 
-  useEffect(() => {
-    fetchData();
-  }, [id]);
-
-  useEffect(() => {
-    if (tripData && tripData.startTime) {
-      setTripValue('Trip Started');
-    }
-    if (tripData && tripData.startTime && tripData.endTime) {
-      setTripValue('Trip Ended');
-    }
-  }, [tripData]);
   useEffect(() => {
     const StartValue = setInterval(() => {
       getData();
@@ -2820,7 +2688,7 @@ function CustomDrawerContent({navigation}) {
               }}
               mt={4}
               style={{color: '#004aad', borderColor: '#004aad'}}>
-              <Text style={{color: '#004aad'}}>{tripValue}</Text>
+              <Text style={{color: '#004aad'}}>My Trip</Text>
             </Button>
           </Box>
         </View>
