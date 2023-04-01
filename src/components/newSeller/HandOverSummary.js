@@ -143,10 +143,11 @@ return (
               <DataTable.Title style={{flex: 1.2}}><Text style={{ textAlign: 'center', color:'white'}}>No. of Shipments</Text></DataTable.Title>
               <DataTable.Title style={{flex: 1.2}}><Text style={{ textAlign: 'center', color:'white'}}>No. of Bags</Text></DataTable.Title>
             </DataTable.Header>
-
+ 
             {displayData && data.length > 0
                 ? Object.keys(displayData11).map((consignorCode, index) =>
-                    displayData11[consignorCode].scanned >= 0 ? (
+                    // displayData11[consignorCode].scanned >= 0 && 
+                    displayData11[consignorCode].scanned+ displayData11[consignorCode].bags!==0 ? (
                         <DataTable.Row
                         style={{
                           height: 'auto',
