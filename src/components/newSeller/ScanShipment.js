@@ -42,6 +42,9 @@ import {
   marginTop,
   style,
 } from 'styled-system';
+import dingReject11 from '../../assets/rejected_sound.mp3';
+import dingAccept11 from '../../assets/beep_accepted.mp3';
+import Sound from 'react-native-sound';
 import {Console} from 'console';
 // import GetLocation from 'react-native-get-location';
 // import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
@@ -175,6 +178,52 @@ const ScanShipment = ({route}) => {
     reloadScanner();
   }, []);
 
+
+  Sound.setCategory('Playback');
+
+  var dingAccept = new Sound(dingAccept11, error => {
+    if (error) {
+      console.log('failed to load the sound', error);
+      return;
+    }
+    // if loaded successfully
+    // console.log(
+    //   'duration in seconds: ' +
+    //     dingAccept.getDuration() +
+    //     'number of channels: ' +
+    //     dingAccept.getNumberOfChannels(),
+    // );
+  });
+  
+    useEffect(() => {
+      dingAccept.setVolume(1);
+      return () => {
+        dingAccept.release();
+      };
+    }, []);
+  
+    var dingReject = new Sound(dingReject11, error => {
+      if (error) {
+        console.log('failed to load the sound', error);
+        return;
+      }
+      // if loaded successfully
+      // console.log(
+      //   'duration in seconds: ' +
+      //   dingReject.getDuration() +
+      //     'number of channels: ' +
+      //     dingReject.getNumberOfChannels(),
+      // );
+    });
+    
+      useEffect(() => {
+        dingReject.setVolume(1);
+        return () => {
+          dingReject.release();
+        };
+      }, []);
+  
+
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       displayDataSPScan();
@@ -263,6 +312,15 @@ const ScanShipment = ({route}) => {
 
           if (results.rowsAffected > 0) {
             console.log(barcode + 'accepted');
+            Vibration.vibrate(200);
+            dingAccept.play(success => {
+              if (success) {
+                // Vibration.vibrate(800);
+                console.log('successfully finished playing');
+              } else {
+                console.log('playback failed due to audio decoding errors');
+              }
+            });
             displayDataSPScan();
           } else {
             console.log(barcode + 'not accepted');
@@ -421,6 +479,16 @@ const ScanShipment = ({route}) => {
     setBarcode(e.data);
     getCategories(e.data);
   };
+
+  const onSucessThroughButton=(data21)=>{
+    console.log(data21, 'barcode');
+    setBarcode(data21);
+
+    // barcode === data21 ? getCategories(data21) : setBarcode(data21);
+    // getCategories(e.data);
+    getCategories(data21);
+  };
+
 
   useEffect(() => {
     if (len) {
@@ -872,7 +940,7 @@ const ScanShipment = ({route}) => {
         <View>
           <View style={{backgroundColor: 'white'}}>
             <View style={{alignItems: 'center', marginTop: 15}}>
-              <View
+              {/* <View
                 style={{
                   backgroundColor: 'lightgray',
                   padding: 10,
@@ -884,7 +952,22 @@ const ScanShipment = ({route}) => {
                 <Text style={{fontSize: 18, fontWeight: '500'}}>
                   shipment ID:{' '}
                 </Text>
-                <Text style={{fontSize: 18, fontWeight: '500'}}>{barcode}</Text>
+                <Text style={{fontSize: 18, fontWeight: '500'}}>{barcode}</Text> */}
+
+                <View style={{backgroundColor: 'lightgrey', padding:0, flexDirection: 'row', justifyContent: 'space-between', width: '90%', borderRadius: 10, flex:1}}>
+
+<Input placeholder="Shipment ID"  value={barcode} onChangeText={(text)=>{ setBarcode(text);}}  style={{
+fontSize: 18, fontWeight: '500',
+width: 320,
+backgroundColor:'lightgrey',
+}} />
+
+<TouchableOpacity style={{flex:1,backgroundColor:'lightgrey',paddingTop:8}} onPress={()=>onSucessThroughButton(barcode)}>
+  <Center>
+ 
+  <MaterialIcons name="send" size={30} color="#004aad" />
+  </Center>
+</TouchableOpacity>
               </View>
               <Button
                 title="Reject Shipment"
