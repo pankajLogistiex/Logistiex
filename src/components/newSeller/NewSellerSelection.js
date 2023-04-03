@@ -794,7 +794,7 @@ const NewSellerSelection = ({route}) => {
                     onPress={() => setModalVisible(true)}
                     style={{backgroundColor: '#004aad', width: '48%'}}
                     disabled={pending !== route.params.Forward}
-                    disabledStyle={{ backgroundColor: 'gray',width: '48%' }}>
+                    disabledStyle={{ backgroundColor: 'gray' }}>
                     Close Pickup
                   </Button>
                   <Button
