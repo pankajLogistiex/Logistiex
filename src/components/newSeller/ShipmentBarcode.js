@@ -86,7 +86,7 @@ const ShipmentBarcode = ({route}) => {
   let serialNo = 0;
 
 
-const [text11,setText11]=useState('');
+const [text11,setText11] = useState('');
     const buttonColor11 = text11.length === 1 ? '#004aad' : 'white';
     const [isPressed, setIsPressed] = useState(false);
 
@@ -95,7 +95,7 @@ const [text11,setText11]=useState('');
 
   // const acceptSound = new Sound('accept.mp3', Sound.MAIN_BUNDLE);
   // const rejectSound = new Sound('reject.mp3', Sound.MAIN_BUNDLE);
-  
+
   const vibrateDevice = (type) => {
     const options = {
       enableVibrateFallback: true,
@@ -147,7 +147,7 @@ var dingAccept = new Sound(dingAccept11, error => {
     //     dingReject.getNumberOfChannels(),
     // );
   });
-  
+
     useEffect(() => {
       dingReject.setVolume(1);
       return () => {
@@ -175,10 +175,12 @@ var dingAccept = new Sound(dingAccept11, error => {
   };
   useEffect(() => {
     DisplayData11();
+    check121();
   }, []);
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       displayDataSPScan();
+      check121();
       Sound.setCategory('Playback');
     });
     return unsubscribe;
@@ -187,21 +189,21 @@ var dingAccept = new Sound(dingAccept11, error => {
   //   partialClose112();
   // }, []);
 
-  const check121 =()=>{
+  const check121 = ()=>{
     db.transaction(tx => {
       tx.executeSql(
         'SELECT * FROM closeBag1 WHERE  consignorCode=? And status="scanPending"',
         [route.params.consignorCode],
         (tx1, results) => {
-          if(results.rows.length>0){
+          if (results.rows.length > 0){
           setPDCheck(true);
-          }else{
+          } else {
             setPDCheck(false);
           }
         },
       );
     });
-  }
+  };
   const displayDataSPScan = async () => {
 
     // db.transaction(tx => {
@@ -249,7 +251,7 @@ var dingAccept = new Sound(dingAccept11, error => {
 
   const partialClose112 = () => {
     console.log('partialClose popup shown11');
-  
+
     if (newaccepted + newrejected === route.params.Forward) {
       console.log(newaccepted);
       // sendSmsOtp();
@@ -269,7 +271,22 @@ var dingAccept = new Sound(dingAccept11, error => {
       });
     } else {
       setDropDownValue11('');
-      setModalVisible11(true);
+      db.transaction(tx => {
+        tx.executeSql(
+          'SELECT * FROM closeBag1 WHERE  consignorCode=? And status="scanPending"',
+          [route.params.consignorCode],
+          (tx1, results) => {
+            if (results.rows.length > 0){
+            setPDCheck(true);
+            setModalVisible11(true);
+            } else {
+              setPDCheck(false);
+               setModalVisible11(true);
+            }
+          },
+        );
+      });
+      // setModalVisible11(true);
     }
   };
 
@@ -328,7 +345,7 @@ var dingAccept = new Sound(dingAccept11, error => {
   };
 
   function handleButtonPress11(item) {
-    console.log("partial button 121"+item);
+    console.log('partial button 121' + item);
     if (item === 'PCR1') {
       setDropDownValue11('');
       setModalVisible11(false);
@@ -421,6 +438,7 @@ var dingAccept = new Sound(dingAccept11, error => {
               ToastAndroid.show('Bag closed successfully', ToastAndroid.SHORT);
               console.log(results11);
               setBarcode('');
+              setPDCheck(true);
               setCheck11(0);
               setText11('');
               viewDetailBag();
@@ -487,6 +505,7 @@ var dingAccept = new Sound(dingAccept11, error => {
               ToastAndroid.show('Bag closed successfully', ToastAndroid.SHORT);
               console.log(results11);
               setBarcode('');
+              setPDCheck(true);
                 setText11('');
                 setCheck11(0);
               viewDetailBag();
@@ -617,7 +636,7 @@ var dingAccept = new Sound(dingAccept11, error => {
 
     const rejectDetails2 = () => {
       console.log('scan 45456');
-var barcode11=barcode;
+var barcode11 = barcode;
       db.transaction((tx) => {
         tx.executeSql('UPDATE SellerMainScreenDetails SET status="rejected" ,rejectionReasonL1=?  WHERE status="accepted" AND consignorCode=? AND (awbNo=? OR clientRefId=? OR clientShipmentReferenceNumber=?) ', [DropDownValue,route.params.consignorCode, barcode11,barcode11,barcode11], (tx1, results) => {
           let temp = [];
@@ -751,7 +770,7 @@ var barcode11=barcode;
                     Vibration.vibrate(800);
                     dingReject.play(success => {
                       if (success) {
-                        
+
                         console.log('successfully finished playing');
                       } else {
                         console.log('playback failed due to audio decoding errors');
@@ -764,7 +783,7 @@ var barcode11=barcode;
                     setCheck11(0);
                     dingReject.play(success => {
                       if (success) {
-                        
+
                         console.log('successfully finished playing');
                       } else {
                         console.log('playback failed due to audio decoding errors');
@@ -820,7 +839,7 @@ var barcode11=barcode;
       Vibration.vibrate(100);
       dingAccept.play(success => {
         if (success) {
-          
+
           console.log('successfully finished playing');
         } else {
           console.log('playback failed due to audio decoding errors');
@@ -830,7 +849,7 @@ var barcode11=barcode;
       // getCategories(e.data);
       setBagSeal(e.data);
     };
-    const onSucessThroughButton=(data21)=>{
+    const onSucessThroughButton = (data21)=>{
       console.log(data21, 'barcode');
       setBarcode(data21);
       getCategories(data21);
@@ -932,7 +951,7 @@ var barcode11=barcode;
           <Modal.Body>
             {PartialCloseData &&
               PartialCloseData.map((d, index) =>
-                newaccepted === 0 && pdCheck && d.reasonName === 'Partial Dispatch' ? (
+                 !pdCheck && d.reasonName === 'Partial Dispatch' ? (
                   <Button
                     h="12"
                     paddingBottom={5}
@@ -946,7 +965,7 @@ var barcode11=barcode;
                         d.reasonID === DropDownValue11 ? '#6666FF' : '#C8C8C8',
                       opacity: 0.4,
                     }}
-                    title={d.reasonName} onPress={() => ToastAndroid.show("No bags for dispatch",ToastAndroid.SHORT)} >
+                    title={d.reasonName} onPress={() => ToastAndroid.show('No bags for dispatch',ToastAndroid.SHORT)} >
                     {' '}
                     {/* onPress={() => ToastAndroid.show("No bags for dispatch",ToastAndroid.SHORT)}  */}
                     <Text
@@ -1255,7 +1274,7 @@ var barcode11=barcode;
           />
         )}
         <View>
-          <Center></Center>
+          <Center />
         </View>
         <View>
           <View style={{backgroundColor: 'white'}}>
@@ -1281,7 +1300,7 @@ backgroundColor:'lightgrey',
 {/* <Button flex="1" mt={2} bg={buttonColor11} onPress={() => { }}>Submit</Button>
                 <Text style={{fontSize: 18, fontWeight: '500'}}>shipment ID: </Text>
                 {/* <MaterialIcons name="send" size={24} color={onPress ? 'black' : 'gray'} /> */}
-                {/* <Text style={{fontSize: 18, fontWeight: '500'}}>{barcode}</Text> */} 
+                {/* <Text style={{fontSize: 18, fontWeight: '500'}}>{barcode}</Text> */}
                 {/* <View style={{ flex: 1,
                 alignItems: 'center',
                 justifyContent: 'center',}}>
@@ -1300,7 +1319,7 @@ backgroundColor:'lightgrey',
               </View>
               <Button
                 title="Reject Shipment"
-                onPress={() =>{ check11===0 ? ToastAndroid.show("No Shipment to Reject",ToastAndroid.SHORT) :setModalVisible(true)}}
+                onPress={() =>{ check11 === 0 ? ToastAndroid.show('No Shipment to Reject',ToastAndroid.SHORT) : setModalVisible(true);}}
                 w="90%"
                 size="lg"
                 bg={buttonColorRejected}
