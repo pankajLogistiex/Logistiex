@@ -2,23 +2,27 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import {NativeBaseProvider, Box, Center, VStack, Button, Icon, Input, Heading, Alert, Text, Modal, ScrollView, Stack} from 'native-base';
 import { Image, StyleSheet, View } from 'react-native';
+import { backendUrl } from '../utils/backendUrl';
 
 export default function StartEndDetails({navigation,route}) {
   const [data, setData] = useState();
   const [printData,setPrintData]=useState([])
   
     useEffect(() => {
-        axios.get("https://bkedtest.logistiex.com/UserTripInfo/getUserTripInfo", {
-        params: {
-        tripID: route.params.tripID, 
-      }
-      }).then(response => {
-      console.log('data',response.data);
-      setData(response.data);
-      setPrintData(response.data.res_data);
-      }).catch(error => {
-      console.log(error, 'error');
-      });
+        axios
+          .get(backendUrl + 'UserTripInfo/getUserTripInfo', {
+            params: {
+              tripID: route.params.tripID,
+            },
+          })
+          .then(response => {
+            console.log('data', response.data);
+            setData(response.data);
+            setPrintData(response.data.res_data);
+          })
+          .catch(error => {
+            console.log(error, 'error');
+          });
     }, []);
     
     return (

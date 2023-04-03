@@ -43,6 +43,7 @@ import OTPTextInput from 'react-native-otp-textinput';
 import dingReject11 from '../../assets/rejected_sound.mp3';
 
 import dingAccept11 from '../../assets/beep_accepted.mp3';
+import { backendUrl } from '../../utils/backendUrl';
 const db = openDatabase({
   name: 'rn_sqlite',
 });
@@ -331,7 +332,7 @@ var dingAccept = new Sound(dingAccept11, error => {
   const sendSmsOtp = async () => {
     console.log(mobileNumber);
     const response = await axios
-      .post('https://bkedtest.logistiex.com/SMS/msg', {
+      .post(backendUrl + 'SMS/msg', {
         mobileNumber: mobileNumber,
       })
       .then(setShowModal11(true))
@@ -359,7 +360,7 @@ var dingAccept = new Sound(dingAccept11, error => {
 
   function validateOTP() {
     axios
-      .post('https://bkedtest.logistiex.com/SMS/OTPValidate', {
+      .post(backendUrl + 'SMS/OTPValidate', {
         mobileNumber: mobileNumber,
         otp: inputOtp,
       })

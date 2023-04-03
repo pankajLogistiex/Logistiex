@@ -31,6 +31,7 @@ import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import OTPTextInput from 'react-native-otp-textinput';
 
 import {openDatabase} from 'react-native-sqlite-storage';
+import { backendUrl } from '../../utils/backendUrl';
 
 const db = openDatabase({
   name: 'rn_sqlite',
@@ -160,7 +161,7 @@ const POD = ({route}) => {
 
     try {
       axios
-        .post('https://bkedtest.logistiex.com/SellerMainScreen/postRD', {
+        .post(backendUrl + 'SellerMainScreen/postRD', {
           runsheetNo: runsheetNo,
           expected: route.params.Forward,
           accepted: route.params.accepted,
@@ -194,7 +195,7 @@ const POD = ({route}) => {
 
   const sendSmsOtp = async () => {
     await axios
-      .post('https://bkedtest.logistiex.com/SMS/msg', {
+      .post(backendUrl + 'SMS/msg', {
         mobileNumber: mobileNumber,
       })
       .then(setShowModal11(true))
@@ -211,7 +212,7 @@ const POD = ({route}) => {
 
   function validateOTP() {
     axios
-      .post('https://bkedtest.logistiex.com/SMS/OTPValidate', {
+      .post(backendUrl + 'SMS/OTPValidate', {
         mobileNumber: mobileNumber,
         otp: inputOtp,
       })
@@ -240,7 +241,6 @@ const POD = ({route}) => {
             );
           });
 
-
           db.transaction(tx => {
             tx.executeSql(
               'UPDATE SellerMainScreenDetails SET status="notPicked", rejectionReasonL1=?, eventTime=?, latitude=?, longitude=? WHERE shipmentAction="Seller Pickup" AND status IS Null And consignorCode=?',
@@ -254,8 +254,8 @@ const POD = ({route}) => {
               (tx1, results) => {
                 if (results.rowsAffected > 0) {
                   // ToastAndroid.show(
-                    // 'Partial Closed Successfully',
-                    // ToastAndroid.SHORT,
+                  // 'Partial Closed Successfully',
+                  // ToastAndroid.SHORT,
                   // );
                   console.log('added notPicked item locally');
                 } else {

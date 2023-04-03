@@ -41,10 +41,12 @@ import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import PieChart from 'react-native-pie-chart';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import GetLocation from 'react-native-get-location';
+import { backendUrl } from '../../utils/backendUrl';
 
 const SellerHandoverSelection = ({route}) => {
   const [barcodeValue, setBarcodeValue] = useState('');
-  const shipmentData = `https://bkedtest.logistiex.com/SellerMainScreen/getSellerDetails/${route.params.paramKey}`;
+  const shipmentData =
+    backendUrl + `SellerMainScreen/getSellerDetails/${route.params.paramKey}`;
   const [acc, setAcc] = useState(0);
   const [pending, setPending] = useState(route.params.Forward);
   const [Forward, setForward] = useState('');
@@ -125,7 +127,7 @@ const SellerHandoverSelection = ({route}) => {
       );
     });
     axios
-      .post('https://bkedtest.logistiex.com/SellerMainScreen/attemptFailed', {
+      .post(backendUrl + 'SellerMainScreen/attemptFailed', {
         consignorCode: route.params.consignorCode,
         rejectionReason: rejectionCode,
         feUserID: route.params.userId,

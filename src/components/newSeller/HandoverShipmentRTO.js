@@ -49,6 +49,7 @@ import {truncate} from 'fs/promises';
 import dingReject11 from '../../assets/rejected_sound.mp3';
 import dingAccept11 from '../../assets/beep_accepted.mp3';
 import Sound from 'react-native-sound';
+import { backendUrl } from '../../utils/backendUrl';
 
 const db = openDatabase({
   name: 'rn_sqlite',
@@ -483,24 +484,21 @@ var dingAccept = new Sound(dingAccept11, error => {
     const row = data.item(0);
     try {
       axios
-        .post(
-          'https://bkedtest.logistiex.com/SellerMainScreen/returnShipmentScan',
-          {
-            clientShipmentReferenceNumber: row.clientShipmentReferenceNumber,
-            awbNo: row.awbNo,
-            clientRefId: row.clientRefId,
-            courierCode: row.courierCode,
-            feUserID: userId,
-            isAccepted: true,
-            consignorCode: row.consignorCode,
-            eventTime: parseInt(new Date().valueOf()),
-            latitude: latitude,
-            longitude: longitude,
-            runsheetNo: row.runSheetNumber,
-            scanStatus: 1,
-            bagSealNo: bagId,
-          },
-        )
+        .post(backendUrl + 'SellerMainScreen/returnShipmentScan', {
+          clientShipmentReferenceNumber: row.clientShipmentReferenceNumber,
+          awbNo: row.awbNo,
+          clientRefId: row.clientRefId,
+          courierCode: row.courierCode,
+          feUserID: userId,
+          isAccepted: true,
+          consignorCode: row.consignorCode,
+          eventTime: parseInt(new Date().valueOf()),
+          latitude: latitude,
+          longitude: longitude,
+          runsheetNo: row.runSheetNumber,
+          scanStatus: 1,
+          bagSealNo: bagId,
+        })
         .then(response => {
           console.log(
             '===========Return Handover Result===========',

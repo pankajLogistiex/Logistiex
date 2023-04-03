@@ -25,12 +25,10 @@ import axios from 'axios';
 import {HStack, Button} from 'native-base';
 import React, {useState, useEffect, useRef} from 'react';
 import {useNavigation} from '@react-navigation/native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import GetLocation from 'react-native-get-location';
-import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import OTPTextInput from 'react-native-otp-textinput';
 
 import {openDatabase} from 'react-native-sqlite-storage';
+import { backendUrl } from '../../utils/backendUrl';
 
 const db = openDatabase({
   name: 'rn_sqlite',
@@ -42,15 +40,11 @@ const CollectPOD = ({route}) => {
   const [inputOtp, setInputOtp] = useState('');
   const [mobileNumber, setMobileNumber] = useState(route.params.phone);
   const [showModal11, setShowModal11] = useState(false);
-  const [modalVisible11, setModalVisible11] = useState(false);
   const [DropDownValue11, setDropDownValue11] = useState(null);
   const [PartialCloseData, setPartialCloseData] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [pending, setPending] = useState(0);
   const [message, setMessage] = useState(0);
   const [runsheetNo, setRunsheetNo] = useState('');
-  const PartialClose =
-    'https://bkedtest.logistiex.com/ADupdatePrams/getPartialClosureReasons';
   const [timer, setTimer] = useState(60);
   const [newaccepted, setnewAccepted] = useState(
     route.params.accepted + route.params.tagged,
@@ -178,7 +172,7 @@ const CollectPOD = ({route}) => {
       nothandedOverShipments: notDeliveredArray,
     });
     axios
-      .post('https://bkedtest.logistiex.com/SellerMainScreen/postRD', {
+      .post(backendUrl + 'SellerMainScreen/postRD', {
         runsheetNo: runsheetNo,
         expected: route.params.Forward,
         accepted: newaccepted,
@@ -208,7 +202,7 @@ const CollectPOD = ({route}) => {
 
   const sendSmsOtp = async () => {
     const response = await axios
-      .post('https://bkedtest.logistiex.com/SMS/msg', {
+      .post(backendUrl + 'SMS/msg', {
         mobileNumber: mobileNumber,
       })
       .then(setShowModal11(true))
@@ -225,7 +219,7 @@ const CollectPOD = ({route}) => {
 
   function validateOTP() {
     axios
-      .post('https://bkedtest.logistiex.com/SMS/OTPValidate', {
+      .post(backendUrl + 'SMS/OTPValidate', {
         mobileNumber: mobileNumber,
         otp: inputOtp,
       })
@@ -240,7 +234,8 @@ const CollectPOD = ({route}) => {
           db.transaction(tx => {
             tx.executeSql(
               'UPDATE SellerMainScreenDetails SET status="notDelivered" , rejectionReasonL1=? WHERE shipmentAction="Seller Delivery" AND status IS Null And consignorCode=?',
-            [route.params.DropDownValue,
+              [
+                route.params.DropDownValue,
                 new Date().valueOf(),
                 route.params.latitude,
                 route.params.longitude,

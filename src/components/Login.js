@@ -7,6 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Pressable } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { backendUrl } from '../utils/backendUrl';
 
 export default function Login() {
 
@@ -62,28 +63,35 @@ export default function Login() {
 
   const handleLogin = async() => {
     setLoginClicked(true);
-    await axios.post('https://bkedtest.logistiex.com/Login/login', { email: email, password: password })
-    .then(async(response) => {
-      setLoginClicked(false);
-      setMessage(1);
-      setShowModal(true);
-      await storeData({
-        UserName : response.data.userDetails.userFirstName + ' ' + response.data.userDetails.userLastName,
-        UserEmail : response.data.userDetails.userPersonalEmailId,
-        userId : response.data.userDetails.userId,
-      });
-      setTimeout(()=>{
-        setShowModal(false);
-        navigation.navigate('Main', {
-          userId : response.data.userDetails.userId,
-        });
-      }, 100);
-    }, (error) => {
-      console.log(error);
-      setLoginClicked(false);
-      setMessage(2);
-      setShowModal(true);
-    });
+    await axios
+      .post(backendUrl + 'Login/login', {email: email, password: password})
+      .then(
+        async response => {
+          setLoginClicked(false);
+          setMessage(1);
+          setShowModal(true);
+          await storeData({
+            UserName:
+              response.data.userDetails.userFirstName +
+              ' ' +
+              response.data.userDetails.userLastName,
+            UserEmail: response.data.userDetails.userPersonalEmailId,
+            userId: response.data.userDetails.userId,
+          });
+          setTimeout(() => {
+            setShowModal(false);
+            navigation.navigate('Main', {
+              userId: response.data.userDetails.userId,
+            });
+          }, 100);
+        },
+        error => {
+          console.log(error);
+          setLoginClicked(false);
+          setMessage(2);
+          setShowModal(true);
+        },
+      );
   };
 
   return (
