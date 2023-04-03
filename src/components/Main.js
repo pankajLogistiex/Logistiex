@@ -2,7 +2,13 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useEffect, useState, Alert} from 'react';
-import {Text, View, ScrollView, ToastAndroid, ActivityIndicator} from 'react-native';
+import {
+  Text,
+  View,
+  ScrollView,
+  ToastAndroid,
+  ActivityIndicator,
+} from 'react-native';
 import axios from 'axios';
 import {Fab} from 'native-base';
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -43,7 +49,6 @@ export default function Main({navigation, route}) {
   const [shnp1, setShnp1] = useState(0);
   const [shr1, setShr1] = useState(0);
 
-
   const [sdts, setSdts] = useState(0);
   const [spc1, setSpc1] = useState(0);
   const [spp1, setSpp1] = useState(0);
@@ -67,6 +72,7 @@ export default function Main({navigation, route}) {
       if (value !== null) {
         const data = JSON.parse(value);
         setId(data.userId);
+        fetchData(data.userId);
       } else {
         setId('');
       }
@@ -88,7 +94,7 @@ export default function Main({navigation, route}) {
     ? tripid.substring(dateStart, dateEnd + 5)
     : 'No match found';
 
-  const fetchData = () => {
+  const fetchData = (id) => {
     if (id) {
       axios
         .get('https://bkedtest.logistiex.com/UserTripInfo/getUserTripInfo', {
@@ -107,7 +113,7 @@ export default function Main({navigation, route}) {
 
   useEffect(() => {
     if (focus == true) {
-      fetchData();
+      fetchData(id);
     }
   }, [focus]);
   useEffect(() => {
@@ -123,7 +129,7 @@ export default function Main({navigation, route}) {
       loadSellerPickupDetails();
       loadHanoverDetails();
       loadSellerDeliveryDetails();
-      fetchData();
+      fetchData(id);
     });
     return unsubscribe;
   }, [navigation]);
@@ -135,7 +141,7 @@ export default function Main({navigation, route}) {
         loadSellerPickupDetails();
         loadHanoverDetails();
         loadSellerDeliveryDetails();
-        fetchData();
+        fetchData(id);
       }
     } catch (e) {
       console.log(e);
@@ -157,9 +163,13 @@ export default function Main({navigation, route}) {
     // setSpr(1);
     // await AsyncStorage.setItem('refresh11', 'notrefresh');
     db.transaction(tx => {
-      tx.executeSql('SELECT COUNT(DISTINCT consignorCode) as count FROM SellerMainScreenDetails WHERE shipmentAction="Seller Pickup"', [], (tx1, results) => {
-        setSpts(results.rows.item(0).count);
-      });
+      tx.executeSql(
+        'SELECT COUNT(DISTINCT consignorCode) as count FROM SellerMainScreenDetails WHERE shipmentAction="Seller Pickup"',
+        [],
+        (tx1, results) => {
+          setSpts(results.rows.item(0).count);
+        },
+      );
     });
     db.transaction(tx => {
       tx.executeSql(
@@ -212,67 +222,75 @@ export default function Main({navigation, route}) {
       );
     });
 
-        db.transaction((tx) => {
-            tx.executeSql('SELECT * FROM SellerMainScreenDetails where shipmentAction="Seller Pickup" AND status="rejected"', [], (tx1, results) => {
-                setSpr(results.rows.length);
-                setIsLoading(false);
-            });
-        });
-        setLoading(false);
-    };
+    db.transaction(tx => {
+      tx.executeSql(
+        'SELECT * FROM SellerMainScreenDetails where shipmentAction="Seller Pickup" AND status="rejected"',
+        [],
+        (tx1, results) => {
+          setSpr(results.rows.length);
+          setIsLoading(false);
+        },
+      );
+    });
+    setLoading(false);
+  };
 
-    const loadHanoverDetails = async () => {
-      setIsLoading(!isLoading);
-      // setSpp1(1);
-      // setSpnp1(1);
-      // setSpc1(1);
-      // setSpr1(1);
-      await AsyncStorage.setItem('refresh11', 'notrefresh');
-      db.transaction(tx => {
-        tx.executeSql('SELECT COUNT(DISTINCT consignorCode) as count FROM SellerMainScreenDetails WHERE shipmentAction="Seller Delivery"', [], (tx1, results) => {
+  const loadHanoverDetails = async () => {
+    setIsLoading(!isLoading);
+    // setSpp1(1);
+    // setSpnp1(1);
+    // setSpc1(1);
+    // setSpr1(1);
+    await AsyncStorage.setItem('refresh11', 'notrefresh');
+    db.transaction(tx => {
+      tx.executeSql(
+        'SELECT COUNT(DISTINCT consignorCode) as count FROM SellerMainScreenDetails WHERE shipmentAction="Seller Delivery"',
+        [],
+        (tx1, results) => {
           setShts(results.rows.item(0).count);
-        });
-      });
-      db.transaction(tx => {
-        tx.executeSql(
-          'SELECT * FROM SellerMainScreenDetails WHERE shipmentAction="Seller Delivery" AND handoverStatus IS NULL',
-          [],
-          (tx1, results) => {
-            setShp1(results.rows.length);
-          },
-        );
-      });
-      db.transaction(tx => {
-        tx.executeSql(
-          'SELECT * FROM SellerMainScreenDetails WHERE shipmentAction="Seller Delivery" AND handoverStatus="pendingHandover"',
-          [],
-          (tx1, results) => {
-            setShnp1(results.rows.length);
-          },
-        );
-      });
+        },
+      );
+    });
+    db.transaction(tx => {
+      tx.executeSql(
+        'SELECT * FROM SellerMainScreenDetails WHERE shipmentAction="Seller Delivery" AND handoverStatus IS NULL',
+        [],
+        (tx1, results) => {
+          setShp1(results.rows.length);
+        },
+      );
+    });
+    db.transaction(tx => {
+      tx.executeSql(
+        'SELECT * FROM SellerMainScreenDetails WHERE shipmentAction="Seller Delivery" AND handoverStatus="pendingHandover"',
+        [],
+        (tx1, results) => {
+          setShnp1(results.rows.length);
+        },
+      );
+    });
 
-      db.transaction(tx => {
-        tx.executeSql(
-          'SELECT * FROM SellerMainScreenDetails where shipmentAction="Seller Delivery" AND handoverStatus="accepted" ',
-          [],
-          (tx1, results) => {
-            let temp = [];
-            setShc1(results.rows.length);
-          },
-        );
-      });
-      db.transaction(tx => {
-        tx.executeSql(
-          'SELECT * FROM SellerMainScreenDetails where shipmentAction="Seller Delivery" AND  handoverStatus="rejected"',
-          [],
-          (tx1, results) => {
-            setShr1(results.rows.length);
-          },
-        );
-      });
-      setLoading(false);
-    };
+    db.transaction(tx => {
+      tx.executeSql(
+        'SELECT * FROM SellerMainScreenDetails where shipmentAction="Seller Delivery" AND handoverStatus="accepted" ',
+        [],
+        (tx1, results) => {
+          let temp = [];
+          setShc1(results.rows.length);
+        },
+      );
+    });
+    db.transaction(tx => {
+      tx.executeSql(
+        'SELECT * FROM SellerMainScreenDetails where shipmentAction="Seller Delivery" AND  handoverStatus="rejected"',
+        [],
+        (tx1, results) => {
+          setShr1(results.rows.length);
+        },
+      );
+    });
+    setLoading(false);
+  };
 
   const loadSellerDeliveryDetails = async () => {
     setIsLoading(!isLoading);
@@ -282,9 +300,13 @@ export default function Main({navigation, route}) {
     // setSpr1(1);
     await AsyncStorage.setItem('refresh11', 'notrefresh');
     db.transaction(tx => {
-      tx.executeSql('SELECT COUNT(DISTINCT consignorCode) as count FROM SellerMainScreenDetails WHERE shipmentAction="Seller Delivery"', [], (tx1, results) => {
-        setSdts(results.rows.item(0).count);
-      });
+      tx.executeSql(
+        'SELECT COUNT(DISTINCT consignorCode) as count FROM SellerMainScreenDetails WHERE shipmentAction="Seller Delivery"',
+        [],
+        (tx1, results) => {
+          setSdts(results.rows.item(0).count);
+        },
+      );
     });
     db.transaction(tx => {
       tx.executeSql(
@@ -506,7 +528,7 @@ export default function Main({navigation, route}) {
     {
       title: 'Seller Handover',
       totalUsers: shts,
-      pendingOrder: shp1 ,
+      pendingOrder: shp1,
       completedOrder: shc1,
       rejectedOrder: shr1,
       notPicked: shnp1,
@@ -531,285 +553,22 @@ export default function Main({navigation, route}) {
 
   return (
     <NativeBaseProvider>
-      {loading 
-      ?
+      {loading ? (
         <ActivityIndicator size="large" color="blue" style={{marginTop: 44}} />
-      :
-      <Box flex={1} bg="gray.300">
-        <ScrollView>
-          <Box flex={1} bg="gray.300" p={4}>
-            {dashboardData.map((it, index) => {
-              if (
-                it.completedOrder !== 0 ||
-                it.pendingOrder !== 0 ||
-                it.notPicked !== 0 ||
-                it.rejectedOrder !== 0
-              ) {
-
-                if (shp1 === 0 && shc1 !== 0){
-                return (
-                  it.title === 'Seller Pickups' || it.title === 'Seller Deliveries'
-                        ?
-                  <Box pt={4} mb="6" rounded="md" bg="white" key={index}>
-                    <Box
-                      w="100%"
-                      flexDir="row"
-                      justifyContent="space-between"
-                      mb={4}
-                      px={4}>
-                      <Box w="45%">
-                        <Heading size="sm" mb={4}>
-                          {it.title}
-                        </Heading>
-                        <PieChart
-                          widthAndHeight={120}
-                          series={[
-                            it.completedOrder,
-                            it.pendingOrder,
-                            it.notPicked,
-                            it.rejectedOrder,
-                          ]}
-                          sliceColor={[
-                            '#4CAF50',
-                            '#2196F3',
-                            '#FFEB3B',
-                            '#F44336',
-                          ]}
-                          doughnut={true}
-                          coverRadius={0.6}
-                          coverFill={'#FFF'}
-                        />
-                      </Box>
-                      <View style={{width: '50%'}}>
-                        <View
-                          style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            marginBottom: 10,
-                          }}>
-                          <Heading size="sm">
-                            {it.title === 'Seller Pickups' || it.title === 'Seller Handover'
-                            //  || it.title === 'Seller Deliveries'
-                              ? 'Total Sellers'
-                              : 'Total Customers'}
-                          </Heading>
-                          <Heading size="sm">{it.totalUsers}</Heading>
-                        </View>
-                        <View
-                          style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            marginTop: 10,
-                          }}>
-                          <View style={{flexDirection: 'row'}}>
-                            <View
-                              style={{
-                                width: 15,
-                                height: 15,
-                                backgroundColor: '#4CAF50',
-                                borderRadius: 100,
-                                marginTop: 4,
-                              }}
-                            />
-                            <Text
-                              style={{
-                                marginLeft: 10,
-                                fontWeight: '500',
-                                fontSize: 14,
-                                color: 'black',
-                              }}>
-                              Completed
-                            </Text>
-                          </View>
-                          <Text
-                            style={{
-                              fontWeight: '500',
-                              fontSize: 14,
-                              color: 'black',
-                            }}>
-                            {it.completedOrder}
-                          </Text>
-                        </View>
-                        <View
-                          style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            marginTop: 10,
-                          }}>
-                          <View style={{flexDirection: 'row'}}>
-                            <View
-                              style={{
-                                width: 15,
-                                height: 15,
-                                backgroundColor: '#2196F3',
-                                borderRadius: 100,
-                                marginTop: 4,
-                              }}
-                            />
-                            <Text
-                              style={{
-                                marginLeft: 10,
-                                fontWeight: '500',
-                                fontSize: 14,
-                                color: 'black',
-                              }}>
-                              Pending
-                            </Text>
-                          </View>
-                          <Text
-                            style={{
-                              fontWeight: '500',
-                              fontSize: 14,
-                              color: 'black',
-                            }}>
-                            {it.pendingOrder}
-                          </Text>
-                        </View>
-                        <View
-                          style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            marginTop: 10,
-                          }}>
-                          <View style={{flexDirection: 'row'}}>
-                            <View
-                              style={{
-                                width: 15,
-                                height: 15,
-                                backgroundColor: '#FFEB3B',
-                                borderRadius: 100,
-                                marginTop: 4,
-                              }}
-                            />
-                            {it.title === 'Seller Handover' ? (
-                              <Text
-                                style={{
-                                  marginLeft: 10,
-                                  fontWeight: '500',
-                                  fontSize: 14,
-                                  color: 'black',
-                                }}>
-                                Not Handover
-                              </Text>
-                            ) :
-                            it.title === 'Seller Deliveries' ? (
-                              <Text
-                                style={{
-                                  marginLeft: 10,
-                                  fontWeight: '500',
-                                  fontSize: 14,
-                                  color: 'black',
-                                }}>
-                                Not Delivered
-                              </Text>
-                            ) : (
-                              <Text
-                                style={{
-                                  marginLeft: 10,
-                                  fontWeight: '500',
-                                  fontSize: 14,
-                                  color: 'black',
-                                }}>
-                                Not Picked
-                              </Text>
-                            )
-                            }
-                          </View>
-                          <Text
-                            style={{
-                              fontWeight: '500',
-                              fontSize: 14,
-                              color: 'black',
-                            }}>
-                            {it.notPicked}
-                          </Text>
-                        </View>
-                        <View
-                          style={{
-                            flexDirection: 'row',
-                            justifyContent: 'space-between',
-                            marginTop: 10,
-                          }}>
-                          <View style={{flexDirection: 'row'}}>
-                            <View
-                              style={{
-                                width: 15,
-                                height: 15,
-                                backgroundColor: '#F44336',
-                                borderRadius: 100,
-                                marginTop: 4,
-                              }}
-                            />
-                            <Text
-                              style={{
-                                marginLeft: 10,
-                                fontWeight: '500',
-                                fontSize: 14,
-                                color: 'black',
-                              }}>
-                              Rejected
-                            </Text>
-                          </View>
-                          <Text
-                            style={{
-                              fontWeight: '500',
-                              fontSize: 14,
-                              color: 'black',
-                            }}>
-                            {it.rejectedOrder}
-                          </Text>
-                        </View>
-                      </View>
-                    </Box>
-                    {
-                       it.title === 'Seller Handover' ? (
-                        <Button
-                          w="100%"
-                          size="lg"
-                          bg="#004aad"
-                          onPress={()=>navigation.navigate('SellerHandover')
-                          }>
-                          Start Handover
-                        </Button>
-                      ) :
-                    it.title === 'Seller Deliveries' ? (
-                      <Button
-                        w="100%"
-                        size="lg"
-                        bg="#004aad"
-                        onPress={() =>
-                          navigation.navigate('SellerDeliveries', {
-                            Forward: Forward,
-                            Reverse: Reverse,
-                            Trip: tripValue,
-                          })
-                        }>
-                        New Delivery
-                      </Button>
-                    ) : (
-                      <Button
-                        w="100%"
-                        size="lg"
-                        bg="#004aad"
-                        onPress={() =>
-                          navigation.navigate('NewSellerPickup', {
-                            Forward: Forward,
-                            Reverse: Reverse,
-                            Trip: tripValue,
-                            userId: id,
-                          })
-                        }>
-                        New Pickup
-                      </Button>
-                    )
-
-                    }
-                  </Box> : null
-                );
-                  } else {
-                    return (
-                      it.title === 'Seller Pickups' || it.title === 'Seller Handover'
-                        ?
+      ) : (
+        <Box flex={1} bg="gray.300">
+          <ScrollView>
+            <Box flex={1} bg="gray.300" p={4}>
+              {dashboardData.map((it, index) => {
+                if (
+                  it.completedOrder !== 0 ||
+                  it.pendingOrder !== 0 ||
+                  it.notPicked !== 0 ||
+                  it.rejectedOrder !== 0
+                ) {
+                  if (shp1 === 0 && shc1 !== 0) {
+                    return it.title === 'Seller Pickups' ||
+                      it.title === 'Seller Deliveries' ? (
                       <Box pt={4} mb="6" rounded="md" bg="white" key={index}>
                         <Box
                           w="100%"
@@ -848,9 +607,10 @@ export default function Main({navigation, route}) {
                                 marginBottom: 10,
                               }}>
                               <Heading size="sm">
-                                {it.title === 'Seller Pickups' || it.title === 'Seller Handover'
-                                //  || it.title === 'Seller Deliveries'
-                                  ? 'Total Sellers'
+                                {it.title === 'Seller Pickups' ||
+                                it.title === 'Seller Handover'
+                                  ? //  || it.title === 'Seller Deliveries'
+                                    'Total Sellers'
                                   : 'Total Customers'}
                               </Heading>
                               <Heading size="sm">{it.totalUsers}</Heading>
@@ -951,8 +711,7 @@ export default function Main({navigation, route}) {
                                     }}>
                                     Not Handover
                                   </Text>
-                                ) :
-                                it.title === 'Seller Deliveries' ? (
+                                ) : it.title === 'Seller Deliveries' ? (
                                   <Text
                                     style={{
                                       marginLeft: 10,
@@ -972,8 +731,7 @@ export default function Main({navigation, route}) {
                                     }}>
                                     Not Picked
                                   </Text>
-                                )
-                                }
+                                )}
                               </View>
                               <Text
                                 style={{
@@ -1021,18 +779,17 @@ export default function Main({navigation, route}) {
                             </View>
                           </View>
                         </Box>
-                        {
-                           it.title === 'Seller Handover' ? (
-                            <Button
-                              w="100%"
-                              size="lg"
-                              bg="#004aad"
-                              onPress={()=>navigation.navigate('SellerHandover')
-                              }>
-                              Start Handover
-                            </Button>
-                          ) :
-                        it.title === 'Seller Deliveries' ? (
+                        {it.title === 'Seller Handover' ? (
+                          <Button
+                            w="100%"
+                            size="lg"
+                            bg="#004aad"
+                            onPress={() =>
+                              navigation.navigate('SellerHandover')
+                            }>
+                            Start Handover
+                          </Button>
+                        ) : it.title === 'Seller Deliveries' ? (
                           <Button
                             w="100%"
                             size="lg"
@@ -1061,256 +818,513 @@ export default function Main({navigation, route}) {
                             }>
                             New Pickup
                           </Button>
-                        )
-
-                        }
-                      </Box> : null
-                    );
+                        )}
+                      </Box>
+                    ) : null;
+                  } else {
+                    return it.title === 'Seller Pickups' ||
+                      it.title === 'Seller Handover' ? (
+                      <Box pt={4} mb="6" rounded="md" bg="white" key={index}>
+                        <Box
+                          w="100%"
+                          flexDir="row"
+                          justifyContent="space-between"
+                          mb={4}
+                          px={4}>
+                          <Box w="45%">
+                            <Heading size="sm" mb={4}>
+                              {it.title}
+                            </Heading>
+                            <PieChart
+                              widthAndHeight={120}
+                              series={[
+                                it.completedOrder,
+                                it.pendingOrder,
+                                it.notPicked,
+                                it.rejectedOrder,
+                              ]}
+                              sliceColor={[
+                                '#4CAF50',
+                                '#2196F3',
+                                '#FFEB3B',
+                                '#F44336',
+                              ]}
+                              doughnut={true}
+                              coverRadius={0.6}
+                              coverFill={'#FFF'}
+                            />
+                          </Box>
+                          <View style={{width: '50%'}}>
+                            <View
+                              style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                                marginBottom: 10,
+                              }}>
+                              <Heading size="sm">
+                                {it.title === 'Seller Pickups' ||
+                                it.title === 'Seller Handover'
+                                  ? //  || it.title === 'Seller Deliveries'
+                                    'Total Sellers'
+                                  : 'Total Customers'}
+                              </Heading>
+                              <Heading size="sm">{it.totalUsers}</Heading>
+                            </View>
+                            <View
+                              style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                                marginTop: 10,
+                              }}>
+                              <View style={{flexDirection: 'row'}}>
+                                <View
+                                  style={{
+                                    width: 15,
+                                    height: 15,
+                                    backgroundColor: '#4CAF50',
+                                    borderRadius: 100,
+                                    marginTop: 4,
+                                  }}
+                                />
+                                <Text
+                                  style={{
+                                    marginLeft: 10,
+                                    fontWeight: '500',
+                                    fontSize: 14,
+                                    color: 'black',
+                                  }}>
+                                  Completed
+                                </Text>
+                              </View>
+                              <Text
+                                style={{
+                                  fontWeight: '500',
+                                  fontSize: 14,
+                                  color: 'black',
+                                }}>
+                                {it.completedOrder}
+                              </Text>
+                            </View>
+                            <View
+                              style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                                marginTop: 10,
+                              }}>
+                              <View style={{flexDirection: 'row'}}>
+                                <View
+                                  style={{
+                                    width: 15,
+                                    height: 15,
+                                    backgroundColor: '#2196F3',
+                                    borderRadius: 100,
+                                    marginTop: 4,
+                                  }}
+                                />
+                                <Text
+                                  style={{
+                                    marginLeft: 10,
+                                    fontWeight: '500',
+                                    fontSize: 14,
+                                    color: 'black',
+                                  }}>
+                                  Pending
+                                </Text>
+                              </View>
+                              <Text
+                                style={{
+                                  fontWeight: '500',
+                                  fontSize: 14,
+                                  color: 'black',
+                                }}>
+                                {it.pendingOrder}
+                              </Text>
+                            </View>
+                            <View
+                              style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                                marginTop: 10,
+                              }}>
+                              <View style={{flexDirection: 'row'}}>
+                                <View
+                                  style={{
+                                    width: 15,
+                                    height: 15,
+                                    backgroundColor: '#FFEB3B',
+                                    borderRadius: 100,
+                                    marginTop: 4,
+                                  }}
+                                />
+                                {it.title === 'Seller Handover' ? (
+                                  <Text
+                                    style={{
+                                      marginLeft: 10,
+                                      fontWeight: '500',
+                                      fontSize: 14,
+                                      color: 'black',
+                                    }}>
+                                    Not Handover
+                                  </Text>
+                                ) : it.title === 'Seller Deliveries' ? (
+                                  <Text
+                                    style={{
+                                      marginLeft: 10,
+                                      fontWeight: '500',
+                                      fontSize: 14,
+                                      color: 'black',
+                                    }}>
+                                    Not Delivered
+                                  </Text>
+                                ) : (
+                                  <Text
+                                    style={{
+                                      marginLeft: 10,
+                                      fontWeight: '500',
+                                      fontSize: 14,
+                                      color: 'black',
+                                    }}>
+                                    Not Picked
+                                  </Text>
+                                )}
+                              </View>
+                              <Text
+                                style={{
+                                  fontWeight: '500',
+                                  fontSize: 14,
+                                  color: 'black',
+                                }}>
+                                {it.notPicked}
+                              </Text>
+                            </View>
+                            <View
+                              style={{
+                                flexDirection: 'row',
+                                justifyContent: 'space-between',
+                                marginTop: 10,
+                              }}>
+                              <View style={{flexDirection: 'row'}}>
+                                <View
+                                  style={{
+                                    width: 15,
+                                    height: 15,
+                                    backgroundColor: '#F44336',
+                                    borderRadius: 100,
+                                    marginTop: 4,
+                                  }}
+                                />
+                                <Text
+                                  style={{
+                                    marginLeft: 10,
+                                    fontWeight: '500',
+                                    fontSize: 14,
+                                    color: 'black',
+                                  }}>
+                                  Rejected
+                                </Text>
+                              </View>
+                              <Text
+                                style={{
+                                  fontWeight: '500',
+                                  fontSize: 14,
+                                  color: 'black',
+                                }}>
+                                {it.rejectedOrder}
+                              </Text>
+                            </View>
+                          </View>
+                        </Box>
+                        {it.title === 'Seller Handover' ? (
+                          <Button
+                            w="100%"
+                            size="lg"
+                            bg="#004aad"
+                            onPress={() =>
+                              navigation.navigate('SellerHandover')
+                            }>
+                            Start Handover
+                          </Button>
+                        ) : it.title === 'Seller Deliveries' ? (
+                          <Button
+                            w="100%"
+                            size="lg"
+                            bg="#004aad"
+                            onPress={() =>
+                              navigation.navigate('SellerDeliveries', {
+                                Forward: Forward,
+                                Reverse: Reverse,
+                                Trip: tripValue,
+                              })
+                            }>
+                            New Delivery
+                          </Button>
+                        ) : (
+                          <Button
+                            w="100%"
+                            size="lg"
+                            bg="#004aad"
+                            onPress={() =>
+                              navigation.navigate('NewSellerPickup', {
+                                Forward: Forward,
+                                Reverse: Reverse,
+                                Trip: tripValue,
+                                userId: id,
+                              })
+                            }>
+                            New Pickup
+                          </Button>
+                        )}
+                      </Box>
+                    ) : null;
                   }
+                } else {
+                  return (
+                    // <Box pt={4} mb="6" rounded="md" bg="white" key={index}>
+                    //   <Box
+                    //     w="100%"
+                    //     flexDir="row"
+                    //             justifyContent="space-between"
+                    //             mb={4}
+                    //             px={4}>
+                    //             <Box w="45%">
+                    //               <Heading size="sm" mb={4}>
+                    //                 {it.title}
+                    //               </Heading>
+                    //               <Center>
+                    //                 {/* <Text style={{color:'black'}}>No assignment for {it.title} </Text> */}
+                    //                 <Image
+                    //                   style={{width: 80, height: 80}}
+                    //                   source={require('../assets/noDataAvailable.jpg')}
+                    //                   alt={'No data Image'}
+                    //                 />
+                    //               </Center>
+                    //             </Box>
+                    //             <View style={{width: '50%'}}>
+                    //               <View
+                    //                 style={{
+                    //                   flexDirection: 'row',
+                    //                   justifyContent: 'space-between',
+                    //                   marginBottom: 10,
+                    //                 }}>
+                    //                 <Heading size="sm">
+                    //                   {it.title === 'Seller Pickups' ||
+                    //                   it.title === 'Seller Deliveries'
+                    //                     ? 'Total Sellers'
+                    //                     : 'Total Customers'}
+                    //                 </Heading>
+                    //                 <Heading size="sm">{it.totalUsers}</Heading>
+                    //               </View>
+                    //               <View
+                    //                 style={{
+                    //                   flexDirection: 'row',
+                    //                   justifyContent: 'space-between',
+                    //                   marginTop: 10,
+                    //                 }}>
+                    //                 <View style={{flexDirection: 'row'}}>
+                    //                   <View
+                    //                     style={{
+                    //                       width: 15,
+                    //                       height: 15,
+                    //                       backgroundColor: '#4CAF50',
+                    //                       borderRadius: 100,
+                    //                       marginTop: 4,
+                    //                     }}
+                    //                   />
+                    //                   <Text
+                    //                     style={{
+                    //                       marginLeft: 10,
+                    //                       fontWeight: '500',
+                    //                       fontSize: 14,
+                    //                       color: 'black',
+                    //                     }}>
+                    //                     Completed
+                    //                   </Text>
+                    //                 </View>
+                    //                 <Text
+                    //                   style={{
+                    //                     fontWeight: '500',
+                    //                     fontSize: 14,
+                    //                     color: 'black',
+                    //                   }}>
+                    //                   {it.completedOrder}
+                    //                 </Text>
+                    //               </View>
+                    //               <View
+                    //                 style={{
+                    //                   flexDirection: 'row',
+                    //                   justifyContent: 'space-between',
+                    //                   marginTop: 10,
+                    //                 }}>
+                    //                 <View style={{flexDirection: 'row'}}>
+                    //                   <View
+                    //                     style={{
+                    //                       width: 15,
+                    //                       height: 15,
+                    //                       backgroundColor: '#2196F3',
+                    //                       borderRadius: 100,
+                    //                       marginTop: 4,
+                    //                     }}
+                    //                   />
+                    //                   <Text
+                    //                     style={{
+                    //                       marginLeft: 10,
+                    //                       fontWeight: '500',
+                    //                       fontSize: 14,
+                    //                       color: 'black',
+                    //                     }}>
+                    //                     Pending
+                    //                   </Text>
+                    //                 </View>
+                    //                 <Text
+                    //                   style={{
+                    //                     fontWeight: '500',
+                    //                     fontSize: 14,
+                    //                     color: 'black',
+                    //                   }}>
+                    //                   {it.pendingOrder}
+                    //                 </Text>
+                    //               </View>
+                    //               <View
+                    //                 style={{
+                    //                   flexDirection: 'row',
+                    //                   justifyContent: 'space-between',
+                    //                   marginTop: 10,
+                    //                 }}>
+                    //                 <View style={{flexDirection: 'row'}}>
+                    //                   <View
+                    //                     style={{
+                    //                       width: 15,
+                    //                       height: 15,
+                    //                       backgroundColor: '#FFEB3B',
+                    //                       borderRadius: 100,
+                    //                       marginTop: 4,
+                    //                     }}
+                    //                   />
+                    //                   {it.title === 'Seller Deliveries' ? (
+                    //                     <Text
+                    //                       style={{
+                    //                         marginLeft: 10,
+                    //                         fontWeight: '500',
+                    //                         fontSize: 14,
+                    //                         color: 'black',
+                    //                       }}>
+                    //                       Not Delivered
+                    //                     </Text>
+                    //                   ) : (
+                    //                     <Text
+                    //                       style={{
+                    //                         marginLeft: 10,
+                    //                         fontWeight: '500',
+                    //                         fontSize: 14,
+                    //                         color: 'black',
+                    //                       }}>
+                    //                       Not Picked
+                    //                     </Text>
+                    //                   )}
+                    //                 </View>
+                    //                 <Text
+                    //                   style={{
+                    //                     fontWeight: '500',
+                    //                     fontSize: 14,
+                    //                     color: 'black',
+                    //                   }}>
+                    //                   {it.notPicked}
+                    //                 </Text>
+                    //               </View>
+                    //               <View
+                    //                 style={{
+                    //                   flexDirection: 'row',
+                    //                   justifyContent: 'space-between',
+                    //                   marginTop: 10,
+                    //                 }}>
+                    //                 <View style={{flexDirection: 'row'}}>
+                    //                   <View
+                    //                     style={{
+                    //                       width: 15,
+                    //                       height: 15,
+                    //                       backgroundColor: '#F44336',
+                    //                       borderRadius: 100,
+                    //                       marginTop: 4,
+                    //                     }}
+                    //                   />
+                    //                   <Text
+                    //                     style={{
+                    //                       marginLeft: 10,
+                    //                       fontWeight: '500',
+                    //                       fontSize: 14,
+                    //                       color: 'black',
+                    //                     }}>
+                    //                     Rejected
+                    //                   </Text>
+                    //                 </View>
+                    //                 <Text
+                    //                   style={{
+                    //                     fontWeight: '500',
+                    //                     fontSize: 14,
+                    //                     color: 'black',
+                    //                   }}>
+                    //                   {it.rejectedOrder}
+                    //                 </Text>
+                    //               </View>
+                    //             </View>
+                    //           </Box>
 
-
-              } else {
-                return (
-                  // <Box pt={4} mb="6" rounded="md" bg="white" key={index}>
-                  //   <Box
-                  //     w="100%"
-                  //     flexDir="row"
-          //             justifyContent="space-between"
-          //             mb={4}
-          //             px={4}>
-          //             <Box w="45%">
-          //               <Heading size="sm" mb={4}>
-          //                 {it.title}
-          //               </Heading>
-          //               <Center>
-          //                 {/* <Text style={{color:'black'}}>No assignment for {it.title} </Text> */}
-          //                 <Image
-          //                   style={{width: 80, height: 80}}
-          //                   source={require('../assets/noDataAvailable.jpg')}
-          //                   alt={'No data Image'}
-          //                 />
-          //               </Center>
-          //             </Box>
-          //             <View style={{width: '50%'}}>
-          //               <View
-          //                 style={{
-          //                   flexDirection: 'row',
-          //                   justifyContent: 'space-between',
-          //                   marginBottom: 10,
-          //                 }}>
-          //                 <Heading size="sm">
-          //                   {it.title === 'Seller Pickups' ||
-          //                   it.title === 'Seller Deliveries'
-          //                     ? 'Total Sellers'
-          //                     : 'Total Customers'}
-          //                 </Heading>
-          //                 <Heading size="sm">{it.totalUsers}</Heading>
-          //               </View>
-          //               <View
-          //                 style={{
-          //                   flexDirection: 'row',
-          //                   justifyContent: 'space-between',
-          //                   marginTop: 10,
-          //                 }}>
-          //                 <View style={{flexDirection: 'row'}}>
-          //                   <View
-          //                     style={{
-          //                       width: 15,
-          //                       height: 15,
-          //                       backgroundColor: '#4CAF50',
-          //                       borderRadius: 100,
-          //                       marginTop: 4,
-          //                     }}
-          //                   />
-          //                   <Text
-          //                     style={{
-          //                       marginLeft: 10,
-          //                       fontWeight: '500',
-          //                       fontSize: 14,
-          //                       color: 'black',
-          //                     }}>
-          //                     Completed
-          //                   </Text>
-          //                 </View>
-          //                 <Text
-          //                   style={{
-          //                     fontWeight: '500',
-          //                     fontSize: 14,
-          //                     color: 'black',
-          //                   }}>
-          //                   {it.completedOrder}
-          //                 </Text>
-          //               </View>
-          //               <View
-          //                 style={{
-          //                   flexDirection: 'row',
-          //                   justifyContent: 'space-between',
-          //                   marginTop: 10,
-          //                 }}>
-          //                 <View style={{flexDirection: 'row'}}>
-          //                   <View
-          //                     style={{
-          //                       width: 15,
-          //                       height: 15,
-          //                       backgroundColor: '#2196F3',
-          //                       borderRadius: 100,
-          //                       marginTop: 4,
-          //                     }}
-          //                   />
-          //                   <Text
-          //                     style={{
-          //                       marginLeft: 10,
-          //                       fontWeight: '500',
-          //                       fontSize: 14,
-          //                       color: 'black',
-          //                     }}>
-          //                     Pending
-          //                   </Text>
-          //                 </View>
-          //                 <Text
-          //                   style={{
-          //                     fontWeight: '500',
-          //                     fontSize: 14,
-          //                     color: 'black',
-          //                   }}>
-          //                   {it.pendingOrder}
-          //                 </Text>
-          //               </View>
-          //               <View
-          //                 style={{
-          //                   flexDirection: 'row',
-          //                   justifyContent: 'space-between',
-          //                   marginTop: 10,
-          //                 }}>
-          //                 <View style={{flexDirection: 'row'}}>
-          //                   <View
-          //                     style={{
-          //                       width: 15,
-          //                       height: 15,
-          //                       backgroundColor: '#FFEB3B',
-          //                       borderRadius: 100,
-          //                       marginTop: 4,
-          //                     }}
-          //                   />
-          //                   {it.title === 'Seller Deliveries' ? (
-          //                     <Text
-          //                       style={{
-          //                         marginLeft: 10,
-          //                         fontWeight: '500',
-          //                         fontSize: 14,
-          //                         color: 'black',
-          //                       }}>
-          //                       Not Delivered
-          //                     </Text>
-          //                   ) : (
-          //                     <Text
-          //                       style={{
-          //                         marginLeft: 10,
-          //                         fontWeight: '500',
-          //                         fontSize: 14,
-          //                         color: 'black',
-          //                       }}>
-          //                       Not Picked
-          //                     </Text>
-          //                   )}
-          //                 </View>
-          //                 <Text
-          //                   style={{
-          //                     fontWeight: '500',
-          //                     fontSize: 14,
-          //                     color: 'black',
-          //                   }}>
-          //                   {it.notPicked}
-          //                 </Text>
-          //               </View>
-          //               <View
-          //                 style={{
-          //                   flexDirection: 'row',
-          //                   justifyContent: 'space-between',
-          //                   marginTop: 10,
-          //                 }}>
-          //                 <View style={{flexDirection: 'row'}}>
-          //                   <View
-          //                     style={{
-          //                       width: 15,
-          //                       height: 15,
-          //                       backgroundColor: '#F44336',
-          //                       borderRadius: 100,
-          //                       marginTop: 4,
-          //                     }}
-          //                   />
-          //                   <Text
-          //                     style={{
-          //                       marginLeft: 10,
-          //                       fontWeight: '500',
-          //                       fontSize: 14,
-          //                       color: 'black',
-          //                     }}>
-          //                     Rejected
-          //                   </Text>
-          //                 </View>
-          //                 <Text
-          //                   style={{
-          //                     fontWeight: '500',
-          //                     fontSize: 14,
-          //                     color: 'black',
-          //                   }}>
-          //                   {it.rejectedOrder}
-          //                 </Text>
-          //               </View>
-          //             </View>
-          //           </Box>
-
-          // </Box>
-          null
-          );
-        }
-        })}
-        {/* {(dashboardData[1].completedOrder!=0 || dashboardData[1].pendingOrder!=0 || dashboardData[1].notPicked!=0 || dashboardData[1].rejectedOrder!=0) ?
+                    // </Box>
+                    null
+                  );
+                }
+              })}
+              {/* {(dashboardData[1].completedOrder!=0 || dashboardData[1].pendingOrder!=0 || dashboardData[1].notPicked!=0 || dashboardData[1].rejectedOrder!=0) ?
         <Button w="100%" size="lg" bg="#004aad" onPress={()=>navigation.navigate('SellerHandover')}>Start Handover</Button>
         :
         null} */}
-        <Button
-          variant="outline"
-          onPress={()=>{navigation.navigate('MyTrip', {userId: id});}}
-          mt={4}
-          style={{color: '#004aad', borderColor: '#004aad'}}>
-          <Text style={{color: '#004aad'}}>{tripValue}</Text>
-        </Button>
-        {/* <Fab onPress={()=>{navigation.navigate('MyTrip', {userId: id})}} position="absolute" size="sm" style={{backgroundColor: '#004aad'}} label={<Text style={{color: 'white', fontSize: 16}} >{tripValue}</Text>} /> */}
-        {/* <Button w="100%" size="lg" bg="#004aad" mt={-5} onPress={()=>navigation.navigate('SellerHandover')}>Seller Handover</Button> */}
-        {/* <Button w="100%" size="lg" bg="#004aad" onPress={()=>navigation.navigate('SellerHandover')}>Start Handover</Button> */}
-        <Center>
-          <Image style={{ width: 150, height: 100 }} source={require('../assets/image.png')} alt={'Logo Image'} />
-        </Center>
-      </Box>
-      </ScrollView>
-      {/* <Fab onPress={()=>sync11()} position="absolute" size="sm" style={{backgroundColor: '#004aad'}} icon={<Icon color="white" as={<MaterialIcons name="sync" />} size="sm" />} /> */}
-      {isLoading ? (
-        <View
-          style={[
-            StyleSheet.absoluteFillObject,
-            {
-              flex: 1,
-              justifyContent: 'center',
-              alignItems: 'center',
-              zIndex: 1,
-              backgroundColor: 'rgba(0,0,0,0.65)',
-            },
-          ]}>
-          <Text style={{color: 'white'}}>Loading...</Text>
-          <Lottie
-            source={require('../assets/loading11.json')}
-            autoPlay
-            loop
-            speed={1}
-            //   progress={animationProgress.current}
-          />
-          <ProgressBar width={70} />
-        </View>
-      ) : null}
-    </Box>
-    }
-      </NativeBaseProvider>
+              <Button
+                variant="outline"
+                onPress={() => {
+                  navigation.navigate('MyTrip', {userId: id});
+                }}
+                mt={4}
+                style={{color: '#004aad', borderColor: '#004aad'}}>
+                <Text style={{color: '#004aad'}}>{tripValue}</Text>
+              </Button>
+              {/* <Fab onPress={()=>{navigation.navigate('MyTrip', {userId: id})}} position="absolute" size="sm" style={{backgroundColor: '#004aad'}} label={<Text style={{color: 'white', fontSize: 16}} >{tripValue}</Text>} /> */}
+              {/* <Button w="100%" size="lg" bg="#004aad" mt={-5} onPress={()=>navigation.navigate('SellerHandover')}>Seller Handover</Button> */}
+              {/* <Button w="100%" size="lg" bg="#004aad" onPress={()=>navigation.navigate('SellerHandover')}>Start Handover</Button> */}
+              <Center>
+                <Image
+                  style={{width: 150, height: 100}}
+                  source={require('../assets/image.png')}
+                  alt={'Logo Image'}
+                />
+              </Center>
+            </Box>
+          </ScrollView>
+          {/* <Fab onPress={()=>sync11()} position="absolute" size="sm" style={{backgroundColor: '#004aad'}} icon={<Icon color="white" as={<MaterialIcons name="sync" />} size="sm" />} /> */}
+          {isLoading ? (
+            <View
+              style={[
+                StyleSheet.absoluteFillObject,
+                {
+                  flex: 1,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  zIndex: 1,
+                  backgroundColor: 'rgba(0,0,0,0.65)',
+                },
+              ]}>
+              <Text style={{color: 'white'}}>Loading...</Text>
+              <Lottie
+                source={require('../assets/loading11.json')}
+                autoPlay
+                loop
+                speed={1}
+                //   progress={animationProgress.current}
+              />
+              <ProgressBar width={70} />
+            </View>
+          ) : null}
+        </Box>
+      )}
+    </NativeBaseProvider>
   );
 }

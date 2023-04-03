@@ -22,6 +22,8 @@ export default function MyTrip({ navigation, route }) {
   const [tripAlreadyStarted, setTripAlreadyStarted] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [message, setMessage] = useState(0);
+  const [showModal1, setShowModal1] = useState(false);
+  const [message1, setMessage1] = useState(0);
   const [loading, setLoading] = useState(true);
   const [pendingPickup, setPendingPickup] = useState(0);
   const [pendingDelivery, setPendingDelivery] = useState(0);
@@ -252,7 +254,8 @@ export default function MyTrip({ navigation, route }) {
   currentDate = currentDate.valueOf();
   const submitStartTrip = () =>  {
     if(pendingHandover!==0){
-      alert("Please complete handover before Start a trip");
+      setMessage1(2);
+      setShowModal1(true);
       navigation.navigate('Main');
     }
     else{
@@ -310,6 +313,19 @@ export default function MyTrip({ navigation, route }) {
                       <VStack space={1} flexShrink={1} w="100%" alignItems="center">
                         <Alert.Icon size="4xl" />
                         <Text my={3} fontSize="md" fontWeight="medium">{message === 1 ? 'Data Successfully Submitted' : 'Trip ID already exists'}</Text>
+                      </VStack>
+                    </Alert>
+                  </Modal.Body>
+                </Modal.Content>
+              </Modal>
+              <Modal isOpen={showModal1} onClose={() => setShowModal1(false)}>
+                <Modal.Content backgroundColor={message1 === 1 ? '#dcfce7' : '#fee2e2'}>
+                  <Modal.CloseButton />
+                  <Modal.Body>
+                    <Alert w="100%" status={message1 === 1 ? 'success' : 'error'}>
+                      <VStack space={1} flexShrink={1} w="100%" alignItems="center">
+                        <Alert.Icon size="4xl" />
+                        <Text my={3} fontSize="md" fontWeight="medium">{message1 === 1 ? '' : 'Please complete handover before Start a trip'}</Text>
                       </VStack>
                     </Alert>
                   </Modal.Body>

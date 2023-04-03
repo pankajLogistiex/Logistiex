@@ -14,6 +14,7 @@ import {
 } from 'native-base';
 import React, {useEffect, useState} from 'react';
 import axios from 'axios';
+
 import {
   Text,
   View,
@@ -44,6 +45,10 @@ import {
 } from 'styled-system';
 import {Console} from 'console';
 import {truncate} from 'fs/promises';
+
+import dingReject11 from '../../assets/rejected_sound.mp3';
+import dingAccept11 from '../../assets/beep_accepted.mp3';
+import Sound from 'react-native-sound';
 
 const db = openDatabase({
   name: 'rn_sqlite',
@@ -90,6 +95,52 @@ const HandoverShipmentRTO = ({route}) => {
   useEffect(() => {
     getUserId();
   }, []);
+
+
+  Sound.setCategory('Playback');
+
+var dingAccept = new Sound(dingAccept11, error => {
+  if (error) {
+    console.log('failed to load the sound', error);
+    return;
+  }
+  // if loaded successfully
+  // console.log(
+  //   'duration in seconds: ' +
+  //     dingAccept.getDuration() +
+  //     'number of channels: ' +
+  //     dingAccept.getNumberOfChannels(),
+  // );
+});
+
+  useEffect(() => {
+    dingAccept.setVolume(1);
+    return () => {
+      dingAccept.release();
+    };
+  }, []);
+
+  var dingReject = new Sound(dingReject11, error => {
+    if (error) {
+      console.log('failed to load the sound', error);
+      return;
+    }
+    // if loaded successfully
+    // console.log(
+    //   'duration in seconds: ' +
+    //   dingReject.getDuration() +
+    //     'number of channels: ' +
+    //     dingReject.getNumberOfChannels(),
+    // );
+  });
+  
+    useEffect(() => {
+      dingReject.setVolume(1);
+      return () => {
+        dingReject.release();
+      };
+    }, []);
+
 
   useEffect(() => {
     current_location();
@@ -318,6 +369,15 @@ const HandoverShipmentRTO = ({route}) => {
           if (results.rowsAffected > 0) {
             console.log(data + 'accepted');
             ToastAndroid.show(data + ' Accepted', ToastAndroid.SHORT);
+            Vibration.vibrate(200);
+            dingAccept.play(success => {
+              if (success) {
+                // Vibration.vibrate(800);
+                console.log('successfully finished playing');
+              } else {
+                console.log('playback failed due to audio decoding errors');
+              }
+            });
             db.transaction(tx => {
               tx.executeSql(
                 'SELECT consignorCode FROM SellerMainScreenDetails where shipmentAction="Seller Delivery" AND (awbNo = ? OR clientShipmentReferenceNumber = ? OR clientRefId = ? )  AND handoverStatus="accepted"',
@@ -483,11 +543,29 @@ const HandoverShipmentRTO = ({route}) => {
                       'Scanning wrong product',
                       ToastAndroid.SHORT,
                     );
+                    Vibration.vibrate(800);
+                    dingReject.play(success => {
+                      if (success) {
+                        
+                        console.log('successfully finished playing');
+                      } else {
+                        console.log('playback failed due to audio decoding errors');
+                      }
+                    });
                   } else {
                     ToastAndroid.show(
                       data + ' already scanned',
                       ToastAndroid.SHORT,
                     );
+                    Vibration.vibrate(800);
+                    dingReject.play(success => {
+                      if (success) {
+                        
+                        console.log('successfully finished playing');
+                      } else {
+                        console.log('playback failed due to audio decoding errors');
+                      }
+                    });
                     setBarcode(() => data);
                     db.transaction(tx => {
                       tx.executeSql(
@@ -527,8 +605,8 @@ const HandoverShipmentRTO = ({route}) => {
             // alert('You are scanning wrong product, please check.');
           } else {
             setBarcode(() => data);
-            Vibration.vibrate(100);
-            RNBeep.beep();
+            // Vibration.vibrate(100);
+            // RNBeep.beep();
             updateDetails2(data);
             // loadDetails(data);
             uploadDataToServer(res.rows);
@@ -558,7 +636,16 @@ const HandoverShipmentRTO = ({route}) => {
 
   const onSuccess11 = e => {
     Vibration.vibrate(100);
-    RNBeep.beep();
+    // Vibration.vibrate(800);
+    dingAccept.play(success => {
+      if (success) {
+        
+        console.log('successfully finished playing');
+      } else {
+        console.log('playback failed due to audio decoding errors');
+      }
+    });
+    // RNBeep.beep();
     console.log(e.data, 'sealID');
     // getCategories(e.data);
     setBagSeal(e.data);
@@ -578,6 +665,16 @@ const HandoverShipmentRTO = ({route}) => {
         },
       );
     });
+  };
+
+
+  const onSucessThroughButton=(data21)=>{
+    console.log(data21, 'barcode');
+    setBarcode(data21);
+
+    // barcode === data21 ? getCategories(data21) : setBarcode(data21);
+    // getCategories(e.data);
+    getCategories(data21);
   };
 
   const bagopenCloseHandler = (consCode11, consName11) => {
@@ -861,21 +958,25 @@ const HandoverShipmentRTO = ({route}) => {
         <View>
           <View style={{backgroundColor: 'white'}}>
             <View style={{alignItems: 'center', marginTop: 15}}>
-              <View
-                style={{
-                  backgroundColor: 'lightgray',
-                  padding: 10,
-                  flexDirection: 'row',
-                  justifyContent: 'space-between',
-                  width: '90%',
-                  borderRadius: 5,
-                  borderBottomLeftRadius: 0,
-                  borderBottomRightRadius: 0,
-                }}>
-                <Text style={{fontSize: 18, fontWeight: '500'}}>
+            <View style={{backgroundColor: 'lightgrey', padding:0, flexDirection: 'row', justifyContent: 'space-between', width: '90%', borderRadius: 10, flex:1}}>
+
+<Input placeholder="Shipment ID"  value={barcode} onChangeText={(text)=>{ setBarcode(text);}}  style={{
+fontSize: 18, fontWeight: '500',
+width: 320,
+backgroundColor:'lightgrey',
+}} />
+
+<TouchableOpacity style={{flex:1,backgroundColor:'lightgrey',paddingTop:8}} onPress={()=>onSucessThroughButton(barcode)}>
+  <Center>
+ 
+  <MaterialIcons name="send" size={30} color="#004aad" />
+  </Center>
+</TouchableOpacity>
+
+                {/* <Text style={{fontSize: 18, fontWeight: '500'}}>
                   Shipment ID{' '}
                 </Text>
-                <Text style={{fontSize: 18, fontWeight: '500'}}>{barcode}</Text>
+                <Text style={{fontSize: 18, fontWeight: '500'}}>{barcode}</Text> */}
               </View>
               <View
                 style={{

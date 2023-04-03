@@ -144,18 +144,24 @@ const PendingHandover = ({route}) => {
         setDropDownValue(item);
       }
       const pendingHandover11 = ()=>{
-        console.log("ok"+consignorCode,DropDownValue);
+        console.log("ok"+consignorCode,DropDownValue,DropDownValue,
+        new Date().valueOf(),
+        latitude,
+        longitude,
+        consignorCode);
+        let time11=new Date().valueOf();
         db.transaction(tx => {
             tx.executeSql(
-              'UPDATE SellerMainScreenDetails SET handoverStatus="pendingHandover" , rejectedReasonL1=?, eventTime=?, latitude=?, longitude=? WHERE shipmentAction="Seller Delivery" AND handoverStatus IS Null And consignorCode=?',
+              'UPDATE SellerMainScreenDetails SET handoverStatus="pendingHandover" , rejectionReasonL1=?, eventTime=?, latitude=?, longitude=? WHERE shipmentAction="Seller Delivery" AND handoverStatus IS Null And consignorCode=?',
               [DropDownValue,
-                new Date().valueOf(),
+                time11,
                 latitude,
                 longitude,
                 consignorCode],
               (tx1, results) => {
                 let temp = [];
-                // console.log("Not Picked Reason",DropDownValue);
+                console.log(tx1);
+                console.log("Not Picked Reason",DropDownValue);
                 console.log('Results',results.rowsAffected);
                 // console.log(results);
                 if (results.rowsAffected > 0) {
@@ -174,7 +180,6 @@ const PendingHandover = ({route}) => {
               },
             );
           });
-
       }
 useEffect(() => {
 loadDetails112();
