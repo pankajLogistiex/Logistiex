@@ -65,7 +65,7 @@ export default function Login() {
   }, []);
 
   const handleBackButtonPress = () => {
-    // Linking.exitApp();
+    BackHandler.exitApp();
     return true; // Prevent default behavior (going back to previous screen)
   };
 
