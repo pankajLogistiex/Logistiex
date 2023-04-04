@@ -5,10 +5,10 @@ import axios from 'axios';
 import {NativeBaseProvider, Box, Image, Center, VStack, Button, Icon, Input, Heading, Alert, Text, Modal } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Pressable } from 'react-native';
+import { Pressable,Linking } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { backendUrl } from '../utils/backendUrl';
-
+import { BackHandler } from 'react-native';
 export default function Login() {
 
   const [email, setEmail] = useState('');
@@ -39,7 +39,7 @@ export default function Login() {
       console.log(e);
     }
   };
-
+ 
   const getData = async () => {
     try {
       const value = await AsyncStorage.getItem('@storage_Key');
@@ -49,11 +49,24 @@ export default function Login() {
         navigation.navigate('Main', {
           userId : data.userId,
         });
-
+ 
       }
     } catch (e) {
       console.log(e);
     }
+  };
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      handleBackButtonPress
+    );
+ 
+    return () => backHandler.remove();
+  }, []);
+
+  const handleBackButtonPress = () => {
+    // Linking.exitApp();
+    return true; // Prevent default behavior (going back to previous screen)
   };
 
   useEffect(() => {
@@ -109,7 +122,7 @@ export default function Login() {
               </Alert>
             </Modal.Body>
           </Modal.Content>
-        </Modal>
+        </Modal> 
         <Box justifyContent="space-between" py={10} px={6} bg="#fff" rounded="xl" width={'90%'} maxWidth="100%" _text={{fontWeight: 'medium'}}>
           <VStack space={6}>
             <Center>
