@@ -41,10 +41,12 @@ import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import PieChart from 'react-native-pie-chart';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import GetLocation from 'react-native-get-location';
+import { backendUrl } from '../../utils/backendUrl';
 
 const NewSellerSelection = ({route}) => {
   const [barcodeValue, setBarcodeValue] = useState('');
-  const shipmentData = `https://bkedtest.logistiex.com/SellerMainScreen/getSellerDetails/${route.params.paramKey}`;
+  const shipmentData =
+    backendUrl + `SellerMainScreen/getSellerDetails/${route.params.paramKey}`;
   const [acc, setAcc] = useState(0);
   const [pending, setPending] = useState(route.params.Forward);
   const [Forward, setForward] = useState('');
@@ -111,6 +113,19 @@ const NewSellerSelection = ({route}) => {
     AsyncStorage.setItem('refresh11', 'refresh');
     db.transaction(tx => {
       tx.executeSql(
+        'UPDATE SyncSellerPickUp  SET otpSubmitted="true" WHERE consignorCode=? ',
+        [route.params.consignorCode],
+        (tx1, results) => {
+          if (results.rowsAffected > 0) {
+            console.log('otp status updated  in seller table ');
+          } else {
+            console.log('opt status not updated in local table');
+          }
+        },
+      );
+    });
+    db.transaction(tx => {
+      tx.executeSql(
         'UPDATE SellerMainScreenDetails SET status="notPicked", rejectionReasonL1=?, eventTime=?, latitude=?, longitude=? WHERE shipmentAction="Seller Pickup" AND status IS Null And consignorCode=?',
         [
           rejectionCode,
@@ -129,7 +144,7 @@ const NewSellerSelection = ({route}) => {
       );
     });
     axios
-      .post('https://bkedtest.logistiex.com/SellerMainScreen/attemptFailed', {
+      .post(backendUrl + 'SellerMainScreen/attemptFailed', {
         consignorCode: route.params.consignorCode,
         rejectionReason: rejectionCode,
         feUserID: route.params.userId,
@@ -423,7 +438,6 @@ const NewSellerSelection = ({route}) => {
 
     Linking.openURL(url);
   }
-
   return (
     <NativeBaseProvider>
       {loading ? 
@@ -774,71 +788,72 @@ const NewSellerSelection = ({route}) => {
                   </View>
                 </View>
               </ScrollView>
-              {pending!==0 ? (
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    width: '92%',
-                    justifyContent: 'space-between',
-                    marginTop: 10,
-                    alignSelf: 'center',
-                  }}>
-                  <Button
-                    leftIcon={
-                      <Icon
-                        color="white"
-                        as={<MaterialIcons name="close-circle-outline" />}
-                        size="sm"
-                      />
-                    }
-                    onPress={() => setModalVisible(true)}
-                    style={{backgroundColor: '#004aad', width: '48%'}}
-                    disabled={pending !== route.params.Forward}
-                    disabledStyle={{ backgroundColor: 'gray' }}>
-                    Close Pickup
-                  </Button>
-                  <Button
-                    style={{
-                      backgroundColor: '#004aad',
-                      width: '50%',
-                      alignSelf: 'center',
-                    }}
-                    leftIcon={
-                      <Icon
-                        color="white"
-                        as={<MaterialIcons name="barcode-scan" />}
-                        size="sm"
-                      />
-                    }
-                    onPress={() =>
-                      navigation.navigate('ShipmentBarcode', {
-                        Forward: Forward,
-                        PRSNumber: route.params.PRSNumber,
-                        consignorCode: route.params.consignorCode,
-                        userId: route.params.userId,
-                        phone: route.params.phone,
-                        contactPersonName: route.params.contactPersonName,
-                        packagingId: route.params.packagingId,
-                        latitude: route.params.consignorLatitude,
-                        longitude: route.params.consignorLongitude,
-                        // TotalpickUp : newdata[0].totalPickups
-                      })
-                    }>
-                    Scan
-                  </Button>
-                </View>
-              ) : (
-                <Button
-                  w="90%"
-                  size="lg"
-                  bg="#004aad"
-                  mb={4}
-                  mt={4}
-                  onPress={() => navigation.navigate('NewSellerPickup')}>
-                  Go Back
-                </Button>
+              {pending === 0 && route.params.otpSubmitted === "true" ? (
+              <Center>
+              <Button
+              w="90%"
+              size="lg"
+              bg="#004aad"
+              mb={4}
+              mt={4}
+              onPress={() => navigation.navigate('NewSellerPickup')}>
+              Go Back
+            </Button>
+            </Center>
+      ) : (
+      <View
+      style={{
+      flexDirection: 'row',
+      width: '92%',
+      justifyContent: 'space-between',
+      marginTop: 10,
+      alignSelf: 'center',
+    }}>
+    <Button
+      leftIcon={
+        <Icon
+          color="white"
+          as={<MaterialIcons name="close-circle-outline" />}
+          size="sm"
+        />
+      }
+      onPress={() => setModalVisible(true)}
+      style={[{ backgroundColor: '#004aad', width: '48%' }, pending !== route.params.Forward && { backgroundColor: 'gray' }  ]}
+      disabled={pending !== route.params.Forward}
+      disabledStyle={{ backgroundColor: 'gray.300' }}>
+      Close Pickup
+    </Button>
+    <Button
+      style={{
+        backgroundColor: '#004aad',
+        width: '50%',
+        alignSelf: 'center',
+      }}
+      leftIcon={
+        <Icon
+          color="white"
+          as={<MaterialIcons name="barcode-scan" />}
+          size="sm"
+        />
+      }
+        onPress={() =>
+          navigation.navigate('ShipmentBarcode', {
+            Forward: Forward,
+            PRSNumber: route.params.PRSNumber,
+            consignorCode: route.params.consignorCode,
+            userId: route.params.userId,
+            phone: route.params.phone,
+            contactPersonName: route.params.contactPersonName,
+            packagingId: route.params.packagingId,
+            latitude: route.params.consignorLatitude,
+            longitude: route.params.consignorLongitude,
+          // TotalpickUp : newdata[0].totalPickups
+            })
+            }>
+             Scan
+            </Button>
+            </View>
               )}
-
               <View style={{paddingTop: 60}}>
                 <Center>
                   <Image

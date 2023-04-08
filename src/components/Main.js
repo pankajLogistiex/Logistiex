@@ -29,6 +29,7 @@ const db = openDatabase({name: 'rn_sqlite'});
 import PieChart from 'react-native-pie-chart';
 import {StyleSheet} from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
+import { backendUrl } from '../utils/backendUrl';
 
 export default function Main({navigation, route}) {
   // const userId = route.params.userId;
@@ -97,7 +98,7 @@ export default function Main({navigation, route}) {
   const fetchData = (id) => {
     if (id) {
       axios
-        .get('https://bkedtest.logistiex.com/UserTripInfo/getUserTripInfo', {
+        .get(backendUrl + 'UserTripInfo/getUserTripInfo', {
           params: {
             tripID: id + '_' + date,
           },

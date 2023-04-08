@@ -135,8 +135,8 @@ import {
             </DataTable.Header>
            {route.params.Trip !== 'Start Trip' && data && data.length > 0
                 ? data.filter(searched(keyword)).map((single, i) =>
-                    reverse[i] > 0 ? (pending11[i]!==reverse[i])? (
-                      <DataTable.Row style={{ height: 'auto', backgroundColor: '#eeeeee', borderBottomWidth: 1, borderWidth: 2, borderColor: 'white',elevation: 8, }} key={single.consignorName} onPress={() => {
+                    reverse[i] > 0 ? (pending11[i]==reverse[i]) && single.otpSubmittedDelivery === "true"? (
+                      <DataTable.Row style={{ height: 'auto', backgroundColor: '#90ee90', borderBottomWidth: 1, borderWidth: 2, borderColor: 'white',elevation: 8, }} key={single.consignorName} onPress={() => {
                         navigation.navigate('SellerHandoverSelection', {
                        paramKey: single.consignorCode,
                        Forward: value[i],
@@ -153,13 +153,14 @@ import {
                        userId: single.userId,
                        phone: single.consignorContact,
                        Reverse: reverse[i],
+                       otpSubmittedDelivery: single.otpSubmittedDelivery,
                        });
                }}>
                  <DataTable.Cell style={{ flex: 1.2 }}><Text style={styles.fontvalue} numberOfLines={2}>{single.consignorName}</Text></DataTable.Cell>
                  <DataTable.Cell style={{ flex: 0.4, marginRight: 50 }}><Text style={styles.fontvalue} numberOfLines={2}>{value[i]}</Text></DataTable.Cell>
                  <DataTable.Cell style={{ flex: 0.4, marginRight: 5 }}><Text style={styles.fontvalue} numberOfLines={2}>{pending11[i]}/{reverse[i]}</Text></DataTable.Cell>
                </DataTable.Row> ): (
-                        <DataTable.Row style={{ height: 'auto', backgroundColor: '#90ee90', borderBottomWidth: 1, borderWidth: 2, borderColor: 'white' }} key={single.consignorName} onPress={() => {
+                        <DataTable.Row style={{ height: 'auto', backgroundColor: '#eeeeee', borderBottomWidth: 1, borderWidth: 2, borderColor: 'white' }} key={single.consignorName} onPress={() => {
                           navigation.navigate('SellerHandoverSelection', {
                          paramKey: single.consignorCode,
                          Forward: value[i],
@@ -176,6 +177,7 @@ import {
                          userId: single.userId,
                          phone: single.consignorContact,
                          Reverse: reverse[i],
+                         otpSubmittedDelivery: single.otpSubmittedDelivery,
                          });
                  }}>
                         <DataTable.Cell style={{ flex: 1.2 }}><Text style={styles.fontvalue} numberOfLines={2}>{single.consignorName}</Text></DataTable.Cell>

@@ -10,6 +10,7 @@ const db = openDatabase({name: 'rn_sqlite'});
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import GetLocation from 'react-native-get-location';
+import { backendUrl } from '../../utils/backendUrl';
 
 const NotPicked = ({route}) => {
     const navigation = useNavigation();
@@ -101,7 +102,7 @@ const NotPicked = ({route}) => {
         );
       });
       axios
-        .post('https://bkedtest.logistiex.com/SellerMainScreen/attemptFailed', {
+        .post(backendUrl + 'SellerMainScreen/attemptFailed', {
           consignorCode: route.params.consignorCode,
           rejectionReason: rejectionCode,
           feUserID: route.params.userId,

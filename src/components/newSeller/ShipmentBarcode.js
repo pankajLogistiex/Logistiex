@@ -43,6 +43,7 @@ import OTPTextInput from 'react-native-otp-textinput';
 import dingReject11 from '../../assets/rejected_sound.mp3';
 
 import dingAccept11 from '../../assets/beep_accepted.mp3';
+import { backendUrl } from '../../utils/backendUrl';
 const db = openDatabase({
   name: 'rn_sqlite',
 });
@@ -53,6 +54,7 @@ const ShipmentBarcode = ({route}) => {
   const [newrejected, setnewRejected] = useState(0);
   const [newNotPicked, setNewNotPicked] = useState(0);
   const [barcode, setBarcode] = useState('');
+  const [packagingAction, setPackagingAction] = useState(0);
   const [len, setLen] = useState(0);
   const [DropDownValue, setDropDownValue] = useState('');
   const [rejectedData, setRejectedData] = useState([]);
@@ -64,9 +66,13 @@ const ShipmentBarcode = ({route}) => {
   const [bagIdNo, setBagIdNo] = useState(1);
   const [showCloseBagModal, setShowCloseBagModal] = useState(false);
   const [showCloseBagModal11, setShowCloseBagModal11] = useState(false);
+  const [showCloseBagModal12, setShowCloseBagModal12] = useState(false);
+  const [showModal, setModal] = useState(false);
+  const [showModal1, setModal1] = useState(false);
   const [bagSeal, setBagSeal] = useState('');
   const [check11, setCheck11] = useState(0);
   const [pdCheck, setPDCheck] = useState(false);
+  const [expectedPackagingId, setExpectedPackaging] = useState('');
 
   const buttonColor = acceptedArray.length === 0 ? 'gray.300' : '#004aad';
 
@@ -86,7 +92,8 @@ const ShipmentBarcode = ({route}) => {
   let serialNo = 0;
 
 
-const [text11,setText11]=useState('');
+const [text11,setText11] = useState('');
+const [text12,setText12] = useState('');
     const buttonColor11 = text11.length === 1 ? '#004aad' : 'white';
     const [isPressed, setIsPressed] = useState(false);
 
@@ -95,7 +102,7 @@ const [text11,setText11]=useState('');
 
   // const acceptSound = new Sound('accept.mp3', Sound.MAIN_BUNDLE);
   // const rejectSound = new Sound('reject.mp3', Sound.MAIN_BUNDLE);
-  
+
   const vibrateDevice = (type) => {
     const options = {
       enableVibrateFallback: true,
@@ -147,7 +154,7 @@ var dingAccept = new Sound(dingAccept11, error => {
     //     dingReject.getNumberOfChannels(),
     // );
   });
-  
+
     useEffect(() => {
       dingReject.setVolume(1);
       return () => {
@@ -175,10 +182,12 @@ var dingAccept = new Sound(dingAccept11, error => {
   };
   useEffect(() => {
     DisplayData11();
+    check121();
   }, []);
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       displayDataSPScan();
+      check121();
       Sound.setCategory('Playback');
     });
     return unsubscribe;
@@ -187,21 +196,21 @@ var dingAccept = new Sound(dingAccept11, error => {
   //   partialClose112();
   // }, []);
 
-  const check121 =()=>{
+  const check121 = ()=>{
     db.transaction(tx => {
       tx.executeSql(
         'SELECT * FROM closeBag1 WHERE  consignorCode=? And status="scanPending"',
         [route.params.consignorCode],
         (tx1, results) => {
-          if(results.rows.length>0){
+          if (results.rows.length > 0){
           setPDCheck(true);
-          }else{
+          } else {
             setPDCheck(false);
           }
         },
       );
     });
-  }
+  };
   const displayDataSPScan = async () => {
 
     // db.transaction(tx => {
@@ -249,7 +258,7 @@ var dingAccept = new Sound(dingAccept11, error => {
 
   const partialClose112 = () => {
     console.log('partialClose popup shown11');
-  
+
     if (newaccepted + newrejected === route.params.Forward) {
       console.log(newaccepted);
       // sendSmsOtp();
@@ -269,7 +278,22 @@ var dingAccept = new Sound(dingAccept11, error => {
       });
     } else {
       setDropDownValue11('');
-      setModalVisible11(true);
+      db.transaction(tx => {
+        tx.executeSql(
+          'SELECT * FROM closeBag1 WHERE  consignorCode=? And status="scanPending"',
+          [route.params.consignorCode],
+          (tx1, results) => {
+            if (results.rows.length > 0){
+            setPDCheck(true);
+            setModalVisible11(true);
+            } else {
+              setPDCheck(false);
+               setModalVisible11(true);
+            }
+          },
+        );
+      });
+      // setModalVisible11(true);
     }
   };
 
@@ -314,7 +338,7 @@ var dingAccept = new Sound(dingAccept11, error => {
   const sendSmsOtp = async () => {
     console.log(mobileNumber);
     const response = await axios
-      .post('https://bkedtest.logistiex.com/SMS/msg', {
+      .post(backendUrl + 'SMS/msg', {
         mobileNumber: mobileNumber,
       })
       .then(setShowModal11(true))
@@ -328,7 +352,7 @@ var dingAccept = new Sound(dingAccept11, error => {
   };
 
   function handleButtonPress11(item) {
-    console.log("partial button 121"+item);
+    console.log('partial button 121' + item);
     if (item === 'PCR1') {
       setDropDownValue11('');
       setModalVisible11(false);
@@ -342,7 +366,7 @@ var dingAccept = new Sound(dingAccept11, error => {
 
   function validateOTP() {
     axios
-      .post('https://bkedtest.logistiex.com/SMS/OTPValidate', {
+      .post(backendUrl + 'SMS/OTPValidate', {
         mobileNumber: mobileNumber,
         otp: inputOtp,
       })
@@ -421,6 +445,7 @@ var dingAccept = new Sound(dingAccept11, error => {
               ToastAndroid.show('Bag closed successfully', ToastAndroid.SHORT);
               console.log(results11);
               setBarcode('');
+              setPDCheck(true);
               setCheck11(0);
               setText11('');
               viewDetailBag();
@@ -487,6 +512,7 @@ var dingAccept = new Sound(dingAccept11, error => {
               ToastAndroid.show('Bag closed successfully', ToastAndroid.SHORT);
               console.log(results11);
               setBarcode('');
+              setPDCheck(true);
                 setText11('');
                 setCheck11(0);
               viewDetailBag();
@@ -542,15 +568,6 @@ var dingAccept = new Sound(dingAccept11, error => {
     });
   };
   const updateDetails2 = () => {
-    // Vibration.vibrate(200);
-    // dingAccept.play(success => {
-    //   if (success) {
-    //     // Vibration.vibrate(800);
-    //     console.log('successfully finished playing');
-    //   } else {
-    //     console.log('playback failed due to audio decoding errors');
-    //   }
-    // });
     console.log('scan ' + barcode.toString());
     setAcceptedArray([...acceptedArray, barcode.toString()]);
     console.log(acceptedArray);
@@ -617,54 +634,82 @@ var dingAccept = new Sound(dingAccept11, error => {
 
     const rejectDetails2 = () => {
       console.log('scan 45456');
-var barcode11=barcode;
-      db.transaction((tx) => {
-        tx.executeSql('UPDATE SellerMainScreenDetails SET status="rejected" ,rejectionReasonL1=?  WHERE status="accepted" AND consignorCode=? AND (awbNo=? OR clientRefId=? OR clientShipmentReferenceNumber=?) ', [DropDownValue,route.params.consignorCode, barcode11,barcode11,barcode11], (tx1, results) => {
-          let temp = [];
-          // ContinueHandle11();
-          // console.log("ddsds4545",tx1);
-          console.log('Rejected Reason : ', DropDownValue);
-          console.log('Results', results.rowsAffected);
-          console.log(results);
-          if (results.rowsAffected > 0) {
-            // ContinueHandle11();
-            console.log(barcode11 + 'rejected');
-            ToastAndroid.show(barcode11 + ' Rejected', ToastAndroid.SHORT);
-            setCheck11(0);
-            // Vibration.vibrate(100);
-            Vibration.vibrate(200);
-            dingAccept.play(success => {
-              if (success) {
-                // Vibration.vibrate(800);
-                console.log('successfully finished playing');
-              } else {
-                console.log('playback failed due to audio decoding errors');
-              }
-            });
-    //         RNBeep.beep();
-
-    //         rejectSound.play();
-    // vibrateDevice(HapticFeedback.FeedbackTypes.notificationError);
-
-            setDropDownValue('');
-            console.log(acceptedArray);
-            const newArray = acceptedArray.filter(item => item !== barcode11);
-            console.log(newArray);
-            setAcceptedArray(newArray);
-            setBarcode('');
-            displayDataSPScan();
-          } else {
-            console.log(barcode11 + 'failed to reject item locally');
-          }
-          console.log(results.rows.length);
-          for (let i = 0; i < results.rows.length; ++i) {
-            temp.push(results.rows.item(i));
-          }
-          // console.log("Data updated: \n ", JSON.stringify(temp, null, 4));
-          // viewDetailsR2();
-        },
-      );
-    });
+var barcode11 = barcode;
+      if(packagingAction==0){
+        db.transaction((tx) => {
+          tx.executeSql('UPDATE SellerMainScreenDetails SET status="rejected" ,rejectionReasonL1=?  WHERE status="accepted" AND consignorCode=? AND (awbNo=? OR clientRefId=? OR clientShipmentReferenceNumber=?) ', [DropDownValue,route.params.consignorCode, barcode11,barcode11,barcode11], (tx1, results) => {
+            let temp = [];
+            console.log('Rejected Reason : ', DropDownValue);
+            console.log('Results', results.rowsAffected);
+            console.log(results);
+            if (results.rowsAffected > 0) {
+              // ContinueHandle11();
+              console.log(barcode11 + 'rejected');
+              ToastAndroid.show(barcode11 + ' Rejected', ToastAndroid.SHORT);
+              setCheck11(0);
+              // Vibration.vibrate(100);
+              Vibration.vibrate(200);
+              dingAccept.play(success => {
+                if (success) {
+                  // Vibration.vibrate(800);
+                  console.log('successfully finished playing');
+                } else {
+                  console.log('playback failed due to audio decoding errors');
+                }
+              });
+  
+              setDropDownValue('');
+              console.log(acceptedArray);
+              const newArray = acceptedArray.filter(item => item !== barcode11);
+              console.log(newArray);
+              setAcceptedArray(newArray);
+              setBarcode('');
+              displayDataSPScan();
+            } else {
+              console.log(barcode11 + 'failed to reject item locally');
+            }
+            console.log(results.rows.length);
+            for (let i = 0; i < results.rows.length; ++i) {
+              temp.push(results.rows.item(i));
+            }
+            // console.log("Data updated: \n ", JSON.stringify(temp, null, 4));
+            // viewDetailsR2();
+          },
+        );
+      });
+      }
+      else{
+        db.transaction((tx) => {
+          tx.executeSql('UPDATE SellerMainScreenDetails SET status="rejected" ,rejectionReasonL1=?  WHERE status="accepted" AND consignorCode=? AND (awbNo=? OR clientRefId=? OR clientShipmentReferenceNumber=?) ', [DropDownValue,route.params.consignorCode, barcode11,barcode11,barcode11], (tx1, results) => {
+            let temp = [];
+            console.log('Rejected Reason : ', DropDownValue);
+            console.log('Results', results.rowsAffected);
+            console.log(results);
+            if (results.rowsAffected > 0) {
+              // ContinueHandle11();
+              console.log(barcode11 + 'rejected');
+              ToastAndroid.show(barcode11 + ' Rejected', ToastAndroid.SHORT);
+              setCheck11(0);
+              // Vibration.vibrate(100);
+              Vibration.vibrate(200);
+              dingAccept.play(success => {
+                if (success) {
+                  // Vibration.vibrate(800);
+                  console.log('successfully finished playing');
+                } else {
+                  console.log('playback failed due to audio decoding errors');
+                }
+              });
+              setDropDownValue('');
+              setExpectedPackaging('');
+            } 
+            for (let i = 0; i < results.rows.length; ++i) {
+              temp.push(results.rows.item(i));
+            }
+          },
+        );
+      });
+      }
   };
 
   const viewDetails2 = () => {
@@ -714,10 +759,10 @@ var barcode11=barcode;
     setDropDownValue11('');
   };
 
-  const getCategories = data => {
+  const getCategories = (data) => {
     db.transaction(txn => {
       txn.executeSql(
-        'SELECT * FROM SellerMainScreenDetails WHERE status IS NULL AND shipmentAction="Seller Pickup" AND  consignorCode=? AND (awbNo=? OR clientRefId=? OR clientShipmentReferenceNumber = ?) ',
+        'SELECT * FROM SellerMainScreenDetails WHERE status IS NULL AND shipmentAction="Seller Pickup" AND  consignorCode=? AND (awbNo=? OR clientRefId=? OR clientShipmentReferenceNumber = ?)',
         [route.params.consignorCode, data, data, data],
         (sqlTxn, res) => {
           // console.log('categories retrieved successfully', res.rows.length);
@@ -729,7 +774,6 @@ var barcode11=barcode;
             // alert('You are scanning wrong product, Please check.');
             console.log(data);
             console.log('ok2222', data);
-
             // barcodeCheck11();
             db.transaction(tx => {
               console.log('ok3333', data);
@@ -751,7 +795,7 @@ var barcode11=barcode;
                     Vibration.vibrate(800);
                     dingReject.play(success => {
                       if (success) {
-                        
+
                         console.log('successfully finished playing');
                       } else {
                         console.log('playback failed due to audio decoding errors');
@@ -764,7 +808,7 @@ var barcode11=barcode;
                     setCheck11(0);
                     dingReject.play(success => {
                       if (success) {
-                        
+
                         console.log('successfully finished playing');
                       } else {
                         console.log('playback failed due to audio decoding errors');
@@ -784,7 +828,56 @@ var barcode11=barcode;
       );
     });
   };
+  console.log(text11);
+  // const fetchData = async () => {
+  //   const tx = await db.transaction();
+  //   const result = await tx.executeSql(
+  //     'SELECT * FROM SellerMainScreenDetails where awbNo="XB-NaNNaNNaN16104" OR clientRefId="1679740804375" OR clientShipmentReferenceNumber="D59uuyd7M"',
+  //     [],
+  //   );
+  //   let temp = [];
+  //         console.log(result.rows.length);
+  //         for (let i = 0; i < result.rows.length; ++i) {
+  //           temp.push(result.rows.item(i));
+  //         }
+  //         setPackagingAction(temp[0].packagingAction);
+  // };
+  
+  // useEffect(() => {
+  //   const unsubscribe = navigation.addListener('focus', fetchData);
+  //   return unsubscribe;
+  // }, [navigation]);
+  const displayData = async () => {
+    db.transaction(tx => {
+      tx.executeSql(
+        'SELECT * FROM SellerMainScreenDetails where awbNo=? OR clientRefId=? OR clientShipmentReferenceNumber=?',
+        [text11,text11,text11],
+        (tx1, results) => {
+          // ToastAndroid.show("Loading...", ToastAndroid.SHORT);
+          let temp = [];
+          console.log(results.rows.length);
+          for (let i = 0; i < results.rows.length; ++i) {
+            temp.push(results.rows.item(i));
+          }
+          setPackagingAction(temp[0].packagingAction);
+        },
+      );
+    });
+  };
 
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      displayData();
+    });
+    return unsubscribe;
+  }, [navigation]);
+  useEffect(() => {
+    (async () => {
+        displayData();
+    })();
+}, [text11]);
+  
+console.log('pa',packagingAction);
   const updateCategories = data => {
     db.transaction(tx => {
       tx.executeSql(
@@ -808,11 +901,55 @@ var barcode11=barcode;
         );
       });
     };
+    const handlepackaging=()=>{
+      db.transaction(tx => {
+        tx.executeSql(
+          'UPDATE SellerMainScreenDetails SET packagingId=?, eventTime=?, latitude=?, longitude=? WHERE  consignorCode=? AND (awbNo=? OR clientRefId=? OR clientShipmentReferenceNumber=?) ',
+          [
+            expectedPackagingId,
+            new Date().valueOf(),
+            latitude,
+            longitude,
+            route.params.consignorCode,
+            barcode,
+            barcode,
+            barcode,
+          ],
+          (tx1, results) => {
+            let temp = [];
+            console.log('Results', results.rowsAffected);
+  
+            if (results.rowsAffected > 0) {
+              Vibration.vibrate(200);
+              ToastAndroid.show(barcode + ' Saved', ToastAndroid.SHORT);
+              dingAccept.play(success => {
+                if (success) {
+                  // Vibration.vibrate(800);
+                  console.log('successfully finished playing');
+                } else {
+                  console.log('playback failed due to audio decoding errors');
+                }
+              });
+            } else {
+              console.log(barcode + 'not updated');
+            }
+            console.log(results.rows.length);
+            for (let i = 0; i < results.rows.length; ++i) {
+              temp.push(results.rows.item(i));
+            }
+          },
+        );
+      });
+
+    }
     const onSuccess = e => {
       console.log(e.data, 'barcode');
       setBarcode(e.data);
       setText11(e.data);
       getCategories(e.data);
+      if(packagingAction!==0){
+        setShowCloseBagModal12(true);
+      }
     };
     const onSuccess11 = e => {
       // Vibration.vibrate(100);
@@ -820,7 +957,7 @@ var barcode11=barcode;
       Vibration.vibrate(100);
       dingAccept.play(success => {
         if (success) {
-          
+
           console.log('successfully finished playing');
         } else {
           console.log('playback failed due to audio decoding errors');
@@ -830,36 +967,41 @@ var barcode11=barcode;
       // getCategories(e.data);
       setBagSeal(e.data);
     };
-    const onSucessThroughButton=(data21)=>{
+    const onSuccess12 = e => {
+      // Vibration.vibrate(100);
+      // RNBeep.beep();
+      Vibration.vibrate(100);
+      dingAccept.play(success => {
+        if (success) {
+
+          console.log('successfully finished playing');
+        } else {
+          console.log('playback failed due to audio decoding errors');
+        }
+      });
+      console.log(e.data, 'ExpectedPackagingID');
+      // getCategories(e.data);
+      setExpectedPackaging(e.data);
+    };
+    const onSucessThroughButton = (data21)=>{
       console.log(data21, 'barcode');
       setBarcode(data21);
       getCategories(data21);
+      if(packagingAction!=0){
+        setShowCloseBagModal12(true);
+      }
     };
 
   useEffect(() => {
     if (len) {
-      // ContinueHandle();
-      // Vibration.vibrate(100);
-      // RNBeep.beep();
       setCheck11(1);
-      // Vibration.vibrate(100);
-      // Vibration.vibrate(200);
-      //       dingAccept.play(success => {
-      //         if (success) {
-      //           // Vibration.vibrate(800);
-      //           console.log('successfully finished playing');
-      //         } else {
-      //           console.log('playback failed due to audio decoding errors');
-      //         }
-      //       });
+      if(packagingAction==0){
       ToastAndroid.show(barcode + ' Accepted', ToastAndroid.SHORT);
       updateDetails2();
       displayDataSPScan();
-
       setLen(false);
-      // updateCategories(barcode);
+      }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [len]);
 
   const displaydata = async () => {
@@ -932,7 +1074,7 @@ var barcode11=barcode;
           <Modal.Body>
             {PartialCloseData &&
               PartialCloseData.map((d, index) =>
-                newaccepted === 0 && pdCheck && d.reasonName === 'Partial Dispatch' ? (
+                 !pdCheck && d.reasonName === 'Partial Dispatch' ? (
                   <Button
                     h="12"
                     paddingBottom={5}
@@ -946,7 +1088,7 @@ var barcode11=barcode;
                         d.reasonID === DropDownValue11 ? '#6666FF' : '#C8C8C8',
                       opacity: 0.4,
                     }}
-                    title={d.reasonName} onPress={() => ToastAndroid.show("No bags for dispatch",ToastAndroid.SHORT)} >
+                    title={d.reasonName} onPress={() => ToastAndroid.show('No bags for dispatch',ToastAndroid.SHORT)} >
                     {' '}
                     {/* onPress={() => ToastAndroid.show("No bags for dispatch",ToastAndroid.SHORT)}  */}
                     <Text
@@ -1126,6 +1268,82 @@ var barcode11=barcode;
           </Modal.Body>
         </Modal.Content>
       </Modal>
+      <Modal
+        isOpen={showCloseBagModal12}
+        onClose={() => {
+          setShowCloseBagModal11(false);
+          reloadScanner();
+          setScanned(true);
+        }}
+        size="lg">
+        <Modal.Content maxWidth="350">
+          <Modal.CloseButton />
+          <Modal.Header>Packaging ID</Modal.Header>
+          <Modal.Body>
+            {showCloseBagModal12 && (
+              <QRCodeScanner
+                onRead={onSuccess12}
+                reactivate={true}
+                reactivateTimeout={2000}
+                flashMode={RNCamera.Constants.FlashMode.off}
+                ref={node => {
+                  this.scanner = node;
+                }}
+                containerStyle={{height: 116, marginBottom: '55%'}}
+                cameraStyle={{
+                  height: 90,
+                  marginTop: 95,
+                  marginBottom: '15%',
+                  width: 289,
+                  alignSelf: 'center',
+                  justifyContent: 'center',
+                }}
+              />
+            )}
+            {'\n'}
+            <Input
+              placeholder="Enter Packaging ID"
+              size="md"
+              value={expectedPackagingId}
+              onChangeText={text => setExpectedPackaging(text)}
+              style={{
+                width: 290,
+                backgroundColor: 'white',
+              }}
+            />
+            {expectedPackagingId.length?
+            <Button
+            flex="1"
+            mt={2}
+            bg="#004aad"
+            onPress={() => {
+              if (packagingAction ==2) {
+                setModal(true);
+                setShowCloseBagModal12(false);
+              } else if (packagingAction ==3) {
+                setModal1(true);
+                setShowCloseBagModal12(false);
+              } else if(packagingAction==1){
+                handlepackaging();
+                setShowCloseBagModal12(false);
+              }else {
+                setShowCloseBagModal12(false);
+              }
+            }}>
+            Submit
+          </Button>
+          :
+          <Button
+              flex="1"
+              mt={2}
+              bg="gray.300"
+              >
+              Submit
+            </Button>
+            } 
+          </Modal.Body>
+        </Modal.Content>
+      </Modal>
 
       <Modal
         isOpen={showCloseBagModal}
@@ -1173,6 +1391,58 @@ var barcode11=barcode;
                 CloseBag(), setShowCloseBagModal(false);
               }}>
               Submit
+            </Button>
+          </Modal.Body>
+        </Modal.Content>
+      </Modal>
+      <Modal
+        isOpen={showModal}
+        onClose={() => {
+          setModal(false);
+        }}
+        size="lg">
+        <Modal.Content maxWidth="350">
+          <Modal.CloseButton />
+          <Modal.Header>Accept Shipment</Modal.Header>
+          <Modal.Body>
+            <Text>Mismatch Packaging ID</Text>
+            <Button
+              flex="1"
+              mt={2}
+              bg="#004aad"
+              onPress={() => {
+                ToastAndroid.show(barcode + ' Accepted', ToastAndroid.SHORT);
+                updateDetails2();
+                displayDataSPScan();
+                setLen(false);
+                setModal(false);
+                setExpectedPackaging('');
+              }}>
+              Accept Anyway
+            </Button>
+          </Modal.Body>
+        </Modal.Content>
+      </Modal>
+      <Modal
+        isOpen={showModal1}
+        onClose={() => {
+          setModal1(false);
+        }}
+        size="lg">
+        <Modal.Content maxWidth="350">
+          <Modal.CloseButton />
+          <Modal.Header>Reject Shipment</Modal.Header>
+          <Modal.Body>
+            <Text>Mismatch Packaging ID</Text>
+            <Button
+              flex="1"
+              mt={2}
+              bg="#004aad"
+              onPress={() => {
+              setModal1(false);
+              setModalVisible(true);
+              }}>
+              Reject Shipment
             </Button>
           </Modal.Body>
         </Modal.Content>
@@ -1234,7 +1504,7 @@ var barcode11=barcode;
       <ScrollView
         style={{paddingTop: 20, paddingBottom: 50}}
         showsVerticalScrollIndicator={false}>
-        {!showCloseBagModal && scanned && (
+        {(!showCloseBagModal || !showCloseBagModal12) && scanned && (
           <QRCodeScanner
             onRead={onSuccess}
             reactivate={true}
@@ -1255,19 +1525,14 @@ var barcode11=barcode;
           />
         )}
         <View>
-          <Center></Center>
+          <Center />
         </View>
         <View>
           <View style={{backgroundColor: 'white'}}>
             <View style={{alignItems: 'center', marginTop: 15}}>
               <View style={{backgroundColor: 'lightgrey', padding:0, flexDirection: 'row', justifyContent: 'space-between', width: '90%', borderRadius: 10, flex:1}}>
-
               <Input placeholder="Shipment ID"  value={text11} onChangeText={(text)=>{ setText11(text);}}  style={{
-fontSize: 18, fontWeight: '500',
-width: 320,
-backgroundColor:'lightgrey',
-}} />
-
+              fontSize: 18, fontWeight: '500', width: 320, backgroundColor:'lightgrey',}} />
 <TouchableOpacity style={{flex:1,backgroundColor:'lightgrey',paddingTop:8}} onPress={()=>onSucessThroughButton(text11)}>
   <Center>
 
@@ -1281,7 +1546,7 @@ backgroundColor:'lightgrey',
 {/* <Button flex="1" mt={2} bg={buttonColor11} onPress={() => { }}>Submit</Button>
                 <Text style={{fontSize: 18, fontWeight: '500'}}>shipment ID: </Text>
                 {/* <MaterialIcons name="send" size={24} color={onPress ? 'black' : 'gray'} /> */}
-                {/* <Text style={{fontSize: 18, fontWeight: '500'}}>{barcode}</Text> */} 
+                {/* <Text style={{fontSize: 18, fontWeight: '500'}}>{barcode}</Text> */}
                 {/* <View style={{ flex: 1,
                 alignItems: 'center',
                 justifyContent: 'center',}}>
@@ -1298,16 +1563,19 @@ backgroundColor:'lightgrey',
         </View> */}
                 {/* </View> */}
               </View>
+              {packagingAction==0?
               <Button
-                title="Reject Shipment"
-                onPress={() =>{ check11===0 ? ToastAndroid.show("No Shipment to Reject",ToastAndroid.SHORT) :setModalVisible(true)}}
-                w="90%"
-                size="lg"
-                bg={buttonColorRejected}
-                mb={4}
-                mt={4}>
-                Reject Shipment
-              </Button>
+              title="Reject Shipment"
+              onPress={() =>{ check11 === 0 ? ToastAndroid.show('No Shipment to Reject',ToastAndroid.SHORT) : setModalVisible(true);}}
+              w="90%"
+              size="lg"
+              bg={buttonColorRejected}
+              mb={4}
+              mt={4}>
+              Reject Shipment
+            </Button>
+            : null
+              }
               <View
                 style={{
                   width: '90%',

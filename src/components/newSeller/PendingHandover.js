@@ -8,6 +8,10 @@ import {useNavigation} from '@react-navigation/native';
 import { Picker } from '@react-native-picker/picker';
 const db = openDatabase({ name: 'rn_sqlite' });
 import GetLocation from 'react-native-get-location';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
+import { backendUrl } from '../../utils/backendUrl';
 
 const PendingHandover = ({route}) => {
 
@@ -21,6 +25,8 @@ const PendingHandover = ({route}) => {
     // const navigation = useNavigation();
   
     const [keyword, setKeyword] = useState('');
+    const [expected11, setExpected11] = useState(0);
+    const [rejected11, setRejected11] = useState(0);
 
     const [modalVisible, setModalVisible] = useState(false);
     const [DropDownValue, setDropDownValue] = useState('');
@@ -29,6 +35,28 @@ const PendingHandover = ({route}) => {
     const [showCloseBagModal, setShowCloseBagModal] = useState(false);
     const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
+
+
+  const [userId, setUserID] = useState('');
+
+  const getUserId = async () => {
+    try {
+      const value = await AsyncStorage.getItem('@storage_Key');
+      if (value !== null) {
+        const data = JSON.parse(value);
+        setUserID(data.userId);
+      } else {
+        setUserID('');
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    getUserId();
+  }, []);
+
 
   useEffect(() => {
     current_location();
@@ -149,7 +177,39 @@ const PendingHandover = ({route}) => {
         latitude,
         longitude,
         consignorCode);
-        let time11=new Date().valueOf();
+        let time11=parseInt(new Date().valueOf(), 10);
+        const DropDownValue112=DropDownValue;
+        db.transaction(tx => {
+          tx.executeSql(
+            'SELECT * FROM SellerMainScreenDetails where shipmentAction="Seller Delivery" AND consignorCode=? ',
+            [consignorCode],
+            (tx1, results111) => {
+
+
+              axios.post(backendUrl + 'SellerMainScreen/closeHandover', {
+                runsheetNo: results111.rows.item(0).runSheetNumber,
+                expected: expected11,
+                accepted: (expected11-rejected11),
+                rejected: rejected11,
+                feUserID: userId,
+                receivingTime: time11,
+                latitude: latitude,
+                longitude: longitude,
+                consignorCode: consignorCode,
+                rejectReason: DropDownValue112,
+              })
+                .then(response => {
+                  console.log('Response close handover:', response.data);
+                })
+                .catch(error => {
+                  console.error('Error:', error);
+                });
+
+
+
+            },
+          );
+        });
         db.transaction(tx => {
             tx.executeSql(
               'UPDATE SellerMainScreenDetails SET handoverStatus="pendingHandover" , rejectionReasonL1=?, eventTime=?, latitude=?, longitude=? WHERE shipmentAction="Seller Delivery" AND handoverStatus IS Null And consignorCode=?',
@@ -160,12 +220,13 @@ const PendingHandover = ({route}) => {
                 consignorCode],
               (tx1, results) => {
                 let temp = [];
-                console.log(tx1);
+                // console.log(tx1);
                 console.log("Not Picked Reason",DropDownValue);
                 console.log('Results',results.rowsAffected);
                 // console.log(results);
                 if (results.rowsAffected > 0) {
                   console.log('notPicked done');
+
                   loadDetails();
                   loadDetails112();
                 } else {
@@ -244,7 +305,7 @@ return (
                         </DataTable.Cell>
                         {/* <MaterialIcons name="check" style={{ fontSize: 30, color: 'green', marginTop: 8 }} /> */}
                       </DataTable.Row>
-                      <Button title="Pending Handover" onPress={() =>{setConsignorCode(consignorCode); setModalVisible(true)}} w="100%" size="lg" bg="gray.300" mb={4} mt={4}>Select Exception Reason</Button>
+                      <Button title="Pending Handover" onPress={() =>{setConsignorCode(consignorCode); setExpected11(displayData11[consignorCode].expected);setRejected11(displayData11[consignorCode].pending);setModalVisible(true)}} w="100%" size="lg" bg="gray.300" mb={4} mt={4}>Select Exception Reason</Button>
                       {/* <Modal isOpen={modalVisible} onClose={() => {setModalVisible(false); setDropDownValue('');}} size="lg">
         <Modal.Content maxWidth="350">
           <Modal.CloseButton />
@@ -309,10 +370,12 @@ return (
         </Modal.Content>
       </Modal>
       <View style={{width: '90%', flexDirection: 'row', justifyContent: 'space-between', alignSelf: 'center', marginTop: 10 }}>
-            <Button w="48%" size="lg" bg="#004aad" onPress={()=>navigation.navigate('HandoverShipmentRTO')}>Start Scanning</Button>
+
+          {totalPending===0 ? <Button w="48%" size="lg" bg="gray.300" onPress={()=>ToastAndroid.show("All shipments scanned",ToastAndroid.SHORT)
+    } >Start Scanning</Button>:  <Button w="48%" size="lg" bg="#004aad" onPress={()=>navigation.navigate('HandoverShipmentRTO')}>Start Scanning</Button>}
            {totalPending===0 ? 
            <Button w="48%" size="lg" bg="#004aad" onPress={()=>navigation.navigate('HandOverSummary')} >Close Handover</Button>
-        :    <Button w="48%" size="lg" bg="gray.300" onPress={()=>ToastAndroid.show("All Shipments Not Scanned",ToastAndroid.SHORT)
+        :    <Button w="48%" size="lg" bg="gray.300" onPress={()=>ToastAndroid.show("All shipments not scanned",ToastAndroid.SHORT)
     } >Close Handover</Button>
         }
           </View>

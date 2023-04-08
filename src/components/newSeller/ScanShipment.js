@@ -52,6 +52,7 @@ import OTPTextInput from 'react-native-otp-textinput';
 import {RNCamera} from 'react-native-camera';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import {panGestureHandlerCustomNativeProps} from 'react-native-gesture-handler/lib/typescript/handlers/PanGestureHandler';
+import { backendUrl } from '../../utils/backendUrl';
 const db = openDatabase({
   name: 'rn_sqlite',
 });
@@ -148,7 +149,7 @@ const ScanShipment = ({route}) => {
         hubCode: 'HC001',
       });
 
-      fetch('https://bkedtest.logistiex.com/DSQCPicture/uploadPicture', {
+      fetch(backendUrl + 'DSQCPicture/uploadPicture', {
         method: 'POST',
         body: formData,
       })

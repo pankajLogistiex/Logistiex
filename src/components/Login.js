@@ -5,9 +5,10 @@ import axios from 'axios';
 import {NativeBaseProvider, Box, Image, Center, VStack, Button, Icon, Input, Heading, Alert, Text, Modal } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Pressable } from 'react-native';
+import { Pressable,Linking } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import { backendUrl } from '../utils/backendUrl';
+import { BackHandler } from 'react-native';
 export default function Login() {
 
   const [email, setEmail] = useState('');
@@ -38,7 +39,7 @@ export default function Login() {
       console.log(e);
     }
   };
-
+ 
   const getData = async () => {
     try {
       const value = await AsyncStorage.getItem('@storage_Key');
@@ -48,11 +49,24 @@ export default function Login() {
         navigation.navigate('Main', {
           userId : data.userId,
         });
-
+ 
       }
     } catch (e) {
       console.log(e);
     }
+  };
+  useEffect(() => {
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      handleBackButtonPress
+    );
+ 
+    return () => backHandler.remove();
+  }, []);
+
+  const handleBackButtonPress = () => {
+    BackHandler.exitApp();
+    return true; // Prevent default behavior (going back to previous screen)
   };
 
   useEffect(() => {
@@ -62,28 +76,35 @@ export default function Login() {
 
   const handleLogin = async() => {
     setLoginClicked(true);
-    await axios.post('https://bkedtest.logistiex.com/Login/login', { email: email, password: password })
-    .then(async(response) => {
-      setLoginClicked(false);
-      setMessage(1);
-      setShowModal(true);
-      await storeData({
-        UserName : response.data.userDetails.userFirstName + ' ' + response.data.userDetails.userLastName,
-        UserEmail : response.data.userDetails.userPersonalEmailId,
-        userId : response.data.userDetails.userId,
-      });
-      setTimeout(()=>{
-        setShowModal(false);
-        navigation.navigate('Main', {
-          userId : response.data.userDetails.userId,
-        });
-      }, 100);
-    }, (error) => {
-      console.log(error);
-      setLoginClicked(false);
-      setMessage(2);
-      setShowModal(true);
-    });
+    await axios
+      .post(backendUrl + 'Login/login', {email: email, password: password})
+      .then(
+        async response => {
+          setLoginClicked(false);
+          setMessage(1);
+          setShowModal(true);
+          await storeData({
+            UserName:
+              response.data.userDetails.userFirstName +
+              ' ' +
+              response.data.userDetails.userLastName,
+            UserEmail: response.data.userDetails.userPersonalEmailId,
+            userId: response.data.userDetails.userId,
+          });
+          setTimeout(() => {
+            setShowModal(false);
+            navigation.navigate('Main', {
+              userId: response.data.userDetails.userId,
+            });
+          }, 100);
+        },
+        error => {
+          console.log(error);
+          setLoginClicked(false);
+          setMessage(2);
+          setShowModal(true);
+        },
+      );
   };
 
   return (
@@ -101,7 +122,7 @@ export default function Login() {
               </Alert>
             </Modal.Body>
           </Modal.Content>
-        </Modal>
+        </Modal> 
         <Box justifyContent="space-between" py={10} px={6} bg="#fff" rounded="xl" width={'90%'} maxWidth="100%" _text={{fontWeight: 'medium'}}>
           <VStack space={6}>
             <Center>

@@ -42,6 +42,7 @@ import {
 } from 'styled-system';
 import {Console} from 'console';
 import {truncate} from 'fs/promises';
+import { backendUrl } from '../../utils/backendUrl';
 
 const db = openDatabase({
   name: 'rn_sqlite',
@@ -62,7 +63,7 @@ const HandoverShipment = ({route}) => {
   const [len, setLen] = useState(0);
   const [DropDownValue, setDropDownValue] = useState(null);
   const [rejectedData, setRejectedData] = useState([]);
-  const RejectReason = 'https://bkedtest.logistiex.com/ADupdatePrams/getUSER';
+  const RejectReason = backendUrl + 'ADupdatePrams/getUSER';
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
   const [modalVisible, setModalVisible] = useState(false);
@@ -310,26 +311,23 @@ const HandoverShipment = ({route}) => {
               let res = results.rows.item(0);
               console.log(res, 'tanmay');
               axios
-                .post(
-                  'https://bkedtest.logistiex.com/SellerMainScreen/postSPS',
-                  {
-                    clientShipmentReferenceNumber:
-                      res.clientShipmentReferenceNumber,
-                    feUserID: route.params.userId,
-                    isAccepted: 'false',
-                    rejectionReason: 'null',
-                    consignorCode: res.consignorCode,
-                    pickupTime: new Date()
-                      .toJSON()
-                      .slice(0, 10)
-                      .replace(/-/g, '/'),
-                    latitude: 0,
-                    longitude: 0,
-                    packagingId: 'ss',
-                    packageingStatus: 1,
-                    PRSNumber: res.PRSNumber,
-                  },
-                )
+                .post(backendUrl + 'SellerMainScreen/postSPS', {
+                  clientShipmentReferenceNumber:
+                    res.clientShipmentReferenceNumber,
+                  feUserID: route.params.userId,
+                  isAccepted: 'false',
+                  rejectionReason: 'null',
+                  consignorCode: res.consignorCode,
+                  pickupTime: new Date()
+                    .toJSON()
+                    .slice(0, 10)
+                    .replace(/-/g, '/'),
+                  latitude: 0,
+                  longitude: 0,
+                  packagingId: 'ss',
+                  packageingStatus: 1,
+                  PRSNumber: res.PRSNumber,
+                })
                 .then(function (response) {
                   console.log(response.data, 'hello');
                   updateCategories1(res.clientShipmentReferenceNumber);
@@ -389,7 +387,7 @@ const HandoverShipment = ({route}) => {
 
   const submitForm = () => {
     axios
-      .post('https://bkedtest.logistiex.com/SellerMainScreen/postSPS', {
+      .post(backendUrl + 'SellerMainScreen/postSPS', {
         clientShipmentReferenceNumber: route.params.barcode,
         feUserID: route.params.userId,
         isAccepted: 'false',

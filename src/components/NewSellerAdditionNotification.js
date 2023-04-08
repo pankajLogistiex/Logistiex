@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Image, StyleSheet, View } from 'react-native';
 import { convertAbsoluteToRem } from 'native-base/lib/typescript/theme/tools';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { backendUrl } from '../utils/backendUrl';
 
 export default function NewSellerAdditionNotification(route) {
 
@@ -42,16 +43,15 @@ export default function NewSellerAdditionNotification(route) {
     }
   };
 
-  console.log(userId)
-
   const DisplayData = () => {
-    axios.get(`https://bkedtest.logistiex.com/SellerMainScreen/getadditionalwork/${userId}`)
+    axios
+      .get(backendUrl + `SellerMainScreen/getadditionalwork/${userId}`)
       .then(res => {
-        setData(res.data)
+        setData(res.data);
       })
       .catch(error => {
-        console.log('Error Msg:', error)
-      })
+        console.log('Error Msg:', error);
+      });
   };
   useEffect(() => {
     DisplayData();
@@ -60,26 +60,32 @@ export default function NewSellerAdditionNotification(route) {
 
   const AcceptHandler = async () => {
     console.log('df')
-    axios.post('https://bkedtest.logistiex.com/SellerMainScreen/acceptworkload', {
-      consignorCode: data.consignorCode,
-      feUserId: userId
-    }).then(response => {
-      console.log(response)
-    }).catch(error => {
-      console.log(error);
-    });
+    axios
+      .post(backendUrl + 'SellerMainScreen/acceptworkload', {
+        consignorCode: data.consignorCode,
+        feUserId: userId,
+      })
+      .then(response => {
+        console.log(response);
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
 
   const RejectHandler = async () => {
     console.log('df')
-    axios.post('https://bkedtest.logistiex.com/SellerMainScreen/rejectworkload', {
-      consignorCode: data.consignorCode,
-      feUserId: userId
-    }).then(response => {
-      console.log(response)
-    }).catch(error => {
-      console.log(error);
-    });
+    axios
+      .post(backendUrl + 'SellerMainScreen/rejectworkload', {
+        consignorCode: data.consignorCode,
+        feUserId: userId,
+      })
+      .then(response => {
+        console.log(response);
+      })
+      .catch(error => {
+        console.log(error);
+      });
   }
 
 

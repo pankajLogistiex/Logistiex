@@ -9,6 +9,7 @@ import { decode } from "react-native-pure-jwt";
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import Marker from 'react-native-image-marker';
 import { ScrollView } from 'react-native-gesture-handler';
+import { backendUrl } from '../utils/backendUrl';
 
 export default function StartTrip() {
 
@@ -43,12 +44,15 @@ export default function StartTrip() {
     getUserId();
 }, []);
 useEffect(() => {
-axios.get(`https://bkedtest.logistiex.com/SellerMainScreen/vehicleNumber/${userId}`).then(response => {
-console.log('data',response);
-setVehicle(response.data.data.vehicleNumber);
-}).catch(error => {
-console.log(error, 'error');
-});
+axios
+  .get(backendUrl + `SellerMainScreen/vehicleNumber/${userId}`)
+  .then(response => {
+    console.log('data', response);
+    setVehicle(response.data.data.vehicleNumber);
+  })
+  .catch(error => {
+    console.log(error, 'error');
+  });
 }, [userId]);
 console.log(vehicle);
   const requestCameraPermission = async () => {
@@ -137,26 +141,26 @@ console.log(vehicle);
         console.log(result)
     }
     if(result.assets !== undefined){          
-      fetch('https://bkedtest.logistiex.com/DSQCPicture/uploadPicture', {
+      fetch(backendUrl + 'DSQCPicture/uploadPicture', {
         method: 'POST',
         body: createFormData(result.assets[0], {
-                useCase : "DSQC",
-                type : "front",
-                contextId : "SI002",
-                contextType: "shipment",
-                hubCode :"HC001"
-              }),
+          useCase: 'DSQC',
+          type: 'front',
+          contextId: 'SI002',
+          contextType: 'shipment',
+          hubCode: 'HC001',
+        }),
       })
-      .then((data) => data.json())
-      .then((res) => {
-        setImageUrl(res.publicURL);
-        setUploadStatus('done');
-        console.log('upload succes', res);
-      })
-      .catch((error) => {
-        console.log('upload error', error);
-        setUploadStatus('error')
-      });
+        .then(data => data.json())
+        .then(res => {
+          setImageUrl(res.publicURL);
+          setUploadStatus('done');
+          console.log('upload succes', res);
+        })
+        .catch(error => {
+          console.log('upload error', error);
+          setUploadStatus('error');
+        });
     }
 }
 // useEffect(() => {
@@ -173,30 +177,30 @@ let date = dateEnd ? tripid.substring(dateStart, dateEnd+5) : "No match found";
 const ImageHandle = () => 
   {
     (async() => {
-        await axios.post('https://bkedtest.logistiex.com/UserTripInfo/userTripDetails', {
-        tripID : userId+"_"+date, 
-        userID : userId, 
-        date : new Date(), 
-        startTime : time,
-        vehicleNumber : vehicle, 
-        startKilometer : startkm, 
-        startVehicleImageUrl : ImageUrl
-        })
-        .then(function (res) {
-          console.log('dscsdc', res.data.msg);
-          // storeDataTripValue();
-          if(res.data.msg=="TripID already exists"){
-            setMessage(2);
-          }
-          else {
-            storeDataTripValue();
-            setMessage(1);
-          }
-          setShowModal(true);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+        await axios
+          .post(backendUrl + 'UserTripInfo/userTripDetails', {
+            tripID: userId + '_' + date,
+            userID: userId,
+            date: new Date(),
+            startTime: time,
+            vehicleNumber: vehicle,
+            startKilometer: startkm,
+            startVehicleImageUrl: ImageUrl,
+          })
+          .then(function (res) {
+            console.log('dscsdc', res.data.msg);
+            // storeDataTripValue();
+            if (res.data.msg == 'TripID already exists') {
+              setMessage(2);
+            } else {
+              storeDataTripValue();
+              setMessage(1);
+            }
+            setShowModal(true);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
     }) ();
    }
 

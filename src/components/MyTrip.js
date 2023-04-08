@@ -7,6 +7,7 @@ import { launchCamera } from 'react-native-image-picker';
 import {openDatabase} from 'react-native-sqlite-storage';
 const db = openDatabase({name: 'rn_sqlite'});
 import { useIsFocused } from "@react-navigation/native"; 
+import { backendUrl } from '../utils/backendUrl';
 
 export default function MyTrip({ navigation, route }) {
 
@@ -46,40 +47,41 @@ export default function MyTrip({ navigation, route }) {
       getTripDetails(userId + "_" + date);
     }
   }, [userId]);
-
   function getVehicleNumber(userId){
-    axios.get(`https://bkedtest.logistiex.com/SellerMainScreen/vehicleNumber/${userId}`)
-    .then(response => {
-      if(response?.data?.data?.vehicleNumber){
-        setVehicle(response.data.data.vehicleNumber);
-      }
-    })
-    .catch(error => {
-      console.log(error, 'error');
-    });
+    axios
+      .get(backendUrl + `SellerMainScreen/vehicleNumber/${userId}`)
+      .then(response => {
+        if (response?.data?.data?.vehicleNumber) {
+          setVehicle(response.data.data.vehicleNumber);
+        }
+      })
+      .catch(error => {
+        console.log(error, 'error');
+      });
   }
 
   function getTripDetails(tripId){
-    axios.get("https://bkedtest.logistiex.com/UserTripInfo/getUserTripInfo", {
-      params: {
-        tripID: tripId, 
-      }
-    })
-    .then(response => {
-      if(response?.data?.res_data){
-        setTripAlreadyStarted(true);
-        setVehicle(response.data.res_data.vehicleNumber);
-        setStartKm(response.data.res_data.startKilometer);
-        if(response.data.res_data.endkilometer){
-          navigation.navigate('StartEndDetails', {tripID:tripId});
+    axios
+      .get(backendUrl + 'UserTripInfo/getUserTripInfo', {
+        params: {
+          tripID: tripId,
+        },
+      })
+      .then(response => {
+        if (response?.data?.res_data) {
+          setTripAlreadyStarted(true);
+          setVehicle(response.data.res_data.vehicleNumber);
+          setStartKm(response.data.res_data.startKilometer);
+          if (response.data.res_data.endkilometer) {
+            navigation.navigate('StartEndDetails', {tripID: tripId});
+          }
         }
-      }
-      setLoading(false);
-    })
-    .catch(error => {
-      console.log(error, 'error');
-      setLoading(false);
-    });
+        setLoading(false);
+      })
+      .catch(error => {
+        console.log(error, 'error');
+        setLoading(false);
+      });
   }
   useEffect(() => {   
     if(focus == true){ 
@@ -167,25 +169,25 @@ export default function MyTrip({ navigation, route }) {
       result = await launchCamera(options);
     }
     if(result.assets !== undefined){          
-      fetch('https://bkedtest.logistiex.com/DSQCPicture/uploadPicture', {
+      fetch(backendUrl + 'DSQCPicture/uploadPicture', {
         method: 'POST',
         body: createFormData(result.assets[0], {
-          useCase : "DSQC",
-          type : "front",
-          contextId : "SI002",
-          contextType: "shipment",
-          hubCode :"HC001"
+          useCase: 'DSQC',
+          type: 'front',
+          contextId: 'SI002',
+          contextType: 'shipment',
+          hubCode: 'HC001',
         }),
       })
-      .then((data) => data.json())
-      .then((res) => {
-        setStartImageUrl(res.publicURL);
-        setUploadStatus('done');
-      })
-      .catch((error) => {
-        console.log('upload error', error);
-        setUploadStatus('error')
-      });
+        .then(data => data.json())
+        .then(res => {
+          setStartImageUrl(res.publicURL);
+          setUploadStatus('done');
+        })
+        .catch(error => {
+          console.log('upload error', error);
+          setUploadStatus('error');
+        });
     }
   }
 
@@ -209,44 +211,45 @@ export default function MyTrip({ navigation, route }) {
       result = await launchCamera(options);
     }
     if (result.assets !== undefined) {
-      fetch('https://bkedtest.logistiex.com/DSQCPicture/uploadPicture', {
+      fetch(backendUrl + 'DSQCPicture/uploadPicture', {
         method: 'POST',
         body: createFormData(result.assets[0], {
-          useCase: "DSQC",
-          type: "front",
-          contextId: "SI002",
-          contextType: "shipment",
-          hubCode: "HC001"
+          useCase: 'DSQC',
+          type: 'front',
+          contextId: 'SI002',
+          contextType: 'shipment',
+          hubCode: 'HC001',
         }),
       })
-      .then((data) => data.json())
-      .then((res) => {
-        setEndImageUrl(res.publicURL);
-        setUploadStatus('done');
-      })
-      .catch((error) => {
-        console.log('upload error', error);
-        setUploadStatus('error');
-      });
+        .then(data => data.json())
+        .then(res => {
+          setEndImageUrl(res.publicURL);
+          setUploadStatus('done');
+        })
+        .catch(error => {
+          console.log('upload error', error);
+          setUploadStatus('error');
+        });
     }
   }
 
   const submitEndTrip = () => {
     (async () => {
-      await axios.post('https://bkedtest.logistiex.com/UserTripInfo/updateUserTripEndDetails', {
-        tripID: tripID,
-        endTime: new Date().valueOf() ,
-        endkilometer: endkm,
-        endVehicleImageUrl: endImageUrl
-      })
-      .then(function (res) {
-        getTripDetails(tripID);
-        setMessage(1);
-        navigation.navigate('StartEndDetails', {tripID:tripID});
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+      await axios
+        .post(backendUrl + 'UserTripInfo/updateUserTripEndDetails', {
+          tripID: tripID,
+          endTime: new Date().valueOf(),
+          endkilometer: endkm,
+          endVehicleImageUrl: endImageUrl,
+        })
+        .then(function (res) {
+          getTripDetails(tripID);
+          setMessage(1);
+          navigation.navigate('StartEndDetails', {tripID: tripID});
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     })();
   }
   let currentDate = new Date();
@@ -260,30 +263,30 @@ export default function MyTrip({ navigation, route }) {
     }
     else{
       (async() => {
-        await axios.post('https://bkedtest.logistiex.com/UserTripInfo/userTripDetails', {
-          tripID : tripID, 
-          userID : userId, 
-          date : currentDate, 
-          startTime : new Date().valueOf(),
-          vehicleNumber : vehicle, 
-          startKilometer : startkm, 
-          startVehicleImageUrl : startImageUrl
-        })
-        .then(function (res) {
-          if(res.data.msg=="TripID already exists"){
-            getTripDetails(tripID);
-            setMessage(2);
-          }
-          else {
-            getTripDetails(tripID);
-            setMessage(1);
-            navigation.navigate('Main',{tripID:tripID});
-          }
-          setShowModal(true);
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+        await axios
+          .post(backendUrl + 'UserTripInfo/userTripDetails', {
+            tripID: tripID,
+            userID: userId,
+            date: currentDate,
+            startTime: new Date().valueOf(),
+            vehicleNumber: vehicle,
+            startKilometer: startkm,
+            startVehicleImageUrl: startImageUrl,
+          })
+          .then(function (res) {
+            if (res.data.msg == 'TripID already exists') {
+              getTripDetails(tripID);
+              setMessage(2);
+            } else {
+              getTripDetails(tripID);
+              setMessage(1);
+              navigation.navigate('Main', {tripID: tripID});
+            }
+            setShowModal(true);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
       })();
     }
   }
