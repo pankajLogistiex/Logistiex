@@ -1094,7 +1094,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white',marginTop:15}} size="md">
                   Notification
                 </Heading>
               </NativeBaseProvider>
@@ -1115,7 +1115,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white',marginTop:15}} size="md">
                   Notification
                 </Heading>
               </NativeBaseProvider>
@@ -1136,7 +1136,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white',marginTop:15}} size="md">
                   Notification
                 </Heading>
               </NativeBaseProvider>
@@ -1157,7 +1157,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white',marginTop:15}} size="md">
                   Notification
                 </Heading>
               </NativeBaseProvider>
@@ -1178,7 +1178,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white',marginTop:15}} size="md">
                   Dashboard
                 </Heading>
               </NativeBaseProvider>
@@ -1188,7 +1188,7 @@ function StackNavigators({navigation}) {
                 name="menu"
                 style={{fontSize: 30, marginLeft: 10, color: 'white'}}
                 onPress={() => {
-                  console.log('dashboard menu clicked');
+                  // console.log('dashboard menu clicked');
                   navigation.dispatch(DrawerActions.openDrawer());
                 }}
               />
@@ -1211,7 +1211,7 @@ function StackNavigators({navigation}) {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('NewSellerAdditionNotification');
-                    navigation.dispatch(DrawerActions.openDrawer());
+                    // navigation.dispatch(DrawerActions.openDrawer());
                   }}>
                   <MaterialIcons
                     name="bell-outline"
@@ -1245,7 +1245,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white',marginTop:15}} size="md">
                   Seller Pickups
                 </Heading>
               </NativeBaseProvider>
@@ -1275,7 +1275,7 @@ function StackNavigators({navigation}) {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('NewSellerAdditionNotification');
-                    navigation.dispatch(DrawerActions.openDrawer());
+                    // navigation.dispatch(DrawerActions.openDrawer());
                   }}>
                   <MaterialIcons
                     name="bell-outline"
@@ -1320,7 +1320,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white',marginTop:15}} size="md">
                   Seller Handover
                 </Heading>
               </NativeBaseProvider>
@@ -1350,7 +1350,6 @@ function StackNavigators({navigation}) {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('NewSellerAdditionNotification');
-                    navigation.dispatch(DrawerActions.openDrawer());
                   }}>
                   <MaterialIcons
                     name="bell-outline"
@@ -1383,7 +1382,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white',marginTop:15}} size="md">
                   Shipment
                 </Heading>
               </NativeBaseProvider>
@@ -1413,7 +1412,6 @@ function StackNavigators({navigation}) {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('NewSellerAdditionNotification');
-                    navigation.dispatch(DrawerActions.openDrawer());
                   }}>
                   <MaterialIcons
                     name="bell-outline"
@@ -1446,7 +1444,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white',marginTop:15}} size="md">
                   Open Bags
                 </Heading>
               </NativeBaseProvider>
@@ -1476,7 +1474,6 @@ function StackNavigators({navigation}) {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('NewSellerAdditionNotification');
-                    navigation.dispatch(DrawerActions.openDrawer());
                   }}>
                   <MaterialIcons
                     name="bell-outline"
@@ -1509,7 +1506,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white',marginTop:15}} size="md">
                   Pending Handover
                 </Heading>
               </NativeBaseProvider>
@@ -1539,7 +1536,6 @@ function StackNavigators({navigation}) {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('NewSellerAdditionNotification');
-                    navigation.dispatch(DrawerActions.openDrawer());
                   }}>
                   <MaterialIcons
                     name="bell-outline"
@@ -1572,7 +1568,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white',marginTop:15}} size="md">
                   Pending Work
                 </Heading>
               </NativeBaseProvider>
@@ -1602,7 +1598,6 @@ function StackNavigators({navigation}) {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('NewSellerAdditionNotification');
-                    navigation.dispatch(DrawerActions.openDrawer());
                   }}>
                   <MaterialIcons
                     name="bell-outline"
@@ -1635,7 +1630,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white',marginTop:15}} size="md">
                   Pending Work
                 </Heading>
               </NativeBaseProvider>
@@ -1665,7 +1660,6 @@ function StackNavigators({navigation}) {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('NewSellerAdditionNotification');
-                    navigation.dispatch(DrawerActions.openDrawer());
                   }}>
                   <MaterialIcons
                     name="bell-outline"
@@ -1698,7 +1692,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white',marginTop:15}} size="md">
                   Pending Work
                 </Heading>
               </NativeBaseProvider>
@@ -1728,7 +1722,6 @@ function StackNavigators({navigation}) {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('NewSellerAdditionNotification');
-                    navigation.dispatch(DrawerActions.openDrawer());
                   }}>
                   <MaterialIcons
                     name="bell-outline"
@@ -1761,7 +1754,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white',marginTop:15}} size="md">
                   Handover Summary
                 </Heading>
               </NativeBaseProvider>
@@ -1791,7 +1784,6 @@ function StackNavigators({navigation}) {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('NewSellerAdditionNotification');
-                    navigation.dispatch(DrawerActions.openDrawer());
                   }}>
                   <MaterialIcons
                     name="bell-outline"
@@ -1825,7 +1817,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white',marginTop:15}} size="md">
                   Handover Scan
                 </Heading>
               </NativeBaseProvider>
@@ -1855,7 +1847,6 @@ function StackNavigators({navigation}) {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('NewSellerAdditionNotification');
-                    navigation.dispatch(DrawerActions.openDrawer());
                   }}>
                   <MaterialIcons
                     name="bell-outline"
@@ -1889,7 +1880,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white',marginTop:15}} size="md">
                   Seller Summary
                 </Heading>
               </NativeBaseProvider>
@@ -1919,7 +1910,6 @@ function StackNavigators({navigation}) {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('NewSellerAdditionNotification');
-                    navigation.dispatch(DrawerActions.openDrawer());
                   }}>
                   <MaterialIcons
                     name="bell-outline"
@@ -1953,7 +1943,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white',marginTop:15}} size="md">
                   Scan Products
                 </Heading>
               </NativeBaseProvider>
@@ -1983,7 +1973,6 @@ function StackNavigators({navigation}) {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('NewSellerAdditionNotification');
-                    navigation.dispatch(DrawerActions.openDrawer());
                   }}>
                   <MaterialIcons
                     name="bell-outline"
@@ -2016,7 +2005,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white',marginTop:15}} size="md">
                   Seller Deliveries
                 </Heading>
               </NativeBaseProvider>
@@ -2046,7 +2035,6 @@ function StackNavigators({navigation}) {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('NewSellerAdditionNotification');
-                    navigation.dispatch(DrawerActions.openDrawer());
                   }}>
                   <MaterialIcons
                     name="bell-outline"
@@ -2079,7 +2067,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white',marginTop:15}} size="md">
                   Seller Handover
                 </Heading>
               </NativeBaseProvider>
@@ -2109,7 +2097,6 @@ function StackNavigators({navigation}) {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('NewSellerAdditionNotification');
-                    navigation.dispatch(DrawerActions.openDrawer());
                   }}>
                   <MaterialIcons
                     name="bell-outline"
@@ -2142,7 +2129,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white',marginTop:15}} size="md">
                   Scan Shipment
                 </Heading>
               </NativeBaseProvider>
@@ -2172,7 +2159,6 @@ function StackNavigators({navigation}) {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('NewSellerAdditionNotification');
-                    navigation.dispatch(DrawerActions.openDrawer());
                   }}>
                   <MaterialIcons
                     name="bell-outline"
@@ -2205,7 +2191,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white',marginTop:15}} size="md">
                   Seller Deliveries
                 </Heading>
               </NativeBaseProvider>
@@ -2233,7 +2219,6 @@ function StackNavigators({navigation}) {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('NewSellerAdditionNotification');
-                    navigation.dispatch(DrawerActions.openDrawer());
                   }}>
                   <MaterialIcons
                     name="bell-outline"
@@ -2266,7 +2251,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white',marginTop:15}} size="md">
                   Bag to Dispatch
                 </Heading>
               </NativeBaseProvider>
@@ -2287,7 +2272,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white',marginTop:15}} size="md">
                   Map Navigation
                 </Heading>
               </NativeBaseProvider>
@@ -2314,7 +2299,6 @@ function StackNavigators({navigation}) {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('NewSellerAdditionNotification');
-                    navigation.dispatch(DrawerActions.openDrawer());
                   }}>
                   <MaterialIcons
                     name="bell-outline"
@@ -2351,7 +2335,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white',marginTop:15}} size="md">
                   Pickup Summary
                 </Heading>
               </NativeBaseProvider>
@@ -2372,7 +2356,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white',marginTop:15}} size="md">
                   My Trip
                 </Heading>
               </NativeBaseProvider>
@@ -2393,7 +2377,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white',marginTop:15}} size="md">
                   Trip Details
                 </Heading>
               </NativeBaseProvider>
@@ -2414,7 +2398,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white',marginTop:15}} size="md">
                   Notification
                 </Heading>
               </NativeBaseProvider>
