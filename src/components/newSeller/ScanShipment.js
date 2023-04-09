@@ -80,6 +80,12 @@ const ScanShipment = ({route}) => {
   const [bagIdNo, setBagIdNo] = useState(1);
   const [showCloseBagModal, setShowCloseBagModal] = useState(false);
   const [bagSeal, setBagSeal] = useState('');
+  const [packagingAction, setPackagingAction] = useState(0);
+  const [showCloseBagModal12, setShowCloseBagModal12] = useState(false);
+  const [showModal, setModal] = useState(false);
+  const [showModal1, setModal1] = useState(false);
+  const [expectedPackagingId, setExpectedPackaging] = useState('');
+
 
   var otpInput = useRef(null);
   const [ImageUrl, setImageUrl] = useState('');
@@ -289,6 +295,36 @@ const ScanShipment = ({route}) => {
       );
     });
   };
+  const displayData = async () => {
+    db.transaction(tx => {
+      tx.executeSql(
+        'SELECT * FROM SellerMainScreenDetails where awbNo=? OR clientRefId=? OR clientShipmentReferenceNumber=?',
+        [barcode,barcode,barcode],
+        (tx1, results) => {
+          // ToastAndroid.show("Loading...", ToastAndroid.SHORT);
+          let temp = [];
+          console.log(results.rows.length);
+          for (let i = 0; i < results.rows.length; ++i) {
+            temp.push(results.rows.item(i));
+          }
+          setPackagingAction(temp[0].packagingAction);
+        },
+      );
+    });
+  };
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      displayData();
+    });
+    return unsubscribe;
+  }, [navigation]);
+  useEffect(() => {
+    (async () => {
+        displayData();
+    })();
+}, [barcode]);
+  
 
   const updateDetails2 = () => {
     console.log('scan ' + barcode.toString());
@@ -336,76 +372,144 @@ const ScanShipment = ({route}) => {
   };
 
   const rejectDetails2 = () => {
-    db.transaction(tx => {
-      tx.executeSql(
-        'UPDATE SellerMainScreenDetails SET status="rejected" ,rejectionReasonL1=?  WHERE  shipmentAction="Seller Delivery" AND  status="accepted" AND consignorCode=? AND (awbNo=? OR clientRefId=? OR clientShipmentReferenceNumber=?) ',
-        [DropDownValue, route.params.consignorCode, barcode, barcode, barcode],
-        (tx1, results) => {
-          let temp = [];
-          console.log('Rejected Reason : ', DropDownValue);
-          console.log('Results', results.rowsAffected);
-          console.log(results);
-          if (results.rowsAffected > 0) {
-            // ContinueHandle11();
-            console.log(barcode + 'rejected');
-            ToastAndroid.show(barcode + ' Rejected', ToastAndroid.SHORT);
-            Vibration.vibrate(100);
-            RNBeep.beep();
-            setDropDownValue('');
-            console.log(acceptedArray);
-            const newArray = acceptedArray.filter(item => item !== barcode);
-            console.log(newArray);
-            setAcceptedArray(newArray);
-            displayDataSPScan();
-          } else {
-            console.log(barcode + 'failed to reject item locally');
-          }
-          console.log(results.rows.length);
-          for (let i = 0; i < results.rows.length; ++i) {
-            temp.push(results.rows.item(i));
-          }
-        },
-      );
-    });
-    submitForm();
-    setImageUrls([]);
+    if(packagingAction==0){
+      db.transaction(tx => {
+        tx.executeSql(
+          'UPDATE SellerMainScreenDetails SET status="rejected" ,rejectionReasonL1=?  WHERE  shipmentAction="Seller Delivery" AND  status="accepted" AND consignorCode=? AND (awbNo=? OR clientRefId=? OR clientShipmentReferenceNumber=?) ',
+          [DropDownValue, route.params.consignorCode, barcode, barcode, barcode],
+          (tx1, results) => {
+            let temp = [];
+            console.log('Rejected Reason : ', DropDownValue);
+            console.log('Results', results.rowsAffected);
+            console.log(results);
+            if (results.rowsAffected > 0) {
+              // ContinueHandle11();
+              console.log(barcode + 'rejected');
+              ToastAndroid.show(barcode + ' Rejected', ToastAndroid.SHORT);
+              Vibration.vibrate(100);
+              RNBeep.beep();
+              setDropDownValue('');
+              console.log(acceptedArray);
+              const newArray = acceptedArray.filter(item => item !== barcode);
+              console.log(newArray);
+              setAcceptedArray(newArray);
+              displayDataSPScan();
+            } else {
+              console.log(barcode + 'failed to reject item locally');
+            }
+            console.log(results.rows.length);
+            for (let i = 0; i < results.rows.length; ++i) {
+              temp.push(results.rows.item(i));
+            }
+          },
+        );
+      });
+      submitForm();
+      setImageUrls([]);
+    }
+    else{
+      db.transaction(tx => {
+        tx.executeSql(
+          'UPDATE SellerMainScreenDetails SET status="rejected" ,rejectionReasonL1=?  WHERE  shipmentAction="Seller Delivery" AND consignorCode=? AND (awbNo=? OR clientRefId=? OR clientShipmentReferenceNumber=?) ',
+          [DropDownValue, route.params.consignorCode, barcode, barcode, barcode],
+          (tx1, results) => {
+            let temp = [];
+            console.log('Rejected Reason : ', DropDownValue);
+            console.log('Results', results.rowsAffected);
+            console.log(results);
+            if (results.rowsAffected > 0) {
+              // ContinueHandle11();
+              console.log(barcode + 'rejected');
+              ToastAndroid.show(barcode + ' Rejected', ToastAndroid.SHORT);
+              Vibration.vibrate(100);
+              RNBeep.beep();
+              setDropDownValue('');
+              displayDataSPScan();
+            } else {
+              console.log(barcode + 'failed to reject item locally');
+            }
+            console.log(results.rows.length);
+            for (let i = 0; i < results.rows.length; ++i) {
+              temp.push(results.rows.item(i));
+            }
+          },
+        );
+      });
+      submitForm();
+      setImageUrls([]);
+    }
   };
   const taggedDetails = () => {
-    db.transaction(tx => {
-      tx.executeSql(
-        'UPDATE SellerMainScreenDetails SET status="tagged" ,rejectionReasonL1=?  WHERE status="accepted" AND consignorCode=? AND (awbNo=? OR clientRefId=? OR clientShipmentReferenceNumber=?) ',
-        [DropDownValue, route.params.consignorCode, barcode, barcode, barcode],
-        (tx1, results) => {
-          let temp = [];
-          console.log('Rejected Reason : ', DropDownValue);
-          console.log('Results', results.rowsAffected);
-          console.log(results);
-          if (results.rowsAffected > 0) {
-            // ContinueHandle11();
-            console.log(barcode + 'tagged');
-            ToastAndroid.show(barcode + ' Tagged', ToastAndroid.SHORT);
-            Vibration.vibrate(100);
-            RNBeep.beep();
-            setDropDownValue('');
-            console.log(acceptedArray);
-            const newArray = acceptedArray.filter(item => item !== barcode);
-            console.log(newArray);
-            setAcceptedArray(newArray);
-            displayDataSPScan();
-          } else {
-            console.log(barcode + 'failed to tagged item locally');
-          }
-          console.log(results.rows.length);
-          for (let i = 0; i < results.rows.length; ++i) {
-            temp.push(results.rows.item(i));
-          }
-          // console.log("Data updated: \n ", JSON.stringify(temp, null, 4));
-          // viewDetailsR2();
-        },
-      );
-    });
-    submitForm1();
-    setImageUrls([]);
+    if(packagingAction==0){
+      db.transaction(tx => {
+        tx.executeSql(
+          'UPDATE SellerMainScreenDetails SET status="tagged" ,rejectionReasonL1=?  WHERE status="accepted" AND consignorCode=? AND (awbNo=? OR clientRefId=? OR clientShipmentReferenceNumber=?) ',
+          [DropDownValue, route.params.consignorCode, barcode, barcode, barcode],
+          (tx1, results) => {
+            let temp = [];
+            console.log('Rejected Reason : ', DropDownValue);
+            console.log('Results', results.rowsAffected);
+            console.log(results);
+            if (results.rowsAffected > 0) {
+              // ContinueHandle11();
+              console.log(barcode + 'tagged');
+              ToastAndroid.show(barcode + ' Tagged', ToastAndroid.SHORT);
+              Vibration.vibrate(100);
+              RNBeep.beep();
+              setDropDownValue('');
+              console.log(acceptedArray);
+              const newArray = acceptedArray.filter(item => item !== barcode);
+              console.log(newArray);
+              setAcceptedArray(newArray);
+              displayDataSPScan();
+            } else {
+              console.log(barcode + 'failed to tagged item locally');
+            }
+            console.log(results.rows.length);
+            for (let i = 0; i < results.rows.length; ++i) {
+              temp.push(results.rows.item(i));
+            }
+            // console.log("Data updated: \n ", JSON.stringify(temp, null, 4));
+            // viewDetailsR2();
+          },
+        );
+      });
+      submitForm1();
+      setImageUrls([]);
+    }
+    else{
+      db.transaction(tx => {
+        tx.executeSql(
+          'UPDATE SellerMainScreenDetails SET status="tagged" ,rejectionReasonL1=?  WHERE consignorCode=? AND (awbNo=? OR clientRefId=? OR clientShipmentReferenceNumber=?) ',
+          [DropDownValue, route.params.consignorCode, barcode, barcode, barcode],
+          (tx1, results) => {
+            let temp = [];
+            console.log('Rejected Reason : ', DropDownValue);
+            console.log('Results', results.rowsAffected);
+            console.log(results);
+            if (results.rowsAffected > 0) {
+              // ContinueHandle11();
+              console.log(barcode + 'tagged');
+              ToastAndroid.show(barcode + ' Tagged', ToastAndroid.SHORT);
+              Vibration.vibrate(100);
+              RNBeep.beep();
+              setDropDownValue('');
+              displayDataSPScan();
+            } else {
+              console.log(barcode + 'failed to tagged item locally');
+            }
+            console.log(results.rows.length);
+            for (let i = 0; i < results.rows.length; ++i) {
+              temp.push(results.rows.item(i));
+            }
+            // console.log("Data updated: \n ", JSON.stringify(temp, null, 4));
+            // viewDetailsR2();
+          },
+        );
+      });
+      submitForm1();
+      setImageUrls([]);
+    }
   };
 
   const getCategories = data => {
@@ -450,8 +554,54 @@ const ScanShipment = ({route}) => {
         },
       );
     });
+    if(packagingAction!=0 && packagingAction!=1 && barcode){
+      setShowCloseBagModal12(true);
+    }
+    if(packagingAction==1){
+      handlepackaging();
+    }
   };
 
+  const handlepackaging=()=>{
+    db.transaction(tx => {
+      tx.executeSql(
+        'UPDATE SellerMainScreenDetails SET eventTime=?, latitude=?, longitude=? WHERE  consignorCode=? AND (awbNo=? OR clientRefId=? OR clientShipmentReferenceNumber=?) ',
+        [
+          new Date().valueOf(),
+          latitude,
+          longitude,
+          route.params.consignorCode,
+          barcode,
+          barcode,
+          barcode,
+        ],
+        (tx1, results) => {
+          let temp = [];
+          console.log('Results', results.rowsAffected);
+
+          if (results.rowsAffected > 0) {
+            Vibration.vibrate(200);
+            ToastAndroid.show(barcode + ' Saved', ToastAndroid.SHORT);
+            dingAccept.play(success => {
+              if (success) {
+                // Vibration.vibrate(800);
+                console.log('successfully finished playing');
+              } else {
+                console.log('playback failed due to audio decoding errors');
+              }
+            });
+          } else {
+            console.log(barcode + 'not updated');
+          }
+          console.log(results.rows.length);
+          for (let i = 0; i < results.rows.length; ++i) {
+            temp.push(results.rows.item(i));
+          }
+        },
+      );
+    });
+
+  }
   const updateCategories = data => {
     db.transaction(tx => {
       tx.executeSql(
@@ -493,13 +643,14 @@ const ScanShipment = ({route}) => {
 
   useEffect(() => {
     if (len) {
+      if(packagingAction==0){
       Vibration.vibrate(100);
       RNBeep.beep();
       ToastAndroid.show(barcode + ' Accepted', ToastAndroid.SHORT);
       updateDetails2();
       displayDataSPScan();
-
       setLen(false);
+      }
     }
   }, [len]);
 
@@ -914,7 +1065,135 @@ const ScanShipment = ({route}) => {
           </Modal.Body>
         </Modal.Content>
       </Modal>
-
+      <Modal
+        isOpen={showCloseBagModal12}
+        onClose={() => {
+          setShowCloseBagModal12(false);
+          setExpectedPackaging('');
+          reloadScanner();
+          setScanned(true);
+        }}
+        size="lg">
+        <Modal.Content maxWidth="350">
+          <Modal.CloseButton />
+          <Modal.Header>Packaging ID</Modal.Header>
+          <Modal.Body>
+            {showCloseBagModal12 && (
+              <QRCodeScanner
+                onRead={onSuccess12}
+                reactivate={true}
+                reactivateTimeout={2000}
+                flashMode={RNCamera.Constants.FlashMode.off}
+                ref={node => {
+                  this.scanner = node;
+                }}
+                containerStyle={{height: 116, marginBottom: '55%'}}
+                cameraStyle={{
+                  height: 90,
+                  marginTop: 95,
+                  marginBottom: '15%',
+                  width: 289,
+                  alignSelf: 'center',
+                  justifyContent: 'center',
+                }}
+              />
+            )}
+            {'\n'}
+            <Input
+              placeholder="Enter Packaging ID"
+              size="md"
+              value={expectedPackagingId}
+              onChangeText={text => setExpectedPackaging(text)}
+              style={{
+                width: 290,
+                backgroundColor: 'white',
+              }}
+            />
+            {expectedPackagingId.length?
+            <Button
+            flex="1"
+            mt={2}
+            bg="#004aad"
+            onPress={() => {
+              if (packagingAction ==2) {
+                setModal(true);
+                setShowCloseBagModal12(false);
+              } else if (packagingAction ==3) {
+                setModal1(true);
+                setShowCloseBagModal12(false);
+              } else {
+                setShowCloseBagModal12(false);
+                setExpectedPackaging('');
+              }
+            }}>
+            Submit
+          </Button>
+          :
+          <Button
+              flex="1"
+              mt={2}
+              bg="gray.300"
+              >
+              Submit
+            </Button>
+            } 
+          </Modal.Body>
+        </Modal.Content>
+      </Modal>
+      <Modal
+        isOpen={showModal}
+        onClose={() => {
+          setModal(false);
+        }}
+        size="lg">
+        <Modal.Content maxWidth="350">
+          <Modal.CloseButton />
+          <Modal.Header>Accept Shipment</Modal.Header>
+          <Modal.Body>
+            <Text>Mismatch Packaging ID</Text>
+            <Button
+              flex="1"
+              mt={2}
+              bg="#004aad"
+              onPress={() => {
+                Vibration.vibrate(100);
+                RNBeep.beep();
+                ToastAndroid.show(barcode + ' Accepted', ToastAndroid.SHORT);
+                updateDetails2();
+                displayDataSPScan();
+                setLen(false);
+                setModal(false);
+                setExpectedPackaging('');
+              }}>
+              Accept Anyway
+            </Button>
+          </Modal.Body>
+        </Modal.Content>
+      </Modal>
+      <Modal
+        isOpen={showModal1}
+        onClose={() => {
+          setModal1(false);
+        }}
+        size="lg">
+        <Modal.Content maxWidth="350">
+          <Modal.CloseButton />
+          <Modal.Header>Reject/Tag Shipment</Modal.Header>
+          <Modal.Body>
+            <Text>Mismatch Packaging ID</Text>
+            <Button
+              flex="1"
+              mt={2}
+              bg="#004aad"
+              onPress={() => {
+              setModal1(false);
+              setModalVisible1(true);
+              }}>
+              Reject/Tag Shipment
+            </Button>
+          </Modal.Body>
+        </Modal.Content>
+      </Modal>
       <ScrollView
         style={{paddingTop: 20, paddingBottom: 50}}
         showsVerticalScrollIndicator={false}>
@@ -970,7 +1249,8 @@ backgroundColor:'lightgrey',
   </Center>
 </TouchableOpacity>
               </View>
-              <Button
+              {packagingAction==0 || packagingAction==2 ?
+                <Button
                 title="Reject Shipment"
                 onPress={() => setModalVisible1(true)}
                 w="90%"
@@ -980,6 +1260,9 @@ backgroundColor:'lightgrey',
                 mt={4}>
                 Reject/Tag Shipment
               </Button>
+              :
+              null
+              }
               <View
                 style={{
                   width: '90%',
