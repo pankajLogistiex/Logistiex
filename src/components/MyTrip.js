@@ -47,7 +47,6 @@ export default function MyTrip({ navigation, route }) {
       getTripDetails(userId + "_" + date);
     }
   }, [userId]);
-
   function getVehicleNumber(userId){
     axios
       .get(backendUrl + `SellerMainScreen/vehicleNumber/${userId}`)

@@ -242,7 +242,7 @@ function StackNavigators({navigation}) {
       packagingId: row.packagingId,
       courierCode: row.courierCode,
       consignorCode: row.consignorCode,
-      packagingAction: 1,
+      packagingAction: row.packagingAction,
       runsheetNo: row.runSheetNumber,
       shipmentAction: row.shipmentAction,
       feUserID: userId,
@@ -268,7 +268,7 @@ function StackNavigators({navigation}) {
         packagingId: row.packagingId,
         courierCode: row.courierCode,
         consignorCode: row.consignorCode,
-        packagingAction: 1,
+        packagingAction: row.packagingAction,
         runsheetNo: row.runSheetNumber,
         shipmentAction: row.shipmentAction,
         feUserID: userId,
@@ -524,7 +524,8 @@ function StackNavigators({navigation}) {
           syncHandoverStatus VARCHAR(200),
           latitude VARCHAR(200),
           longitude VARCHAR(200),
-          bagId VARCHAR(200)
+          bagId VARCHAR(200),
+          packagingAction VARCHAR(200)
           )`,
         [],
         (sqlTxn, res) => {
@@ -573,8 +574,9 @@ function StackNavigators({navigation}) {
                   handoverStatus,
                   syncStatus,
                   syncHandoverStatus,
-                  bagId
-                ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
+                  bagId,
+                  packagingAction
+                ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
                   [
                     res.data.data[i].clientShipmentReferenceNumber,
                     res.data.data[i].clientRefId,
@@ -606,6 +608,7 @@ function StackNavigators({navigation}) {
                     null,
                     null,
                     '',
+                    res.data.data[i].packagingAction
                   ],
                   (sqlTxn, _res) => {
                     // console.log(`\n Data Added to local db successfully`);
