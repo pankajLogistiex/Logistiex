@@ -680,7 +680,7 @@ var barcode11 = barcode;
       }
       else{
         db.transaction((tx) => {
-          tx.executeSql('UPDATE SellerMainScreenDetails SET status="rejected" ,rejectionReasonL1=?  WHERE status="accepted" AND consignorCode=? AND (awbNo=? OR clientRefId=? OR clientShipmentReferenceNumber=?) ', [DropDownValue,route.params.consignorCode, barcode11,barcode11,barcode11], (tx1, results) => {
+          tx.executeSql('UPDATE SellerMainScreenDetails SET status="rejected" ,rejectionReasonL1=?  WHERE consignorCode=? AND (awbNo=? OR clientRefId=? OR clientShipmentReferenceNumber=?) ', [DropDownValue,route.params.consignorCode, barcode11,barcode11,barcode11], (tx1, results) => {
             let temp = [];
             console.log('Rejected Reason : ', DropDownValue);
             console.log('Results', results.rowsAffected);
@@ -701,6 +701,8 @@ var barcode11 = barcode;
                 }
               });
               setDropDownValue('');
+              setBarcode('');
+              displayDataSPScan();
               setExpectedPackaging('');
             } 
             for (let i = 0; i < results.rows.length; ++i) {
@@ -777,7 +779,6 @@ var barcode11 = barcode;
             // barcodeCheck11();
             db.transaction(tx => {
               console.log('ok3333', data);
-
               tx.executeSql(
                 'Select * FROM SellerMainScreenDetails WHERE status IS NOT NULL And shipmentAction="Seller Pickup" And consignorCode=? AND (awbNo=? OR clientRefId=? OR clientShipmentReferenceNumber=?)',
                 [route.params.consignorCode, data, data, data],
@@ -827,6 +828,12 @@ var barcode11 = barcode;
         },
       );
     });
+    if(packagingAction!=0 && packagingAction!=1 && barcode){
+      setShowCloseBagModal12(true);
+    }
+    if(packagingAction==1){
+      handlepackaging();
+    }
   };
   console.log(text11);
   // const fetchData = async () => {
@@ -904,9 +911,8 @@ console.log('pa',packagingAction);
     const handlepackaging=()=>{
       db.transaction(tx => {
         tx.executeSql(
-          'UPDATE SellerMainScreenDetails SET packagingId=?, eventTime=?, latitude=?, longitude=? WHERE  consignorCode=? AND (awbNo=? OR clientRefId=? OR clientShipmentReferenceNumber=?) ',
+          'UPDATE SellerMainScreenDetails SET eventTime=?, latitude=?, longitude=? WHERE  consignorCode=? AND (awbNo=? OR clientRefId=? OR clientShipmentReferenceNumber=?) ',
           [
-            expectedPackagingId,
             new Date().valueOf(),
             latitude,
             longitude,
@@ -947,9 +953,6 @@ console.log('pa',packagingAction);
       setBarcode(e.data);
       setText11(e.data);
       getCategories(e.data);
-      if(packagingAction!==0){
-        setShowCloseBagModal12(true);
-      }
     };
     const onSuccess11 = e => {
       // Vibration.vibrate(100);
@@ -987,15 +990,12 @@ console.log('pa',packagingAction);
       console.log(data21, 'barcode');
       setBarcode(data21);
       getCategories(data21);
-      if(packagingAction!=0){
-        setShowCloseBagModal12(true);
-      }
     };
 
   useEffect(() => {
     if (len) {
-      setCheck11(1);
       if(packagingAction==0){
+      setCheck11(1);
       ToastAndroid.show(barcode + ' Accepted', ToastAndroid.SHORT);
       updateDetails2();
       displayDataSPScan();
@@ -1271,7 +1271,8 @@ console.log('pa',packagingAction);
       <Modal
         isOpen={showCloseBagModal12}
         onClose={() => {
-          setShowCloseBagModal11(false);
+          setShowCloseBagModal12(false);
+          setExpectedPackaging('');
           reloadScanner();
           setScanned(true);
         }}
@@ -1323,12 +1324,9 @@ console.log('pa',packagingAction);
               } else if (packagingAction ==3) {
                 setModal1(true);
                 setShowCloseBagModal12(false);
-              } else if(packagingAction==1){
-                handlepackaging();
+              } else {
                 setShowCloseBagModal12(false);
-                setExpectedPackaging('')
-              }else {
-                setShowCloseBagModal12(false);
+                setExpectedPackaging('');
               }
             }}>
             Submit
@@ -1412,6 +1410,7 @@ console.log('pa',packagingAction);
               mt={2}
               bg="#004aad"
               onPress={() => {
+                setCheck11(1);
                 ToastAndroid.show(barcode + ' Accepted', ToastAndroid.SHORT);
                 updateDetails2();
                 displayDataSPScan();
@@ -1564,7 +1563,7 @@ console.log('pa',packagingAction);
         </View> */}
                 {/* </View> */}
               </View>
-              {packagingAction==0?
+              {packagingAction==0 || packagingAction==2?
               <Button
               title="Reject Shipment"
               onPress={() =>{ check11 === 0 ? ToastAndroid.show('No Shipment to Reject',ToastAndroid.SHORT) : setModalVisible(true);}}
