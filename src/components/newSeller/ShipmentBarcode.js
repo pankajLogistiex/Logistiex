@@ -1326,6 +1326,7 @@ console.log('pa',packagingAction);
               } else if(packagingAction==1){
                 handlepackaging();
                 setShowCloseBagModal12(false);
+                setExpectedPackaging('')
               }else {
                 setShowCloseBagModal12(false);
               }
