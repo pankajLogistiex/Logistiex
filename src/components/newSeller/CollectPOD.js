@@ -308,7 +308,8 @@ const CollectPOD = ({route}) => {
 
   return (
     <NativeBaseProvider>
-      <Modal
+     {/* 
+     <Modal
         w="100%"
         isOpen={showModal11}
         onClose={() => {
@@ -340,14 +341,14 @@ const CollectPOD = ({route}) => {
                   Resend
                 </Button>
               )}
-              {/* <Button w="40%" bg="gray.500" onPress={()=>sendSmsOtp()}>Resend</Button> */}
+              <Button w="40%" bg="gray.500" onPress={()=>sendSmsOtp()}>Resend</Button> 
               <Button w="40%" bg="#004aad" onPress={() => validateOTP()}>
                 Submit
               </Button>
             </Box>
           </Modal.Body>
         </Modal.Content>
-      </Modal>
+      </Modal>*/}
       <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
         <Modal.Content backgroundColor={message === 1 ? '#dcfce7' : '#fee2e2'}>
           <Modal.CloseButton />
@@ -471,7 +472,76 @@ const CollectPOD = ({route}) => {
               value={mobileNumber}
               onChangeText={e => setMobileNumber(e)}
             />
-            <Button
+
+{!showModal11?<Button
+              w="90%"
+              size="lg"
+              style={{backgroundColor: '#004aad', color: '#fff'}}
+              title="Submit"
+              onPress={() => {sendSmsOtp();setShowModal11(true);setTimer(60);}}>
+              Send OTP
+            </Button>: timer ? (
+              
+                <Button w="90%" size="lg" bg="gray.500">
+                  <Text style={{color: 'white', fontSize:16.5}}>Resend OTP in {timer}sec</Text>
+                </Button>
+              ) : (
+                <Button
+                  w="90%" size="lg"
+                  bg="gray.500"
+                  onPress={() => {
+                    sendSmsOtp();
+                    setTimer(60);
+                  }}>
+                  Resend
+                </Button>
+              )}
+
+            { showModal11? 
+            <>
+             <Center>
+              <View style={{
+    flexDirection: 'row',
+    justifyContent: 'center',
+  }}>
+    {/* <Center> */}
+ <OTPTextInput 
+        handleTextChange={e => setInputOtp(e)}
+        inputCount={6} 
+        tintColor="#004aad" 
+        offTintColor="gray" 
+        containerStyle={{
+          marginTop: 4,
+          padding:10,
+          // size:20
+        }}
+        textInputStyle={{
+          backgroundColor: '#F5F5F5',
+          borderRadius: 10,
+          borderWidth: 1,
+          borderColor: '#BDBDBD',
+          padding: 10,
+        }}
+        // secureTextEntry={!showPassword}
+        keyboardType="number-pad"
+        onBackspace={() => console.log('back')}
+      />
+
+</View>
+</Center>
+
+              <Button
+                w="90%" size="lg"
+                bg="#004aad"
+                onPress={() => {
+                  validateOTP();
+                }}>
+                Verify OTP
+              </Button>
+            {/* </Box> */}
+            </>:null}
+
+            {/* <Button
               w="90%"
               size="lg"
               style={{
@@ -485,7 +555,7 @@ const CollectPOD = ({route}) => {
                 sendSmsOtp();
               }}>
               Generate OTP
-            </Button>
+            </Button> */}
           </Center>
           <Center>
             <Image

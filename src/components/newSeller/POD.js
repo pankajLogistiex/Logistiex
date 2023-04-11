@@ -29,7 +29,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import GetLocation from 'react-native-get-location';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import OTPTextInput from 'react-native-otp-textinput';
-
+import MaterialIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import {openDatabase} from 'react-native-sqlite-storage';
 import { backendUrl } from '../../utils/backendUrl';
 
@@ -56,6 +56,30 @@ const POD = ({route}) => {
   const [rejectedArray, setRejectedArray] = useState([]);
   const [notPickedArray, setNotPickedArray] = useState([]);
   const [timer, setTimer] = useState(60);
+  const [showPassword, setShowPassword] = useState(false);
+  const refs = useRef([]);
+
+  // const handleOnChange = (value, index) => {
+  //   // console.log(inputOtp.filter(digit => typeof digit === 'string' && digit !== '').join(''));
+  //   setInputOtp((prev) => {
+  //     const nextOtp = [...prev];
+  //     nextOtp[index] = value;
+  //     return nextOtp;
+  //   });
+  //   if (index < refs.current.length - 1 && value) {
+  //     refs.current[index + 1].focus();
+  //   }
+  // };
+
+  // const handleOnKeyPress = (event, index) => {
+  //   if (event.nativeEvent.key === 'Backspace' && !inputOtp[index] && index > 0) {
+  //     refs.current[index - 1].focus();
+  //   }
+  // };
+
+  const toggleShowPassword = () => {
+    setShowPassword((prev) => !prev);
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -211,10 +235,14 @@ const POD = ({route}) => {
   }
 
   function validateOTP() {
+    console.log(inputOtp)
+    var otp11=inputOtp;
+    // const otp11=mm.filter(Boolean).join('');
+    // console.log(otp11);
     axios
       .post(backendUrl + 'SMS/OTPValidate', {
         mobileNumber: mobileNumber,
-        otp: inputOtp,
+        otp: otp11,
       })
       .then(response => {
         if (response.data.return) {
@@ -294,6 +322,8 @@ const POD = ({route}) => {
     });
   };
 
+
+  
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
       displayData();
@@ -303,21 +333,51 @@ const POD = ({route}) => {
 
   return (
     <NativeBaseProvider>
+      {/*
       <Modal
         w="100%"
         isOpen={showModal11}
         onClose={() => {
-          setShowModal11(false), setTimer(60);
+          setShowModal11(false), setInputOtp('');setTimer(60);
         }}>
         <Modal.Content w="100%" bg={'#eee'}>
           <Modal.CloseButton />
           <Modal.Body w="100%">
             <Modal.Header>Enter the OTP</Modal.Header>
-            <OTPTextInput
+             <OTPTextInput
               ref={e => (otpInput = e)}
               inputCount={6}
               handleTextChange={e => setInputOtp(e)}
-            />
+            /> 
+      <View style={{
+    flexDirection: 'row',
+    justifyContent: 'center',margin:20,
+  }}>
+              <OTPTextInput
+        handleTextChange={e => setInputOtp(e)}
+        inputCount={6} // specify the number of digits in OTP
+        tintColor="#004aad" // color of the underline when active
+        offTintColor="#BDBDBD" // color of the underline when inactive
+        containerStyle={{
+          marginTop: 20,
+        }}
+        textInputStyle={{
+          backgroundColor: '#F5F5F5',
+          borderRadius: 10,
+          borderWidth: 1,
+          borderColor: '#BDBDBD',
+          padding: 10,
+        }}
+        secureTextEntry={true}
+        keyboardType="number-pad"
+        onBackspace={() => console.log('back')}
+      />  
+      <MaterialIcons
+                name={showPassword ? "eye-off" : "eye"}
+                style={{fontSize: 22, marginLeft: 4, color: 'gray.950'}}
+                onPress={toggleShowPassword}
+              />
+              </View>
             <Box flexDir="row" justifyContent="space-between" mt={3}>
               {timer ? (
                 <Button w="40%" bg="gray.500">
@@ -345,7 +405,7 @@ const POD = ({route}) => {
             </Box>
           </Modal.Body>
         </Modal.Content>
-      </Modal>
+      </Modal>*/}
       <Modal isOpen={showModal} onClose={() => setShowModal(false)}>
         <Modal.Content backgroundColor={message === 1 ? '#dcfce7' : '#fee2e2'}>
           <Modal.CloseButton />
@@ -494,14 +554,95 @@ const POD = ({route}) => {
               value={mobileNumber}
               onChangeText={e => setMobileNumber(e)}
             />
-            <Button
+            {!showModal11?<Button
               w="90%"
               size="lg"
               style={{backgroundColor: '#004aad', color: '#fff'}}
               title="Submit"
-              onPress={() => sendSmsOtp()}>
-              Submit
-            </Button>
+              onPress={() => {sendSmsOtp();setTimer(60);}}>
+              Send OTP
+            </Button>: timer ? (
+              
+                <Button w="90%" size="lg" bg="gray.500">
+                  <Text style={{color: 'white', fontSize:16.5}}>Resend OTP in {timer}sec</Text>
+                </Button>
+              ) : (
+                <Button
+                  w="90%" size="lg"
+                  bg="gray.500"
+                  onPress={() => {
+                    sendSmsOtp();
+                    setTimer(60);
+                  }}>
+                  Resend
+                </Button>
+              )}
+
+            { showModal11? 
+            <>
+             <Center>
+              <View style={{
+    flexDirection: 'row',
+    justifyContent: 'center',
+  }}>
+    {/* <Center> */}
+ <OTPTextInput 
+        handleTextChange={e => setInputOtp(e)}
+        inputCount={6} 
+        tintColor="#004aad" 
+        offTintColor="gray" 
+        containerStyle={{
+          marginTop: 4,
+          padding:10,
+          // size:20
+        }}
+        textInputStyle={{
+          backgroundColor: '#F5F5F5',
+          borderRadius: 10,
+          borderWidth: 1,
+          borderColor: '#BDBDBD',
+          padding: 10,
+        }}
+        // secureTextEntry={!showPassword}
+        keyboardType="number-pad"
+        onBackspace={() => console.log('back')}
+      />
+
+      {/* <MaterialIcons
+                name={showPassword ? "eye-off" : "eye"}
+                style={{fontSize: 20, marginTop: 10, color: 'gray.950'}}
+                onPress={toggleShowPassword}
+              /> */}
+              {/* </Center> */}
+</View>
+</Center>
+{/* <Box flexDir="row" justifyContent="space-between" mt={3}> */}
+              {/* {timer ? (
+                <Button w="40%" bg="gray.500">
+                  <Text style={{color: 'white'}}>OTP Sent {timer}s</Text>
+                </Button>
+              ) : (
+                <Button
+                  w="40%"
+                  bg="gray.500"
+                  onPress={() => {
+                    sendSmsOtp();
+                    setTimer(60);
+                  }}>
+                  Resend
+                </Button>
+              )} */}
+              <Button
+                w="90%" size="lg"
+                bg="#004aad"
+                onPress={() => {
+                  validateOTP();
+                }}>
+                Verify OTP
+              </Button>
+            {/* </Box> */}
+            </>:null}
+  
             {/* <Button w="90%" mt={2} size="lg" style={{backgroundColor:'#004aad', color:'#fff'}}  title="Submit"  onPress={() => setModalVisible11(true)} >Partial Close</Button> */}
           </Center>
           <Center>
