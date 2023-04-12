@@ -4,6 +4,9 @@ import {
     Box,
     Image,
     Center,
+    Modal,
+    Alert,
+    VStack
   } from 'native-base';
   import {StyleSheet, ScrollView, View, ActivityIndicator} from 'react-native';
   import {DataTable, Searchbar, Text, Card} from 'react-native-paper';
@@ -22,6 +25,8 @@ import {
     const [value,setValue] =useState([]);
     const [reverse,setReverse] =useState([]);
     const [loading, setLoading] = useState(true);
+    const [showModal1, setShowModal1] = useState(false);
+    const [message1, setMessage1] = useState(0);
 
     const navigation = useNavigation();
   
@@ -113,8 +118,35 @@ import {
         let f = c.consignorName;
         return (f.includes(keyword1));
     };
+    
+    const handleTrip=()=>{
+      if(route.params.PendingHandover!=0){
+        setMessage1(2);
+        setShowModal1(true);
+        navigation.navigate('Main');
+      }
+      else{
+        setMessage1(1);
+        setShowModal1(true);
+        navigation.navigate('Main');
+      }
+    }
+    
   return (
   <NativeBaseProvider>
+    <Modal isOpen={showModal1} onClose={() => setShowModal1(false)}>
+                <Modal.Content backgroundColor={message1 === 1 ? '#fee2e2' : '#fee2e2'}>
+                  <Modal.CloseButton />
+                  <Modal.Body>
+                    <Alert w="100%" status={message1 === 1 ? 'error' : 'error'}>
+                      <VStack space={1} flexShrink={1} w="100%" alignItems="center">
+                        <Alert.Icon size="4xl" />
+                        <Text my={3} fontSize="md" fontWeight="medium">{message1 === 1 ? 'Trip Not Started Yet' : 'Please complete handover before Start a trip'}</Text>
+                      </VStack>
+                    </Alert>
+                  </Modal.Body>
+                </Modal.Content>
+      </Modal>
     {loading ? 
         <ActivityIndicator size="large" color="blue" style={{marginTop: 44}} />
       :
@@ -193,7 +225,7 @@ import {
                 ? data.filter(searched(keyword)).map((single, i) =>
                     reverse[i] > 0 ? (pending11[i]!==reverse[i])? (
                       <DataTable.Row style={{ height: 'auto', backgroundColor: '#eeeeee', borderBottomWidth: 1, borderWidth: 2, borderColor: 'white',elevation: 8, }} key={single.consignorName} onPress={() => {
-                        navigation.navigate('MyTrip', {userId: single.userId});
+                        handleTrip()
                }}>
                  <DataTable.Cell style={{ flex: 1.2 }}><Text style={styles.fontvalue} numberOfLines={2}>{single.consignorName}</Text></DataTable.Cell>
                  <DataTable.Cell style={{ flex: 0.4, marginRight: 50 }}><Text style={styles.fontvalue} numberOfLines={2}>{value[i]}</Text></DataTable.Cell>
