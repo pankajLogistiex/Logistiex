@@ -96,8 +96,8 @@ export default function Main({navigation, route}) {
     : 'No match found';
 
   useEffect(() => {
-    fetchData(userId);
-  }, [userId]);
+    fetchData(id);
+  }, [id]);
 
   const fetchData = id => {
     if (id) {
