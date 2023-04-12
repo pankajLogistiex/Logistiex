@@ -792,7 +792,7 @@ export default function Main({navigation, route}) {
                             onPress={() =>
                               navigation.navigate('SellerHandover')
                             }>
-                            Start Handover
+                            {tripValue === 'Start Trip' ? 'Start Handover' : spp1 === 0 ? 'Handover completed' : 'Handover in progress'}
                           </Button>
                         ) : it.title === 'Seller Deliveries' ? (
                           <Button
@@ -806,7 +806,7 @@ export default function Main({navigation, route}) {
                                 Trip: tripValue,
                               })
                             }>
-                            New Delivery
+                            {tripValue === 'Start Trip' ? 'New Delivery' : spp1 === 0 ? 'Delivery completed' : 'Delivery in progress'}
                           </Button>
                         ) : (
                           <Button
@@ -821,7 +821,7 @@ export default function Main({navigation, route}) {
                                 userId: id,
                               })
                             }>
-                            New Pickup
+                            {tripValue === 'Start Trip' ? 'New Pickup' : spp === 0 ? 'Pickup completed' : 'Pickup in progress'}
                           </Button>
                         )}
                       </Box>
@@ -1047,7 +1047,7 @@ export default function Main({navigation, route}) {
                             onPress={() =>
                               navigation.navigate('SellerHandover')
                             }>
-                            Start Handover
+                            {tripValue === 'Start Trip' ? 'Start Handover' : spp1 === 0 ? 'Handover completed' : 'Handover in progress'}
                           </Button>
                         ) : it.title === 'Seller Deliveries' ? (
                           <Button
@@ -1061,7 +1061,7 @@ export default function Main({navigation, route}) {
                                 Trip: tripValue,
                               })
                             }>
-                            New Delivery
+                            {tripValue === 'Start Trip' ? 'New Delivery' : spp1 === 0 ? 'Delivery completed' : 'Delivery in progress'}
                           </Button>
                         ) : (
                           <Button
@@ -1076,7 +1076,7 @@ export default function Main({navigation, route}) {
                                 userId: id,
                               })
                             }>
-                            New Pickup
+                            {tripValue === 'Start Trip' ? 'New Pickup' : spp === 0 ? 'Pickup completed' : 'Pickup in progress'}
                           </Button>
                         )}
                       </Box>
