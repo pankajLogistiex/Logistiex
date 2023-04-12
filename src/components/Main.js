@@ -29,7 +29,7 @@ const db = openDatabase({name: 'rn_sqlite'});
 import PieChart from 'react-native-pie-chart';
 import {StyleSheet} from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
-import { backendUrl } from '../utils/backendUrl';
+import {backendUrl} from '../utils/backendUrl';
 
 export default function Main({navigation, route}) {
   // const userId = route.params.userId;
@@ -95,7 +95,11 @@ export default function Main({navigation, route}) {
     ? tripid.substring(dateStart, dateEnd + 5)
     : 'No match found';
 
-  const fetchData = (id) => {
+  useEffect(() => {
+    fetchData(id);
+  }, [id]);
+
+  const fetchData = id => {
     if (id) {
       axios
         .get(backendUrl + 'UserTripInfo/getUserTripInfo', {

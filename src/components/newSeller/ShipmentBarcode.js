@@ -61,6 +61,10 @@ const ShipmentBarcode = ({route}) => {
   const [acceptedArray, setAcceptedArray] = useState([]);
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
+
+  const [sellerLatitude, setSellerLatitude] = useState(0);
+  const [sellerLongitude, setSellerLongitude] = useState(0);
+
   const [modalVisible, setModalVisible] = useState(false);
   const [bagId, setBagId] = useState('');
   const [bagIdNo, setBagIdNo] = useState(1);
@@ -103,6 +107,102 @@ const [text12,setText12] = useState('');
   // const acceptSound = new Sound('accept.mp3', Sound.MAIN_BUNDLE);
   // const rejectSound = new Sound('reject.mp3', Sound.MAIN_BUNDLE);
 
+
+  // useEffect(() => {
+  //   // Get the current location of the device
+  //   Geolocation.getCurrentPosition(
+  //     position => {
+  //       setCurrentLocation({ lat: position.coords.latitude, long: position.coords.longitude });
+  //     },
+  //     error => console.log(error),
+  //     { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+  //   );
+  // }, []);
+
+  // Calculate the distance between the two locations using the Haversine formula
+  const calculateDistance = (lat1, long1, lat2, long2) => {
+    const R = 6371; // radius of the earth in km
+    const dLat = ((lat2 - lat1) * Math.PI) / 180;
+    const dLon = ((long2 - long1) * Math.PI) / 180;
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos((lat1 * Math.PI) / 180) *
+        Math.cos((lat2 * Math.PI) / 180) *
+        Math.sin(dLon / 2) *
+        Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const d = R * c * 1000;
+    console.log('Distance between seller and pickup is ' + d + ' meters and ' + d / 1000 + ' Km' ); // distance in meters
+    return d;
+  };
+
+  // Check if the current location is within 100 meters of the seller location
+  const isWithin100Meters = (cLatitude,cLongitude) => {
+    console.log(cLatitude,cLongitude,sellerLatitude,
+      sellerLongitude,);
+    const distance = calculateDistance(
+      cLatitude,
+      cLongitude,
+      sellerLatitude,
+      sellerLongitude,
+    );
+    // return distance <= 100;
+    return distance;
+
+  };
+
+  // Handle the action based on the geofencing logic
+  const handleRejectAction = () => {
+
+    GetLocation.getCurrentPosition({
+      enableHighAccuracy: true,
+      timeout: 10000,
+    })
+      .then(location => {
+        console.log('lat long updating ');
+        setLatitude(location.latitude);
+        setLongitude(location.longitude);
+        let m = isWithin100Meters(location.latitude,location.longitude);
+        if (m <= 100) {
+          rejectDetails2();
+        } else {
+
+          Alert.alert('Shipment cannot be rejected',  Math.floor(m) < 1000 ? 'You are currently ' + Math.floor(m) + ' meters away from the seller.' : 'You are currently ' + Math.floor(m) / 1000 + ' Km away from the seller.', [
+
+            {
+              text: 'Cancel reject',
+              onPress: () =>{ console.log('Cancel Pressed'); setDropDownValue('');},
+              style: 'cancel',
+            },{
+              text: 'Retry',
+              onPress: () => handleRejectAction(),
+            },
+          ]);
+        }
+
+
+
+      })
+      .catch(error => {
+        RNAndroidLocationEnabler.promptForEnableLocationIfNeeded({
+          interval: 10000,
+          fastInterval: 5000,
+        })
+          .then(status => {
+            if (status) {
+              console.log('Location enabled');
+            }
+          })
+          .catch(err => {
+            console.log(err);
+          });
+        console.log('Location Lat long error', error);
+      });
+
+
+
+  };
+
   const vibrateDevice = (type) => {
     const options = {
       enableVibrateFallback: true,
@@ -115,6 +215,21 @@ const [text12,setText12] = useState('');
     if (scannerRef.current) {
       scannerRef.current.reactivate();
     }
+  };
+
+  const sellerLatLongLoad = ()=>{
+    db.transaction(tx => {
+      tx.executeSql(
+        'SELECT * FROM SyncSellerPickUp where  consignorCode=? ',
+        [route.params.consignorCode],
+        (tx1, results) => {
+          console.log(results);
+          setSellerLatitude(results.rows.item(0).consignorLatitude);
+          setSellerLongitude(results.rows.item(0).consignorLongitude);
+        },
+      );
+    });
+
   };
 
 
@@ -164,6 +279,7 @@ var dingAccept = new Sound(dingAccept11, error => {
 
   useEffect(() => {
     reloadScanner();
+    sellerLatLongLoad();
     // Sound.setCategory('Playback');
   }, []);
   const DisplayData11 = async () => {
@@ -188,6 +304,7 @@ var dingAccept = new Sound(dingAccept11, error => {
     const unsubscribe = navigation.addListener('focus', () => {
       displayDataSPScan();
       check121();
+    sellerLatLongLoad();
       Sound.setCategory('Playback');
     });
     return unsubscribe;
@@ -635,7 +752,7 @@ var dingAccept = new Sound(dingAccept11, error => {
     const rejectDetails2 = () => {
       console.log('scan 45456');
 var barcode11 = barcode;
-      if(packagingAction==0){
+      if (packagingAction == 0){
         db.transaction((tx) => {
           tx.executeSql('UPDATE SellerMainScreenDetails SET status="rejected" ,rejectionReasonL1=?  WHERE status="accepted" AND consignorCode=? AND (awbNo=? OR clientRefId=? OR clientShipmentReferenceNumber=?) ', [DropDownValue,route.params.consignorCode, barcode11,barcode11,barcode11], (tx1, results) => {
             let temp = [];
@@ -657,7 +774,7 @@ var barcode11 = barcode;
                   console.log('playback failed due to audio decoding errors');
                 }
               });
-  
+
               setDropDownValue('');
               console.log(acceptedArray);
               const newArray = acceptedArray.filter(item => item !== barcode11);
@@ -678,7 +795,7 @@ var barcode11 = barcode;
         );
       });
       }
-      else{
+      else {
         db.transaction((tx) => {
           tx.executeSql('UPDATE SellerMainScreenDetails SET status="rejected" ,rejectionReasonL1=?  WHERE consignorCode=? AND (awbNo=? OR clientRefId=? OR clientShipmentReferenceNumber=?) ', [DropDownValue,route.params.consignorCode, barcode11,barcode11,barcode11], (tx1, results) => {
             let temp = [];
@@ -704,7 +821,7 @@ var barcode11 = barcode;
               setBarcode('');
               displayDataSPScan();
               setExpectedPackaging('');
-            } 
+            }
             for (let i = 0; i < results.rows.length; ++i) {
               temp.push(results.rows.item(i));
             }
@@ -828,10 +945,10 @@ var barcode11 = barcode;
         },
       );
     });
-    if(packagingAction!=0 && packagingAction!=1 && barcode){
+    if (packagingAction != 0 && packagingAction != 1 && barcode){
       setShowCloseBagModal12(true);
     }
-    if(packagingAction==1){
+    if (packagingAction == 1){
       handlepackaging();
     }
   };
@@ -849,7 +966,7 @@ var barcode11 = barcode;
   //         }
   //         setPackagingAction(temp[0].packagingAction);
   // };
-  
+
   // useEffect(() => {
   //   const unsubscribe = navigation.addListener('focus', fetchData);
   //   return unsubscribe;
@@ -883,7 +1000,7 @@ var barcode11 = barcode;
         displayData();
     })();
 }, [text11]);
-  
+
 console.log('pa',packagingAction);
   const updateCategories = data => {
     db.transaction(tx => {
@@ -908,7 +1025,7 @@ console.log('pa',packagingAction);
         );
       });
     };
-    const handlepackaging=()=>{
+    const handlepackaging = ()=>{
       db.transaction(tx => {
         tx.executeSql(
           'UPDATE SellerMainScreenDetails SET eventTime=?, latitude=?, longitude=? WHERE  consignorCode=? AND (awbNo=? OR clientRefId=? OR clientShipmentReferenceNumber=?) ',
@@ -924,7 +1041,7 @@ console.log('pa',packagingAction);
           (tx1, results) => {
             let temp = [];
             console.log('Results', results.rowsAffected);
-  
+
             if (results.rowsAffected > 0) {
               Vibration.vibrate(200);
               ToastAndroid.show(barcode + ' Saved', ToastAndroid.SHORT);
@@ -947,7 +1064,7 @@ console.log('pa',packagingAction);
         );
       });
 
-    }
+    };
     const onSuccess = e => {
       console.log(e.data, 'barcode');
       setBarcode(e.data);
@@ -994,7 +1111,7 @@ console.log('pa',packagingAction);
 
   useEffect(() => {
     if (len) {
-      if(packagingAction==0){
+      if (packagingAction == 0){
       setCheck11(1);
       ToastAndroid.show(barcode + ' Accepted', ToastAndroid.SHORT);
       updateDetails2();
@@ -1312,16 +1429,16 @@ console.log('pa',packagingAction);
                 backgroundColor: 'white',
               }}
             />
-            {expectedPackagingId.length?
+            {expectedPackagingId.length ?
             <Button
             flex="1"
             mt={2}
             bg="#004aad"
             onPress={() => {
-              if (packagingAction ==2) {
+              if (packagingAction == 2) {
                 setModal(true);
                 setShowCloseBagModal12(false);
-              } else if (packagingAction ==3) {
+              } else if (packagingAction == 3) {
                 setModal1(true);
                 setShowCloseBagModal12(false);
               } else {
@@ -1339,7 +1456,7 @@ console.log('pa',packagingAction);
               >
               Submit
             </Button>
-            } 
+            }
           </Modal.Body>
         </Modal.Content>
       </Modal>
@@ -1492,7 +1609,8 @@ console.log('pa',packagingAction);
               marginBottom={1.5}
               marginTop={1.5}
               onPress={() => {
-                rejectDetails2();
+                // rejectDetails2();
+                handleRejectAction();
                 setModalVisible(false);
               }}>
               Submit
@@ -1532,7 +1650,7 @@ console.log('pa',packagingAction);
             <View style={{alignItems: 'center', marginTop: 15}}>
               <View style={{backgroundColor: 'lightgrey', padding:0, flexDirection: 'row', justifyContent: 'space-between', width: '90%', borderRadius: 10, flex:1}}>
               <Input placeholder="Shipment ID"  value={text11} onChangeText={(text)=>{ setText11(text);}}  style={{
-              fontSize: 18, fontWeight: '500', width: 320, backgroundColor:'lightgrey',}} />
+              fontSize: 18, fontWeight: '500', width: 320, backgroundColor:'lightgrey'}} />
 <TouchableOpacity style={{flex:1,backgroundColor:'lightgrey',paddingTop:8}} onPress={()=>onSucessThroughButton(text11)}>
   <Center>
 
@@ -1563,7 +1681,7 @@ console.log('pa',packagingAction);
         </View> */}
                 {/* </View> */}
               </View>
-              {packagingAction==0 || packagingAction==2?
+              {packagingAction == 0 || packagingAction == 2 ?
               <Button
               title="Reject Shipment"
               onPress={() =>{ check11 === 0 ? ToastAndroid.show('No Shipment to Reject',ToastAndroid.SHORT) : setModalVisible(true);}}

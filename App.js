@@ -20,7 +20,7 @@ import {
   DrawerActions,
   useIsFocused,
 } from '@react-navigation/native';
-import { CommonActions } from '@react-navigation/native';
+import {CommonActions} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import Login from './src/components/Login';
@@ -68,7 +68,7 @@ import ReturnHandoverRejectionTag from './src/components/newSeller/ReturnHandove
 import HandoverShipmentRTO from './src/components/newSeller/HandoverShipmentRTO';
 import {LogBox} from 'react-native';
 import MyTrip from './src/components/MyTrip';
-import { backendUrl } from './src/utils/backendUrl';
+import {backendUrl} from './src/utils/backendUrl';
 const db = openDatabase({name: 'rn_sqlite'});
 
 const Stack = createStackNavigator();
@@ -140,7 +140,7 @@ function StackNavigators({navigation}) {
         const data = JSON.parse(value);
         setUserId(data.userId);
         Login_Data_load();
-        if (!isLogin){
+        if (!isLogin) {
           setIsLogin(true);
           Login_Data_load();
         }
@@ -453,10 +453,7 @@ function StackNavigators({navigation}) {
             setIsLoading(false);
           },
           error => {
-            console.log(
-              'error api SellerMainScreen/consignorslist/',
-              error,
-            );
+            console.log('error api SellerMainScreen/consignorslist/', error);
           },
         );
     })();
@@ -542,20 +539,15 @@ function StackNavigators({navigation}) {
   const loadAPI_Data2 = () => {
     // setIsLoading(!isLoading);
     (async () => {
-      await axios
-        .get(
-          backendUrl +
-            `SellerMainScreen/workload/${userId}`,
-        )
-        .then(
-          res => {
-            createTables2();
-            console.log('API 2 OK: ' + res.data.data.length);
-            for (let i = 0; i < res.data.data.length; i++) {
-              //console.log(res.data.data[i].shipmentStatus);
-              db.transaction(txn => {
-                txn.executeSql(
-                  `INSERT OR REPLACE INTO SellerMainScreenDetails( 
+      await axios.get(backendUrl + `SellerMainScreen/workload/${userId}`).then(
+        res => {
+          createTables2();
+          console.log('API 2 OK: ' + res.data.data.length);
+          for (let i = 0; i < res.data.data.length; i++) {
+            //console.log(res.data.data[i].shipmentStatus);
+            db.transaction(txn => {
+              txn.executeSql(
+                `INSERT OR REPLACE INTO SellerMainScreenDetails( 
                   clientShipmentReferenceNumber,
                   clientRefId,
                   awbNo,
@@ -577,57 +569,61 @@ function StackNavigators({navigation}) {
                   bagId,
                   packagingAction
                 ) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)`,
-                  [
-                    res.data.data[i].clientShipmentReferenceNumber,
-                    res.data.data[i].clientRefId,
-                    res.data.data[i].awbNo,
-                    res.data.data[i].courierCode,
-                    res.data.data[i].consignorCode,
-                    res.data.data[i].packagingStatus,
-                    res.data.data[i].expectedPackagingId,
-                    res.data.data[i].runsheetNo,
-                    res.data.data[i].shipmentStatus,
-                    res.data.data[i].shipmentAction,
-                    '',
-                    '',
-                    0,
-                    res.data.data[i].actionTime,
-                    res.data.data[i].shipmentStatus == 'PUS' ||
-                    res.data.data[i].shipmentStatus == 'PUC' ||
-                    res.data.data[i].shipmentStatus == 'DLR' ||
-                    res.data.data[i].shipmentStatus == 'RDS'
-                      ? 'accepted'
-                      : res.data.data[i].shipmentStatus == 'PUR' ||
-                        res.data.data[i].shipmentStatus == 'RDR' ||
-                        res.data.data[i].shipmentStatus == 'UDU' ||
-                        res.data.data[i].shipmentStatus == 'PUF'
-                      ? 'rejected'
-                      : null,
-                    // null,
-                    null,
-                    null,
-                    null,
-                    '',
-                    res.data.data[i].packagingAction
-                  ],
-                  (sqlTxn, _res) => {
-                    // console.log(`\n Data Added to local db successfully`);
-                    // console.log(res);
-                  },
-                  error => {
-                    console.log('error on adding data ' + error.message);
-                  },
-                );
-              });
-            }
-            m++;
-            // console.log('value of m2 '+m);
-            // setIsLoading(false);
-          },
-          error => {
-            console.log(error);
-          },
-        );
+                [
+                  res.data.data[i].clientShipmentReferenceNumber,
+                  res.data.data[i].clientRefId,
+                  res.data.data[i].awbNo,
+                  res.data.data[i].courierCode,
+                  res.data.data[i].consignorCode,
+                  res.data.data[i].packagingStatus,
+                  res.data.data[i].expectedPackagingId,
+                  res.data.data[i].runsheetNo,
+                  res.data.data[i].shipmentStatus,
+                  res.data.data[i].shipmentAction,
+                  '',
+                  '',
+                  0,
+                  res.data.data[i].actionTime,
+                  res.data.data[i].shipmentStatus == 'PUS' ||
+                  res.data.data[i].shipmentStatus == 'PUC' ||
+                  res.data.data[i].shipmentStatus == 'DLR' ||
+                  res.data.data[i].shipmentStatus == 'RDS'
+                    ? 'accepted'
+                    : res.data.data[i].shipmentStatus == 'PUR' ||
+                      res.data.data[i].shipmentStatus == 'RDR' ||
+                      res.data.data[i].shipmentStatus == 'UDU' ||
+                      res.data.data[i].shipmentStatus == 'PUF'
+                    ? 'rejected'
+                    : null,
+                  // null,
+                  res.data.data[i].handoverStatus == 1
+                    ? 'accepted'
+                    : res.data.data[i].handoverStatus == 2
+                    ? 'rejected'
+                    : null,
+                  null,
+                  null,
+                  '',
+                  res.data.data[i].packagingAction,
+                ],
+                (sqlTxn, _res) => {
+                  // console.log(`\n Data Added to local db successfully`);
+                  // console.log(res);
+                },
+                error => {
+                  console.log('error on adding data ' + error.message);
+                },
+              );
+            });
+          }
+          m++;
+          // console.log('value of m2 '+m);
+          // setIsLoading(false);
+        },
+        error => {
+          console.log(error);
+        },
+      );
     })();
   };
 
@@ -1048,10 +1044,7 @@ function StackNavigators({navigation}) {
 
   const DisplayData = () => {
     axios
-      .get(
-        backendUrl +
-          `SellerMainScreen/getadditionalwork/${userId}`,
-      )
+      .get(backendUrl + `SellerMainScreen/getadditionalwork/${userId}`)
       .then(res => {
         setData(res.data);
         // console.log('dataDisplay', res.data);
@@ -1094,7 +1087,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white', marginTop: 15}} size="md">
                   Notification
                 </Heading>
               </NativeBaseProvider>
@@ -1115,7 +1108,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white', marginTop: 15}} size="md">
                   Notification
                 </Heading>
               </NativeBaseProvider>
@@ -1136,7 +1129,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white', marginTop: 15}} size="md">
                   Notification
                 </Heading>
               </NativeBaseProvider>
@@ -1157,7 +1150,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white', marginTop: 15}} size="md">
                   Notification
                 </Heading>
               </NativeBaseProvider>
@@ -1178,7 +1171,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white', marginTop: 15}} size="md">
                   Dashboard
                 </Heading>
               </NativeBaseProvider>
@@ -1188,7 +1181,7 @@ function StackNavigators({navigation}) {
                 name="menu"
                 style={{fontSize: 30, marginLeft: 10, color: 'white'}}
                 onPress={() => {
-                  console.log('dashboard menu clicked');
+                  // console.log('dashboard menu clicked');
                   navigation.dispatch(DrawerActions.openDrawer());
                 }}
               />
@@ -1211,7 +1204,7 @@ function StackNavigators({navigation}) {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('NewSellerAdditionNotification');
-                    navigation.dispatch(DrawerActions.openDrawer());
+                    // navigation.dispatch(DrawerActions.openDrawer());
                   }}>
                   <MaterialIcons
                     name="bell-outline"
@@ -1245,7 +1238,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white', marginTop: 15}} size="md">
                   Seller Pickups
                 </Heading>
               </NativeBaseProvider>
@@ -1275,7 +1268,7 @@ function StackNavigators({navigation}) {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('NewSellerAdditionNotification');
-                    navigation.dispatch(DrawerActions.openDrawer());
+                    // navigation.dispatch(DrawerActions.openDrawer());
                   }}>
                   <MaterialIcons
                     name="bell-outline"
@@ -1320,7 +1313,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white', marginTop: 15}} size="md">
                   Seller Handover
                 </Heading>
               </NativeBaseProvider>
@@ -1350,7 +1343,6 @@ function StackNavigators({navigation}) {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('NewSellerAdditionNotification');
-                    navigation.dispatch(DrawerActions.openDrawer());
                   }}>
                   <MaterialIcons
                     name="bell-outline"
@@ -1383,7 +1375,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white', marginTop: 15}} size="md">
                   Shipment
                 </Heading>
               </NativeBaseProvider>
@@ -1413,7 +1405,6 @@ function StackNavigators({navigation}) {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('NewSellerAdditionNotification');
-                    navigation.dispatch(DrawerActions.openDrawer());
                   }}>
                   <MaterialIcons
                     name="bell-outline"
@@ -1446,7 +1437,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white', marginTop: 15}} size="md">
                   Open Bags
                 </Heading>
               </NativeBaseProvider>
@@ -1476,7 +1467,6 @@ function StackNavigators({navigation}) {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('NewSellerAdditionNotification');
-                    navigation.dispatch(DrawerActions.openDrawer());
                   }}>
                   <MaterialIcons
                     name="bell-outline"
@@ -1509,7 +1499,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white', marginTop: 15}} size="md">
                   Pending Handover
                 </Heading>
               </NativeBaseProvider>
@@ -1539,7 +1529,6 @@ function StackNavigators({navigation}) {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('NewSellerAdditionNotification');
-                    navigation.dispatch(DrawerActions.openDrawer());
                   }}>
                   <MaterialIcons
                     name="bell-outline"
@@ -1572,7 +1561,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white', marginTop: 15}} size="md">
                   Pending Work
                 </Heading>
               </NativeBaseProvider>
@@ -1602,7 +1591,6 @@ function StackNavigators({navigation}) {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('NewSellerAdditionNotification');
-                    navigation.dispatch(DrawerActions.openDrawer());
                   }}>
                   <MaterialIcons
                     name="bell-outline"
@@ -1635,7 +1623,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white', marginTop: 15}} size="md">
                   Pending Work
                 </Heading>
               </NativeBaseProvider>
@@ -1665,7 +1653,6 @@ function StackNavigators({navigation}) {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('NewSellerAdditionNotification');
-                    navigation.dispatch(DrawerActions.openDrawer());
                   }}>
                   <MaterialIcons
                     name="bell-outline"
@@ -1698,7 +1685,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white', marginTop: 15}} size="md">
                   Pending Work
                 </Heading>
               </NativeBaseProvider>
@@ -1728,7 +1715,6 @@ function StackNavigators({navigation}) {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('NewSellerAdditionNotification');
-                    navigation.dispatch(DrawerActions.openDrawer());
                   }}>
                   <MaterialIcons
                     name="bell-outline"
@@ -1761,7 +1747,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white', marginTop: 15}} size="md">
                   Handover Summary
                 </Heading>
               </NativeBaseProvider>
@@ -1791,7 +1777,6 @@ function StackNavigators({navigation}) {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('NewSellerAdditionNotification');
-                    navigation.dispatch(DrawerActions.openDrawer());
                   }}>
                   <MaterialIcons
                     name="bell-outline"
@@ -1825,7 +1810,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white', marginTop: 15}} size="md">
                   Handover Scan
                 </Heading>
               </NativeBaseProvider>
@@ -1855,7 +1840,6 @@ function StackNavigators({navigation}) {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('NewSellerAdditionNotification');
-                    navigation.dispatch(DrawerActions.openDrawer());
                   }}>
                   <MaterialIcons
                     name="bell-outline"
@@ -1889,7 +1873,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white', marginTop: 15}} size="md">
                   Seller Summary
                 </Heading>
               </NativeBaseProvider>
@@ -1919,7 +1903,6 @@ function StackNavigators({navigation}) {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('NewSellerAdditionNotification');
-                    navigation.dispatch(DrawerActions.openDrawer());
                   }}>
                   <MaterialIcons
                     name="bell-outline"
@@ -1953,7 +1936,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white', marginTop: 15}} size="md">
                   Scan Products
                 </Heading>
               </NativeBaseProvider>
@@ -1983,7 +1966,6 @@ function StackNavigators({navigation}) {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('NewSellerAdditionNotification');
-                    navigation.dispatch(DrawerActions.openDrawer());
                   }}>
                   <MaterialIcons
                     name="bell-outline"
@@ -2016,7 +1998,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white', marginTop: 15}} size="md">
                   Seller Deliveries
                 </Heading>
               </NativeBaseProvider>
@@ -2046,7 +2028,6 @@ function StackNavigators({navigation}) {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('NewSellerAdditionNotification');
-                    navigation.dispatch(DrawerActions.openDrawer());
                   }}>
                   <MaterialIcons
                     name="bell-outline"
@@ -2079,7 +2060,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white', marginTop: 15}} size="md">
                   Seller Handover
                 </Heading>
               </NativeBaseProvider>
@@ -2109,7 +2090,6 @@ function StackNavigators({navigation}) {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('NewSellerAdditionNotification');
-                    navigation.dispatch(DrawerActions.openDrawer());
                   }}>
                   <MaterialIcons
                     name="bell-outline"
@@ -2142,7 +2122,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white', marginTop: 15}} size="md">
                   Scan Shipment
                 </Heading>
               </NativeBaseProvider>
@@ -2172,7 +2152,6 @@ function StackNavigators({navigation}) {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('NewSellerAdditionNotification');
-                    navigation.dispatch(DrawerActions.openDrawer());
                   }}>
                   <MaterialIcons
                     name="bell-outline"
@@ -2205,7 +2184,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white', marginTop: 15}} size="md">
                   Seller Deliveries
                 </Heading>
               </NativeBaseProvider>
@@ -2233,7 +2212,6 @@ function StackNavigators({navigation}) {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('NewSellerAdditionNotification');
-                    navigation.dispatch(DrawerActions.openDrawer());
                   }}>
                   <MaterialIcons
                     name="bell-outline"
@@ -2266,7 +2244,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white', marginTop: 15}} size="md">
                   Bag to Dispatch
                 </Heading>
               </NativeBaseProvider>
@@ -2287,7 +2265,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white', marginTop: 15}} size="md">
                   Map Navigation
                 </Heading>
               </NativeBaseProvider>
@@ -2314,7 +2292,6 @@ function StackNavigators({navigation}) {
                 <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('NewSellerAdditionNotification');
-                    navigation.dispatch(DrawerActions.openDrawer());
                   }}>
                   <MaterialIcons
                     name="bell-outline"
@@ -2351,7 +2328,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white', marginTop: 15}} size="md">
                   Pickup Summary
                 </Heading>
               </NativeBaseProvider>
@@ -2372,7 +2349,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white', marginTop: 15}} size="md">
                   My Trip
                 </Heading>
               </NativeBaseProvider>
@@ -2393,7 +2370,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white', marginTop: 15}} size="md">
                   Trip Details
                 </Heading>
               </NativeBaseProvider>
@@ -2414,7 +2391,7 @@ function StackNavigators({navigation}) {
           options={{
             headerTitle: props => (
               <NativeBaseProvider>
-                <Heading style={{color: 'white'}} size="md">
+                <Heading style={{color: 'white', marginTop: 15}} size="md">
                   Notification
                 </Heading>
               </NativeBaseProvider>
@@ -2501,27 +2478,22 @@ function CustomDrawerContent({navigation}) {
 
     db.transaction(tx => {
       tx.executeSql(
-        'SELECT name FROM sqlite_master WHERE type=\'table\' AND name NOT LIKE \'sqlite_%\'',
+        "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'",
         [],
         (tx1, result) => {
-
-
           console.log(result);
           let i = 0;
-          for ( i = 0; i < result.rows.length; i++) {
+          for (i = 0; i < result.rows.length; i++) {
             const tableName = result.rows.item(i).name;
             console.log(tableName);
             tx.executeSql(`DROP TABLE IF EXISTS ${tableName}`);
           }
-          if (i === result.rows.length){
+          if (i === result.rows.length) {
             console.log('SQlite DB cleared successfully!');
           }
-
-
         },
       );
     });
-
   };
   return (
     <NativeBaseProvider>
@@ -2545,15 +2517,15 @@ function CustomDrawerContent({navigation}) {
                 CommonActions.reset({
                   index: 1,
                   routes: [
-                    { name: 'Login' },
+                    {name: 'Login'},
                     // {
                     //   name: 'Profile',
                     //   params: { user: 'jane' },
                     // },
                   ],
-                })
+                }),
               );
-             
+
               // navigation.navigate('Login');
               navigation.closeDrawer();
             }}
@@ -2570,13 +2542,13 @@ function CustomDrawerContent({navigation}) {
                 CommonActions.reset({
                   index: 1,
                   routes: [
-                    { name: 'Login' },
+                    {name: 'Login'},
                     // {
                     //   name: 'Profile',
                     //   params: { user: 'jane' },
                     // },
                   ],
-                })
+                }),
               );
               // navigation.navigate('Login');
               navigation.closeDrawer();
