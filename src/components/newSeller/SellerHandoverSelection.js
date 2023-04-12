@@ -774,8 +774,8 @@ const SellerHandoverSelection = ({route}) => {
         />
       }
       onPress={() => setModalVisible(true)}
-      style={[{ backgroundColor: '#004aad', width: '48%' }, pending !== route.params.Forward && { backgroundColor: 'gray' }  ]}
-      disabled={pending !== route.params.Forward}
+      style={[{ backgroundColor: '#004aad', width: '48%' }, pending !== route.params.Reverse && { backgroundColor: 'gray' }  ]}
+      disabled={pending !== route.params.Reverse}
       disabledStyle={{ backgroundColor: 'gray.300' }}>
       Close Delivery
     </Button>
