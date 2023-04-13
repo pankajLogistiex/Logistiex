@@ -1,0 +1,679 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.demoproject"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+8        android:minSdkVersion="21"
+9        android:targetSdkVersion="31" />
+10
+11    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+11-->/home/pankaj/Downloads/Logistiex/android/app/src/debug/AndroidManifest.xml:5:5-77
+11-->/home/pankaj/Downloads/Logistiex/android/app/src/debug/AndroidManifest.xml:5:22-75
+12    <uses-permission android:name="android.permission.INTERNET" />
+12-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:4:5-67
+12-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:4:22-64
+13    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+13-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:5:5-80
+13-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:5:22-78
+14    <uses-permission android:name="android.permission.CAMERA" />
+14-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:6:5-65
+14-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:6:22-62
+15    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+15-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:7:5-70
+15-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:7:22-68
+16    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+16-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:8:5-79
+16-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:8:22-77
+17    <uses-permission android:name="android.permission.VIBRATE" />
+17-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:9:5-65
+17-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:9:22-63
+18    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+18-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:10:5-79
+18-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:10:22-76
+19    <uses-permission android:name="android.permission.CALL_PHONE" />
+19-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:11:5-69
+19-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:11:22-66
+20    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+20-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:12:5-80
+20-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:12:22-78
+21    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+21-->[com.facebook.flipper:flipper:0.125.0] /home/pankaj/.gradle/caches/transforms-3/436f54e1c9e400a7ad96009301b788b4/transformed/jetified-flipper-0.125.0/AndroidManifest.xml:16:5-76
+21-->[com.facebook.flipper:flipper:0.125.0] /home/pankaj/.gradle/caches/transforms-3/436f54e1c9e400a7ad96009301b788b4/transformed/jetified-flipper-0.125.0/AndroidManifest.xml:16:22-73
+22
+23    <uses-feature
+23-->[:react-native-camera] /home/pankaj/Downloads/Logistiex/node_modules/react-native-camera/android/build/intermediates/merged_manifest/generalDebug/AndroidManifest.xml:11:5-13:36
+24        android:name="android.hardware.camera"
+24-->[:react-native-camera] /home/pankaj/Downloads/Logistiex/node_modules/react-native-camera/android/build/intermediates/merged_manifest/generalDebug/AndroidManifest.xml:12:9-47
+25        android:required="false" />
+25-->[:react-native-camera] /home/pankaj/Downloads/Logistiex/node_modules/react-native-camera/android/build/intermediates/merged_manifest/generalDebug/AndroidManifest.xml:13:9-33
+26    <uses-feature
+26-->[:react-native-camera] /home/pankaj/Downloads/Logistiex/node_modules/react-native-camera/android/build/intermediates/merged_manifest/generalDebug/AndroidManifest.xml:14:5-16:36
+27        android:name="android.hardware.camera.autofocus"
+27-->[:react-native-camera] /home/pankaj/Downloads/Logistiex/node_modules/react-native-camera/android/build/intermediates/merged_manifest/generalDebug/AndroidManifest.xml:15:9-57
+28        android:required="false" />
+28-->[:react-native-camera] /home/pankaj/Downloads/Logistiex/node_modules/react-native-camera/android/build/intermediates/merged_manifest/generalDebug/AndroidManifest.xml:16:9-33
+29
+30    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+30-->[:react-native-community_netinfo] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-community/netinfo/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:5-79
+30-->[:react-native-community_netinfo] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-community/netinfo/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:9:22-76
+31    <uses-permission android:name="android.permission.WAKE_LOCK" />
+31-->[:react-native-firebase_messaging] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/messaging/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:5-68
+31-->[:react-native-firebase_messaging] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/messaging/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:22-65
+32    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" /> <!-- Required by older versions of Google Play services to create IID tokens -->
+32-->[com.google.firebase:firebase-messaging:23.1.2] /home/pankaj/.gradle/caches/transforms-3/dd45d618e37bd3d07f275fcd1ca2ce23/transformed/jetified-firebase-messaging-23.1.2/AndroidManifest.xml:25:5-77
+32-->[com.google.firebase:firebase-messaging:23.1.2] /home/pankaj/.gradle/caches/transforms-3/dd45d618e37bd3d07f275fcd1ca2ce23/transformed/jetified-firebase-messaging-23.1.2/AndroidManifest.xml:25:22-74
+33    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+33-->[com.google.firebase:firebase-messaging:23.1.2] /home/pankaj/.gradle/caches/transforms-3/dd45d618e37bd3d07f275fcd1ca2ce23/transformed/jetified-firebase-messaging-23.1.2/AndroidManifest.xml:28:5-82
+33-->[com.google.firebase:firebase-messaging:23.1.2] /home/pankaj/.gradle/caches/transforms-3/dd45d618e37bd3d07f275fcd1ca2ce23/transformed/jetified-firebase-messaging-23.1.2/AndroidManifest.xml:28:22-79
+34    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+34-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:27:5-81
+34-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:27:22-78
+35    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+35-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:28:5-77
+35-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:28:22-74
+36
+37    <uses-feature
+37-->[com.google.android.gms:play-services-maps:18.0.2] /home/pankaj/.gradle/caches/transforms-3/52a2fce4aee195acae89b335dcc6797a/transformed/jetified-play-services-maps-18.0.2/AndroidManifest.xml:26:5-28:35
+38        android:glEsVersion="0x00020000"
+38-->[com.google.android.gms:play-services-maps:18.0.2] /home/pankaj/.gradle/caches/transforms-3/52a2fce4aee195acae89b335dcc6797a/transformed/jetified-play-services-maps-18.0.2/AndroidManifest.xml:27:9-41
+39        android:required="true" />
+39-->[com.google.android.gms:play-services-maps:18.0.2] /home/pankaj/.gradle/caches/transforms-3/52a2fce4aee195acae89b335dcc6797a/transformed/jetified-play-services-maps-18.0.2/AndroidManifest.xml:28:9-32
+40
+41    <queries>
+41-->[com.google.android.gms:play-services-maps:18.0.2] /home/pankaj/.gradle/caches/transforms-3/52a2fce4aee195acae89b335dcc6797a/transformed/jetified-play-services-maps-18.0.2/AndroidManifest.xml:30:5-34:15
+42
+43        <!-- Needs to be explicitly declared on Android R+ -->
+44        <package android:name="com.google.android.apps.maps" />
+44-->[com.google.android.gms:play-services-maps:18.0.2] /home/pankaj/.gradle/caches/transforms-3/52a2fce4aee195acae89b335dcc6797a/transformed/jetified-play-services-maps-18.0.2/AndroidManifest.xml:33:9-64
+44-->[com.google.android.gms:play-services-maps:18.0.2] /home/pankaj/.gradle/caches/transforms-3/52a2fce4aee195acae89b335dcc6797a/transformed/jetified-play-services-maps-18.0.2/AndroidManifest.xml:33:18-61
+45    </queries>
+46
+47    <application
+47-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:14:5-36:19
+48        android:name="com.demoproject.MainApplication"
+48-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:15:7-38
+49        android:allowBackup="false"
+49-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:19:7-34
+50        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+50-->[androidx.core:core:1.7.0] /home/pankaj/.gradle/caches/transforms-3/12cba7cf5359c966f50d933ae798b1d0/transformed/core-1.7.0/AndroidManifest.xml:24:18-86
+51        android:debuggable="true"
+52        android:icon="@mipmap/ic_launcher"
+52-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:17:7-41
+53        android:label="@string/app_name"
+53-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:16:7-39
+54        android:roundIcon="@mipmap/ic_launcher_round"
+54-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:18:7-52
+55        android:theme="@style/AppTheme"
+55-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:20:7-38
+56        android:usesCleartextTraffic="true" >
+56-->/home/pankaj/Downloads/Logistiex/android/app/src/debug/AndroidManifest.xml:8:9-44
+57        <activity
+57-->/home/pankaj/Downloads/Logistiex/android/app/src/debug/AndroidManifest.xml:11:9-111
+58            android:name="com.facebook.react.devsupport.DevSettingsActivity"
+58-->/home/pankaj/Downloads/Logistiex/android/app/src/debug/AndroidManifest.xml:11:19-83
+59            android:exported="false" />
+59-->/home/pankaj/Downloads/Logistiex/android/app/src/debug/AndroidManifest.xml:11:84-108
+60
+61        <meta-data
+61-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:21:7-23:67
+62            android:name="com.google.android.geo.API_KEY"
+62-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:22:9-54
+63            android:value="AIzaSyCQckZTP5hiP_wozcqIM6IU_9BgOozNJeo" />
+63-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:23:9-64
+64
+65        <activity
+65-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:24:7-35:18
+66            android:name="com.demoproject.MainActivity"
+66-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:25:9-37
+67            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
+67-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:27:9-118
+68            android:exported="true"
+68-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:30:9-32
+69            android:label="@string/app_name"
+69-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:26:9-41
+70            android:launchMode="singleTask"
+70-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:28:9-40
+71            android:windowSoftInputMode="adjustResize" >
+71-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:29:9-51
+72            <intent-filter>
+72-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:31:9-34:25
+73                <action android:name="android.intent.action.MAIN" />
+73-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:32:13-65
+73-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:32:21-62
+74
+75                <category android:name="android.intent.category.LAUNCHER" />
+75-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:33:13-73
+75-->/home/pankaj/Downloads/Logistiex/android/app/src/main/AndroidManifest.xml:33:23-70
+76            </intent-filter>
+77        </activity>
+78
+79        <service
+79-->[:react-native-firebase_messaging] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/messaging/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:14:9-16:40
+80            android:name="io.invertase.firebase.messaging.ReactNativeFirebaseMessagingHeadlessService"
+80-->[:react-native-firebase_messaging] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/messaging/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:15:13-103
+81            android:exported="false" />
+81-->[:react-native-firebase_messaging] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/messaging/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:16:13-37
+82        <service
+82-->[:react-native-firebase_messaging] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/messaging/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:17:9-23:19
+83            android:name="io.invertase.firebase.messaging.ReactNativeFirebaseMessagingService"
+83-->[:react-native-firebase_messaging] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/messaging/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:18:13-95
+84            android:exported="false" >
+84-->[:react-native-firebase_messaging] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/messaging/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:19:13-37
+85            <intent-filter>
+85-->[:react-native-firebase_messaging] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/messaging/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:20:13-22:29
+86                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+86-->[:react-native-firebase_messaging] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/messaging/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:21:17-78
+86-->[:react-native-firebase_messaging] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/messaging/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:21:25-75
+87            </intent-filter>
+88        </service>
+89
+90        <receiver
+90-->[:react-native-firebase_messaging] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/messaging/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:25:9-32:20
+91            android:name="io.invertase.firebase.messaging.ReactNativeFirebaseMessagingReceiver"
+91-->[:react-native-firebase_messaging] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/messaging/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:26:13-96
+92            android:exported="true"
+92-->[:react-native-firebase_messaging] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/messaging/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:27:13-36
+93            android:permission="com.google.android.c2dm.permission.SEND" >
+93-->[:react-native-firebase_messaging] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/messaging/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:28:13-73
+94            <intent-filter>
+94-->[:react-native-firebase_messaging] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/messaging/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:29:13-31:29
+95                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+95-->[:react-native-firebase_messaging] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/messaging/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:30:17-81
+95-->[:react-native-firebase_messaging] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/messaging/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:30:25-78
+96            </intent-filter>
+97        </receiver>
+98
+99        <meta-data
+99-->[:react-native-firebase_messaging] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/messaging/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:34:9-36:36
+100            android:name="firebase_messaging_auto_init_enabled"
+100-->[:react-native-firebase_messaging] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/messaging/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:35:13-64
+101            android:value="true" />
+101-->[:react-native-firebase_messaging] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/messaging/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:36:13-33
+102        <meta-data
+102-->[:react-native-firebase_messaging] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/messaging/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:37:9-39:32
+103            android:name="com.google.firebase.messaging.default_notification_channel_id"
+103-->[:react-native-firebase_messaging] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/messaging/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:38:13-89
+104            android:value="" />
+104-->[:react-native-firebase_messaging] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/messaging/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:39:13-29
+105        <meta-data
+105-->[:react-native-firebase_messaging] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/messaging/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:40:9-42:47
+106            android:name="com.google.firebase.messaging.default_notification_color"
+106-->[:react-native-firebase_messaging] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/messaging/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:41:13-84
+107            android:resource="@color/white" />
+107-->[:react-native-firebase_messaging] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/messaging/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:42:13-44
+108        <meta-data
+108-->[:react-native-firebase_app] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:11:9-13:36
+109            android:name="app_data_collection_default_enabled"
+109-->[:react-native-firebase_app] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-63
+110            android:value="true" />
+110-->[:react-native-firebase_app] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-33
+111
+112        <service
+112-->[:react-native-firebase_app] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:15:9-23:19
+113            android:name="com.google.firebase.components.ComponentDiscoveryService"
+113-->[:react-native-firebase_app] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:16:13-84
+114            android:directBootAware="true"
+114-->[:react-native-firebase_app] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:17:13-43
+115            android:exported="false" >
+115-->[:react-native-firebase_app] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:18:13-37
+116            <meta-data
+116-->[:react-native-firebase_app] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:20:13-22:85
+117                android:name="com.google.firebase.components:io.invertase.firebase.app.ReactNativeFirebaseAppRegistrar"
+117-->[:react-native-firebase_app] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:21:17-120
+118                android:value="com.google.firebase.components.ComponentRegistrar" />
+118-->[:react-native-firebase_app] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:22:17-82
+119            <meta-data
+119-->[com.google.firebase:firebase-messaging:23.1.2] /home/pankaj/.gradle/caches/transforms-3/dd45d618e37bd3d07f275fcd1ca2ce23/transformed/jetified-firebase-messaging-23.1.2/AndroidManifest.xml:55:13-57:85
+120                android:name="com.google.firebase.components:com.google.firebase.messaging.FirebaseMessagingRegistrar"
+120-->[com.google.firebase:firebase-messaging:23.1.2] /home/pankaj/.gradle/caches/transforms-3/dd45d618e37bd3d07f275fcd1ca2ce23/transformed/jetified-firebase-messaging-23.1.2/AndroidManifest.xml:56:17-119
+121                android:value="com.google.firebase.components.ComponentRegistrar" />
+121-->[com.google.firebase:firebase-messaging:23.1.2] /home/pankaj/.gradle/caches/transforms-3/dd45d618e37bd3d07f275fcd1ca2ce23/transformed/jetified-firebase-messaging-23.1.2/AndroidManifest.xml:57:17-82
+122            <meta-data
+122-->[com.google.firebase:firebase-datatransport:18.1.7] /home/pankaj/.gradle/caches/transforms-3/3772f249c839a7e4607c259387be7b83/transformed/jetified-firebase-datatransport-18.1.7/AndroidManifest.xml:27:13-29:85
+123                android:name="com.google.firebase.components:com.google.firebase.datatransport.TransportRegistrar"
+123-->[com.google.firebase:firebase-datatransport:18.1.7] /home/pankaj/.gradle/caches/transforms-3/3772f249c839a7e4607c259387be7b83/transformed/jetified-firebase-datatransport-18.1.7/AndroidManifest.xml:28:17-115
+124                android:value="com.google.firebase.components.ComponentRegistrar" />
+124-->[com.google.firebase:firebase-datatransport:18.1.7] /home/pankaj/.gradle/caches/transforms-3/3772f249c839a7e4607c259387be7b83/transformed/jetified-firebase-datatransport-18.1.7/AndroidManifest.xml:29:17-82
+125            <meta-data
+125-->[com.google.firebase:firebase-installations:17.1.3] /home/pankaj/.gradle/caches/transforms-3/a499e712da17e3b7690ce75d375c6460/transformed/jetified-firebase-installations-17.1.3/AndroidManifest.xml:17:13-19:85
+126                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsRegistrar"
+126-->[com.google.firebase:firebase-installations:17.1.3] /home/pankaj/.gradle/caches/transforms-3/a499e712da17e3b7690ce75d375c6460/transformed/jetified-firebase-installations-17.1.3/AndroidManifest.xml:18:17-127
+127                android:value="com.google.firebase.components.ComponentRegistrar" />
+127-->[com.google.firebase:firebase-installations:17.1.3] /home/pankaj/.gradle/caches/transforms-3/a499e712da17e3b7690ce75d375c6460/transformed/jetified-firebase-installations-17.1.3/AndroidManifest.xml:19:17-82
+128        </service>
+129
+130        <provider
+130-->[:react-native-firebase_app] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:25:9-29:38
+131            android:name="io.invertase.firebase.app.ReactNativeFirebaseAppInitProvider"
+131-->[:react-native-firebase_app] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:26:13-88
+132            android:authorities="com.demoproject.reactnativefirebaseappinitprovider"
+132-->[:react-native-firebase_app] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:27:13-86
+133            android:exported="false"
+133-->[:react-native-firebase_app] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:28:13-37
+134            android:initOrder="99" />
+134-->[:react-native-firebase_app] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/app/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:29:13-35
+135        <provider
+135-->[:react-native-image-picker] /home/pankaj/Downloads/Logistiex/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:10:9-18:20
+136            android:name="com.imagepicker.ImagePickerProvider"
+136-->[:react-native-image-picker] /home/pankaj/Downloads/Logistiex/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:11:13-63
+137            android:authorities="com.demoproject.imagepickerprovider"
+137-->[:react-native-image-picker] /home/pankaj/Downloads/Logistiex/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:12:13-71
+138            android:exported="false"
+138-->[:react-native-image-picker] /home/pankaj/Downloads/Logistiex/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:13:13-37
+139            android:grantUriPermissions="true" >
+139-->[:react-native-image-picker] /home/pankaj/Downloads/Logistiex/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:14:13-47
+140            <meta-data
+140-->[:react-native-image-picker] /home/pankaj/Downloads/Logistiex/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:15:13-17:70
+141                android:name="android.support.FILE_PROVIDER_PATHS"
+141-->[:react-native-image-picker] /home/pankaj/Downloads/Logistiex/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:16:17-67
+142                android:resource="@xml/imagepicker_provider_paths" />
+142-->[:react-native-image-picker] /home/pankaj/Downloads/Logistiex/node_modules/react-native-image-picker/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:17:17-67
+143        </provider>
+144
+145        <service
+145-->[com.google.android.gms:play-services-mlkit-barcode-scanning:16.2.0] /home/pankaj/.gradle/caches/transforms-3/0b25aa270bbd1ec7a938af48048b1244/transformed/jetified-play-services-mlkit-barcode-scanning-16.2.0/AndroidManifest.xml:9:9-15:19
+146            android:name="com.google.mlkit.common.internal.MlKitComponentDiscoveryService"
+146-->[com.google.android.gms:play-services-mlkit-barcode-scanning:16.2.0] /home/pankaj/.gradle/caches/transforms-3/0b25aa270bbd1ec7a938af48048b1244/transformed/jetified-play-services-mlkit-barcode-scanning-16.2.0/AndroidManifest.xml:10:13-91
+147            android:directBootAware="true"
+147-->[com.google.mlkit:common:17.2.0] /home/pankaj/.gradle/caches/transforms-3/e2475445a5f6e377a4659fb7940c9bea/transformed/jetified-common-17.2.0/AndroidManifest.xml:17:13-43
+148            android:exported="false" >
+148-->[com.google.android.gms:play-services-mlkit-barcode-scanning:16.2.0] /home/pankaj/.gradle/caches/transforms-3/0b25aa270bbd1ec7a938af48048b1244/transformed/jetified-play-services-mlkit-barcode-scanning-16.2.0/AndroidManifest.xml:11:13-37
+149            <meta-data
+149-->[com.google.android.gms:play-services-mlkit-barcode-scanning:16.2.0] /home/pankaj/.gradle/caches/transforms-3/0b25aa270bbd1ec7a938af48048b1244/transformed/jetified-play-services-mlkit-barcode-scanning-16.2.0/AndroidManifest.xml:12:13-14:85
+150                android:name="com.google.firebase.components:com.google.mlkit.vision.barcode.internal.BarcodeRegistrar"
+150-->[com.google.android.gms:play-services-mlkit-barcode-scanning:16.2.0] /home/pankaj/.gradle/caches/transforms-3/0b25aa270bbd1ec7a938af48048b1244/transformed/jetified-play-services-mlkit-barcode-scanning-16.2.0/AndroidManifest.xml:13:17-120
+151                android:value="com.google.firebase.components.ComponentRegistrar" />
+151-->[com.google.android.gms:play-services-mlkit-barcode-scanning:16.2.0] /home/pankaj/.gradle/caches/transforms-3/0b25aa270bbd1ec7a938af48048b1244/transformed/jetified-play-services-mlkit-barcode-scanning-16.2.0/AndroidManifest.xml:14:17-82
+152            <meta-data
+152-->[com.google.android.gms:play-services-mlkit-face-detection:16.2.0] /home/pankaj/.gradle/caches/transforms-3/714790de3a0401fba5da4192aa5f4f4d/transformed/jetified-play-services-mlkit-face-detection-16.2.0/AndroidManifest.xml:12:13-14:85
+153                android:name="com.google.firebase.components:com.google.mlkit.vision.face.internal.FaceRegistrar"
+153-->[com.google.android.gms:play-services-mlkit-face-detection:16.2.0] /home/pankaj/.gradle/caches/transforms-3/714790de3a0401fba5da4192aa5f4f4d/transformed/jetified-play-services-mlkit-face-detection-16.2.0/AndroidManifest.xml:13:17-114
+154                android:value="com.google.firebase.components.ComponentRegistrar" />
+154-->[com.google.android.gms:play-services-mlkit-face-detection:16.2.0] /home/pankaj/.gradle/caches/transforms-3/714790de3a0401fba5da4192aa5f4f4d/transformed/jetified-play-services-mlkit-face-detection-16.2.0/AndroidManifest.xml:14:17-82
+155            <meta-data
+155-->[com.google.android.gms:play-services-mlkit-text-recognition:16.3.0] /home/pankaj/.gradle/caches/transforms-3/0b52ba7f2ea277292d567cebbe288dfa/transformed/jetified-play-services-mlkit-text-recognition-16.3.0/AndroidManifest.xml:12:13-14:85
+156                android:name="com.google.firebase.components:com.google.mlkit.vision.text.internal.TextRegistrar"
+156-->[com.google.android.gms:play-services-mlkit-text-recognition:16.3.0] /home/pankaj/.gradle/caches/transforms-3/0b52ba7f2ea277292d567cebbe288dfa/transformed/jetified-play-services-mlkit-text-recognition-16.3.0/AndroidManifest.xml:13:17-114
+157                android:value="com.google.firebase.components.ComponentRegistrar" />
+157-->[com.google.android.gms:play-services-mlkit-text-recognition:16.3.0] /home/pankaj/.gradle/caches/transforms-3/0b52ba7f2ea277292d567cebbe288dfa/transformed/jetified-play-services-mlkit-text-recognition-16.3.0/AndroidManifest.xml:14:17-82
+158            <meta-data
+158-->[com.google.mlkit:vision-common:16.5.0] /home/pankaj/.gradle/caches/transforms-3/63e9c06ddb3ac37ccbff2b2a8f04afc5/transformed/jetified-vision-common-16.5.0/AndroidManifest.xml:12:13-14:85
+159                android:name="com.google.firebase.components:com.google.mlkit.vision.common.internal.VisionCommonRegistrar"
+159-->[com.google.mlkit:vision-common:16.5.0] /home/pankaj/.gradle/caches/transforms-3/63e9c06ddb3ac37ccbff2b2a8f04afc5/transformed/jetified-vision-common-16.5.0/AndroidManifest.xml:13:17-124
+160                android:value="com.google.firebase.components.ComponentRegistrar" />
+160-->[com.google.mlkit:vision-common:16.5.0] /home/pankaj/.gradle/caches/transforms-3/63e9c06ddb3ac37ccbff2b2a8f04afc5/transformed/jetified-vision-common-16.5.0/AndroidManifest.xml:14:17-82
+161            <meta-data
+161-->[com.google.mlkit:common:17.2.0] /home/pankaj/.gradle/caches/transforms-3/e2475445a5f6e377a4659fb7940c9bea/transformed/jetified-common-17.2.0/AndroidManifest.xml:20:13-22:85
+162                android:name="com.google.firebase.components:com.google.mlkit.common.internal.CommonComponentRegistrar"
+162-->[com.google.mlkit:common:17.2.0] /home/pankaj/.gradle/caches/transforms-3/e2475445a5f6e377a4659fb7940c9bea/transformed/jetified-common-17.2.0/AndroidManifest.xml:21:17-120
+163                android:value="com.google.firebase.components.ComponentRegistrar" />
+163-->[com.google.mlkit:common:17.2.0] /home/pankaj/.gradle/caches/transforms-3/e2475445a5f6e377a4659fb7940c9bea/transformed/jetified-common-17.2.0/AndroidManifest.xml:22:17-82
+164        </service>
+165
+166        <receiver
+166-->[com.google.firebase:firebase-messaging:23.1.2] /home/pankaj/.gradle/caches/transforms-3/dd45d618e37bd3d07f275fcd1ca2ce23/transformed/jetified-firebase-messaging-23.1.2/AndroidManifest.xml:31:9-38:20
+167            android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver"
+167-->[com.google.firebase:firebase-messaging:23.1.2] /home/pankaj/.gradle/caches/transforms-3/dd45d618e37bd3d07f275fcd1ca2ce23/transformed/jetified-firebase-messaging-23.1.2/AndroidManifest.xml:32:13-78
+168            android:exported="true"
+168-->[com.google.firebase:firebase-messaging:23.1.2] /home/pankaj/.gradle/caches/transforms-3/dd45d618e37bd3d07f275fcd1ca2ce23/transformed/jetified-firebase-messaging-23.1.2/AndroidManifest.xml:33:13-36
+169            android:permission="com.google.android.c2dm.permission.SEND" >
+169-->[com.google.firebase:firebase-messaging:23.1.2] /home/pankaj/.gradle/caches/transforms-3/dd45d618e37bd3d07f275fcd1ca2ce23/transformed/jetified-firebase-messaging-23.1.2/AndroidManifest.xml:34:13-73
+170            <intent-filter>
+170-->[:react-native-firebase_messaging] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/messaging/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:29:13-31:29
+171                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+171-->[:react-native-firebase_messaging] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/messaging/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:30:17-81
+171-->[:react-native-firebase_messaging] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/messaging/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:30:25-78
+172            </intent-filter>
+173        </receiver>
+174        <!--
+175             FirebaseMessagingService performs security checks at runtime,
+176             but set to not exported to explicitly avoid allowing another app to call it.
+177        -->
+178        <service
+178-->[com.google.firebase:firebase-messaging:23.1.2] /home/pankaj/.gradle/caches/transforms-3/dd45d618e37bd3d07f275fcd1ca2ce23/transformed/jetified-firebase-messaging-23.1.2/AndroidManifest.xml:44:9-51:19
+179            android:name="com.google.firebase.messaging.FirebaseMessagingService"
+179-->[com.google.firebase:firebase-messaging:23.1.2] /home/pankaj/.gradle/caches/transforms-3/dd45d618e37bd3d07f275fcd1ca2ce23/transformed/jetified-firebase-messaging-23.1.2/AndroidManifest.xml:45:13-82
+180            android:directBootAware="true"
+180-->[com.google.firebase:firebase-messaging:23.1.2] /home/pankaj/.gradle/caches/transforms-3/dd45d618e37bd3d07f275fcd1ca2ce23/transformed/jetified-firebase-messaging-23.1.2/AndroidManifest.xml:46:13-43
+181            android:exported="false" >
+181-->[com.google.firebase:firebase-messaging:23.1.2] /home/pankaj/.gradle/caches/transforms-3/dd45d618e37bd3d07f275fcd1ca2ce23/transformed/jetified-firebase-messaging-23.1.2/AndroidManifest.xml:47:13-37
+182            <intent-filter android:priority="-500" >
+182-->[:react-native-firebase_messaging] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/messaging/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:20:13-22:29
+183                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+183-->[:react-native-firebase_messaging] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/messaging/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:21:17-78
+183-->[:react-native-firebase_messaging] /home/pankaj/Downloads/Logistiex/node_modules/@react-native-firebase/messaging/android/build/intermediates/merged_manifest/debug/AndroidManifest.xml:21:25-75
+184            </intent-filter>
+185        </service>
+186
+187        <provider
+187-->[com.google.mlkit:common:17.2.0] /home/pankaj/.gradle/caches/transforms-3/e2475445a5f6e377a4659fb7940c9bea/transformed/jetified-common-17.2.0/AndroidManifest.xml:9:9-13:38
+188            android:name="com.google.mlkit.common.internal.MlKitInitProvider"
+188-->[com.google.mlkit:common:17.2.0] /home/pankaj/.gradle/caches/transforms-3/e2475445a5f6e377a4659fb7940c9bea/transformed/jetified-common-17.2.0/AndroidManifest.xml:10:13-78
+189            android:authorities="com.demoproject.mlkitinitprovider"
+189-->[com.google.mlkit:common:17.2.0] /home/pankaj/.gradle/caches/transforms-3/e2475445a5f6e377a4659fb7940c9bea/transformed/jetified-common-17.2.0/AndroidManifest.xml:11:13-69
+190            android:exported="false"
+190-->[com.google.mlkit:common:17.2.0] /home/pankaj/.gradle/caches/transforms-3/e2475445a5f6e377a4659fb7940c9bea/transformed/jetified-common-17.2.0/AndroidManifest.xml:12:13-37
+191            android:initOrder="99" />
+191-->[com.google.mlkit:common:17.2.0] /home/pankaj/.gradle/caches/transforms-3/e2475445a5f6e377a4659fb7940c9bea/transformed/jetified-common-17.2.0/AndroidManifest.xml:13:13-35
+192
+193        <service
+193-->[com.google.android.datatransport:transport-backend-cct:3.1.8] /home/pankaj/.gradle/caches/transforms-3/3c7e23b83618651b58f6210fcc1f3dc9/transformed/jetified-transport-backend-cct-3.1.8/AndroidManifest.xml:28:9-34:19
+194            android:name="com.google.android.datatransport.runtime.backends.TransportBackendDiscovery"
+194-->[com.google.android.datatransport:transport-backend-cct:3.1.8] /home/pankaj/.gradle/caches/transforms-3/3c7e23b83618651b58f6210fcc1f3dc9/transformed/jetified-transport-backend-cct-3.1.8/AndroidManifest.xml:29:13-103
+195            android:exported="false" >
+195-->[com.google.android.datatransport:transport-backend-cct:3.1.8] /home/pankaj/.gradle/caches/transforms-3/3c7e23b83618651b58f6210fcc1f3dc9/transformed/jetified-transport-backend-cct-3.1.8/AndroidManifest.xml:30:13-37
+196            <meta-data
+196-->[com.google.android.datatransport:transport-backend-cct:3.1.8] /home/pankaj/.gradle/caches/transforms-3/3c7e23b83618651b58f6210fcc1f3dc9/transformed/jetified-transport-backend-cct-3.1.8/AndroidManifest.xml:31:13-33:39
+197                android:name="backend:com.google.android.datatransport.cct.CctBackendFactory"
+197-->[com.google.android.datatransport:transport-backend-cct:3.1.8] /home/pankaj/.gradle/caches/transforms-3/3c7e23b83618651b58f6210fcc1f3dc9/transformed/jetified-transport-backend-cct-3.1.8/AndroidManifest.xml:32:17-94
+198                android:value="cct" />
+198-->[com.google.android.datatransport:transport-backend-cct:3.1.8] /home/pankaj/.gradle/caches/transforms-3/3c7e23b83618651b58f6210fcc1f3dc9/transformed/jetified-transport-backend-cct-3.1.8/AndroidManifest.xml:33:17-36
+199        </service>
+200        <service
+200-->[com.google.android.datatransport:transport-runtime:3.1.8] /home/pankaj/.gradle/caches/transforms-3/00566a39db566487e6da5f469ee926b3/transformed/jetified-transport-runtime-3.1.8/AndroidManifest.xml:26:9-30:19
+201            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService"
+201-->[com.google.android.datatransport:transport-runtime:3.1.8] /home/pankaj/.gradle/caches/transforms-3/00566a39db566487e6da5f469ee926b3/transformed/jetified-transport-runtime-3.1.8/AndroidManifest.xml:27:13-117
+202            android:exported="false"
+202-->[com.google.android.datatransport:transport-runtime:3.1.8] /home/pankaj/.gradle/caches/transforms-3/00566a39db566487e6da5f469ee926b3/transformed/jetified-transport-runtime-3.1.8/AndroidManifest.xml:28:13-37
+203            android:permission="android.permission.BIND_JOB_SERVICE" >
+203-->[com.google.android.datatransport:transport-runtime:3.1.8] /home/pankaj/.gradle/caches/transforms-3/00566a39db566487e6da5f469ee926b3/transformed/jetified-transport-runtime-3.1.8/AndroidManifest.xml:29:13-69
+204        </service>
+205
+206        <receiver
+206-->[com.google.android.datatransport:transport-runtime:3.1.8] /home/pankaj/.gradle/caches/transforms-3/00566a39db566487e6da5f469ee926b3/transformed/jetified-transport-runtime-3.1.8/AndroidManifest.xml:32:9-34:40
+207            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver"
+207-->[com.google.android.datatransport:transport-runtime:3.1.8] /home/pankaj/.gradle/caches/transforms-3/00566a39db566487e6da5f469ee926b3/transformed/jetified-transport-runtime-3.1.8/AndroidManifest.xml:33:13-132
+208            android:exported="false" />
+208-->[com.google.android.datatransport:transport-runtime:3.1.8] /home/pankaj/.gradle/caches/transforms-3/00566a39db566487e6da5f469ee926b3/transformed/jetified-transport-runtime-3.1.8/AndroidManifest.xml:34:13-37
+209
+210        <provider
+210-->[com.google.firebase:firebase-common:20.3.2] /home/pankaj/.gradle/caches/transforms-3/222948e1cea199507c8ac58f1031aabf/transformed/jetified-firebase-common-20.3.2/AndroidManifest.xml:25:9-30:39
+211            android:name="com.google.firebase.provider.FirebaseInitProvider"
+211-->[com.google.firebase:firebase-common:20.3.2] /home/pankaj/.gradle/caches/transforms-3/222948e1cea199507c8ac58f1031aabf/transformed/jetified-firebase-common-20.3.2/AndroidManifest.xml:26:13-77
+212            android:authorities="com.demoproject.firebaseinitprovider"
+212-->[com.google.firebase:firebase-common:20.3.2] /home/pankaj/.gradle/caches/transforms-3/222948e1cea199507c8ac58f1031aabf/transformed/jetified-firebase-common-20.3.2/AndroidManifest.xml:27:13-72
+213            android:directBootAware="true"
+213-->[com.google.firebase:firebase-common:20.3.2] /home/pankaj/.gradle/caches/transforms-3/222948e1cea199507c8ac58f1031aabf/transformed/jetified-firebase-common-20.3.2/AndroidManifest.xml:28:13-43
+214            android:exported="false"
+214-->[com.google.firebase:firebase-common:20.3.2] /home/pankaj/.gradle/caches/transforms-3/222948e1cea199507c8ac58f1031aabf/transformed/jetified-firebase-common-20.3.2/AndroidManifest.xml:29:13-37
+215            android:initOrder="100" />
+215-->[com.google.firebase:firebase-common:20.3.2] /home/pankaj/.gradle/caches/transforms-3/222948e1cea199507c8ac58f1031aabf/transformed/jetified-firebase-common-20.3.2/AndroidManifest.xml:30:13-36
+216        <provider
+216-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:31:9-39:20
+217            android:name="androidx.startup.InitializationProvider"
+217-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:32:13-67
+218            android:authorities="com.demoproject.androidx-startup"
+218-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:33:13-68
+219            android:exported="false" >
+219-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:34:13-37
+220            <meta-data
+220-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:36:13-38:52
+221                android:name="androidx.work.WorkManagerInitializer"
+221-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:37:17-68
+222                android:value="androidx.startup" />
+222-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:38:17-49
+223            <meta-data
+223-->[androidx.emoji2:emoji2:1.0.0] /home/pankaj/.gradle/caches/transforms-3/b261c6f403307910e557cc2f90eed1e8/transformed/jetified-emoji2-1.0.0/AndroidManifest.xml:31:13-33:52
+224                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+224-->[androidx.emoji2:emoji2:1.0.0] /home/pankaj/.gradle/caches/transforms-3/b261c6f403307910e557cc2f90eed1e8/transformed/jetified-emoji2-1.0.0/AndroidManifest.xml:32:17-75
+225                android:value="androidx.startup" />
+225-->[androidx.emoji2:emoji2:1.0.0] /home/pankaj/.gradle/caches/transforms-3/b261c6f403307910e557cc2f90eed1e8/transformed/jetified-emoji2-1.0.0/AndroidManifest.xml:33:17-49
+226            <meta-data
+226-->[androidx.lifecycle:lifecycle-process:2.4.0] /home/pankaj/.gradle/caches/transforms-3/619a89f1314a1f65bd02b1ae20d6fac5/transformed/jetified-lifecycle-process-2.4.0/AndroidManifest.xml:31:13-33:52
+227                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+227-->[androidx.lifecycle:lifecycle-process:2.4.0] /home/pankaj/.gradle/caches/transforms-3/619a89f1314a1f65bd02b1ae20d6fac5/transformed/jetified-lifecycle-process-2.4.0/AndroidManifest.xml:32:17-78
+228                android:value="androidx.startup" />
+228-->[androidx.lifecycle:lifecycle-process:2.4.0] /home/pankaj/.gradle/caches/transforms-3/619a89f1314a1f65bd02b1ae20d6fac5/transformed/jetified-lifecycle-process-2.4.0/AndroidManifest.xml:33:17-49
+229        </provider>
+230
+231        <service
+231-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:41:9-46:35
+232            android:name="androidx.work.impl.background.systemalarm.SystemAlarmService"
+232-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:42:13-88
+233            android:directBootAware="false"
+233-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:43:13-44
+234            android:enabled="@bool/enable_system_alarm_service_default"
+234-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:44:13-72
+235            android:exported="false" />
+235-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:45:13-37
+236        <service
+236-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:47:9-53:35
+237            android:name="androidx.work.impl.background.systemjob.SystemJobService"
+237-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:48:13-84
+238            android:directBootAware="false"
+238-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:49:13-44
+239            android:enabled="@bool/enable_system_job_service_default"
+239-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:50:13-70
+240            android:exported="true"
+240-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:51:13-36
+241            android:permission="android.permission.BIND_JOB_SERVICE" />
+241-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:52:13-69
+242        <service
+242-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:54:9-59:35
+243            android:name="androidx.work.impl.foreground.SystemForegroundService"
+243-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:55:13-81
+244            android:directBootAware="false"
+244-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:56:13-44
+245            android:enabled="@bool/enable_system_foreground_service_default"
+245-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:57:13-77
+246            android:exported="false" />
+246-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:58:13-37
+247
+248        <receiver
+248-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:61:9-66:35
+249            android:name="androidx.work.impl.utils.ForceStopRunnable$BroadcastReceiver"
+249-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:62:13-88
+250            android:directBootAware="false"
+250-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:63:13-44
+251            android:enabled="true"
+251-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:64:13-35
+252            android:exported="false" />
+252-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:65:13-37
+253        <receiver
+253-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:67:9-77:20
+254            android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryChargingProxy"
+254-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:68:13-106
+255            android:directBootAware="false"
+255-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:69:13-44
+256            android:enabled="false"
+256-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:70:13-36
+257            android:exported="false" >
+257-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:71:13-37
+258            <intent-filter>
+258-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:73:13-76:29
+259                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
+259-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:74:17-87
+259-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:74:25-84
+260                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
+260-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:75:17-90
+260-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:75:25-87
+261            </intent-filter>
+262        </receiver>
+263        <receiver
+263-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:78:9-88:20
+264            android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$BatteryNotLowProxy"
+264-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:79:13-104
+265            android:directBootAware="false"
+265-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:80:13-44
+266            android:enabled="false"
+266-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:81:13-36
+267            android:exported="false" >
+267-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:82:13-37
+268            <intent-filter>
+268-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:84:13-87:29
+269                <action android:name="android.intent.action.BATTERY_OKAY" />
+269-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:85:17-77
+269-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:85:25-74
+270                <action android:name="android.intent.action.BATTERY_LOW" />
+270-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:86:17-76
+270-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:86:25-73
+271            </intent-filter>
+272        </receiver>
+273        <receiver
+273-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:89:9-99:20
+274            android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$StorageNotLowProxy"
+274-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:90:13-104
+275            android:directBootAware="false"
+275-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:91:13-44
+276            android:enabled="false"
+276-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:92:13-36
+277            android:exported="false" >
+277-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:93:13-37
+278            <intent-filter>
+278-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:95:13-98:29
+279                <action android:name="android.intent.action.DEVICE_STORAGE_LOW" />
+279-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:96:17-83
+279-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:96:25-80
+280                <action android:name="android.intent.action.DEVICE_STORAGE_OK" />
+280-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:97:17-82
+280-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:97:25-79
+281            </intent-filter>
+282        </receiver>
+283        <receiver
+283-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:100:9-109:20
+284            android:name="androidx.work.impl.background.systemalarm.ConstraintProxy$NetworkStateProxy"
+284-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:101:13-103
+285            android:directBootAware="false"
+285-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:102:13-44
+286            android:enabled="false"
+286-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:103:13-36
+287            android:exported="false" >
+287-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:104:13-37
+288            <intent-filter>
+288-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:106:13-108:29
+289                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+289-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:107:17-79
+289-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:107:25-76
+290            </intent-filter>
+291        </receiver>
+292        <receiver
+292-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:110:9-121:20
+293            android:name="androidx.work.impl.background.systemalarm.RescheduleReceiver"
+293-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:111:13-88
+294            android:directBootAware="false"
+294-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:112:13-44
+295            android:enabled="false"
+295-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:113:13-36
+296            android:exported="false" >
+296-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:114:13-37
+297            <intent-filter>
+297-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:116:13-120:29
+298                <action android:name="android.intent.action.BOOT_COMPLETED" />
+298-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:117:17-79
+298-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:117:25-76
+299                <action android:name="android.intent.action.TIME_SET" />
+299-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:118:17-73
+299-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:118:25-70
+300                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+300-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:119:17-81
+300-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:119:25-78
+301            </intent-filter>
+302        </receiver>
+303        <receiver
+303-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:122:9-131:20
+304            android:name="androidx.work.impl.background.systemalarm.ConstraintProxyUpdateReceiver"
+304-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:123:13-99
+305            android:directBootAware="false"
+305-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:124:13-44
+306            android:enabled="@bool/enable_system_alarm_service_default"
+306-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:125:13-72
+307            android:exported="false" >
+307-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:126:13-37
+308            <intent-filter>
+308-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:128:13-130:29
+309                <action android:name="androidx.work.impl.background.systemalarm.UpdateProxies" />
+309-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:129:17-98
+309-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:129:25-95
+310            </intent-filter>
+311        </receiver>
+312        <receiver
+312-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:132:9-142:20
+313            android:name="androidx.work.impl.diagnostics.DiagnosticsReceiver"
+313-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:133:13-78
+314            android:directBootAware="false"
+314-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:134:13-44
+315            android:enabled="true"
+315-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:135:13-35
+316            android:exported="true"
+316-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:136:13-36
+317            android:permission="android.permission.DUMP" >
+317-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:137:13-57
+318            <intent-filter>
+318-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:139:13-141:29
+319                <action android:name="androidx.work.diagnostics.REQUEST_DIAGNOSTICS" />
+319-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:140:17-88
+319-->[androidx.work:work-runtime:2.7.1] /home/pankaj/.gradle/caches/transforms-3/92879e6e6f3fd6aeedb9363b6fa828d4/transformed/work-runtime-2.7.1/AndroidManifest.xml:140:25-85
+320            </intent-filter>
+321        </receiver>
+322
+323        <service
+323-->[androidx.room:room-runtime:2.2.5] /home/pankaj/.gradle/caches/transforms-3/dbd75f7f051acfdc2dc1dcf87eb72c95/transformed/room-runtime-2.2.5/AndroidManifest.xml:25:9-28:40
+324            android:name="androidx.room.MultiInstanceInvalidationService"
+324-->[androidx.room:room-runtime:2.2.5] /home/pankaj/.gradle/caches/transforms-3/dbd75f7f051acfdc2dc1dcf87eb72c95/transformed/room-runtime-2.2.5/AndroidManifest.xml:26:13-74
+325            android:directBootAware="true"
+325-->[androidx.room:room-runtime:2.2.5] /home/pankaj/.gradle/caches/transforms-3/dbd75f7f051acfdc2dc1dcf87eb72c95/transformed/room-runtime-2.2.5/AndroidManifest.xml:27:13-43
+326            android:exported="false" />
+326-->[androidx.room:room-runtime:2.2.5] /home/pankaj/.gradle/caches/transforms-3/dbd75f7f051acfdc2dc1dcf87eb72c95/transformed/room-runtime-2.2.5/AndroidManifest.xml:28:13-37
+327
+328        <activity
+328-->[com.google.android.gms:play-services-auth:20.3.0] /home/pankaj/.gradle/caches/transforms-3/4492490d96c52724de1d345e5c4bb8a0/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:23:9-27:75
+329            android:name="com.google.android.gms.auth.api.signin.internal.SignInHubActivity"
+329-->[com.google.android.gms:play-services-auth:20.3.0] /home/pankaj/.gradle/caches/transforms-3/4492490d96c52724de1d345e5c4bb8a0/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:24:13-93
+330            android:excludeFromRecents="true"
+330-->[com.google.android.gms:play-services-auth:20.3.0] /home/pankaj/.gradle/caches/transforms-3/4492490d96c52724de1d345e5c4bb8a0/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:25:13-46
+331            android:exported="false"
+331-->[com.google.android.gms:play-services-auth:20.3.0] /home/pankaj/.gradle/caches/transforms-3/4492490d96c52724de1d345e5c4bb8a0/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:26:13-37
+332            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+332-->[com.google.android.gms:play-services-auth:20.3.0] /home/pankaj/.gradle/caches/transforms-3/4492490d96c52724de1d345e5c4bb8a0/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:27:13-72
+333        <!--
+334            Service handling Google Sign-In user revocation. For apps that do not integrate with
+335            Google Sign-In, this service will never be started.
+336        -->
+337        <service
+337-->[com.google.android.gms:play-services-auth:20.3.0] /home/pankaj/.gradle/caches/transforms-3/4492490d96c52724de1d345e5c4bb8a0/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:33:9-37:51
+338            android:name="com.google.android.gms.auth.api.signin.RevocationBoundService"
+338-->[com.google.android.gms:play-services-auth:20.3.0] /home/pankaj/.gradle/caches/transforms-3/4492490d96c52724de1d345e5c4bb8a0/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:34:13-89
+339            android:exported="true"
+339-->[com.google.android.gms:play-services-auth:20.3.0] /home/pankaj/.gradle/caches/transforms-3/4492490d96c52724de1d345e5c4bb8a0/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:35:13-36
+340            android:permission="com.google.android.gms.auth.api.signin.permission.REVOCATION_NOTIFICATION"
+340-->[com.google.android.gms:play-services-auth:20.3.0] /home/pankaj/.gradle/caches/transforms-3/4492490d96c52724de1d345e5c4bb8a0/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:36:13-107
+341            android:visibleToInstantApps="true" /> <!-- Needs to be explicitly declared on P+ -->
+341-->[com.google.android.gms:play-services-auth:20.3.0] /home/pankaj/.gradle/caches/transforms-3/4492490d96c52724de1d345e5c4bb8a0/transformed/jetified-play-services-auth-20.3.0/AndroidManifest.xml:37:13-48
+342        <uses-library
+342-->[com.google.android.gms:play-services-maps:18.0.2] /home/pankaj/.gradle/caches/transforms-3/52a2fce4aee195acae89b335dcc6797a/transformed/jetified-play-services-maps-18.0.2/AndroidManifest.xml:39:9-41:40
+343            android:name="org.apache.http.legacy"
+343-->[com.google.android.gms:play-services-maps:18.0.2] /home/pankaj/.gradle/caches/transforms-3/52a2fce4aee195acae89b335dcc6797a/transformed/jetified-play-services-maps-18.0.2/AndroidManifest.xml:40:13-50
+344            android:required="false" />
+344-->[com.google.android.gms:play-services-maps:18.0.2] /home/pankaj/.gradle/caches/transforms-3/52a2fce4aee195acae89b335dcc6797a/transformed/jetified-play-services-maps-18.0.2/AndroidManifest.xml:41:13-37
+345
+346        <activity
+346-->[com.google.android.gms:play-services-base:18.1.0] /home/pankaj/.gradle/caches/transforms-3/3c5cd40a450fb7a3b3a3cb4263b56109/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:20:9-22:45
+347            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+347-->[com.google.android.gms:play-services-base:18.1.0] /home/pankaj/.gradle/caches/transforms-3/3c5cd40a450fb7a3b3a3cb4263b56109/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:20:19-85
+348            android:exported="false"
+348-->[com.google.android.gms:play-services-base:18.1.0] /home/pankaj/.gradle/caches/transforms-3/3c5cd40a450fb7a3b3a3cb4263b56109/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:22:19-43
+349            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+349-->[com.google.android.gms:play-services-base:18.1.0] /home/pankaj/.gradle/caches/transforms-3/3c5cd40a450fb7a3b3a3cb4263b56109/transformed/jetified-play-services-base-18.1.0/AndroidManifest.xml:21:19-78
+350
+351        <meta-data
+351-->[com.google.android.gms:play-services-basement:18.1.0] /home/pankaj/.gradle/caches/transforms-3/7c678868a1ca807badefe5a8fd8327ab/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:21:9-23:69
+352            android:name="com.google.android.gms.version"
+352-->[com.google.android.gms:play-services-basement:18.1.0] /home/pankaj/.gradle/caches/transforms-3/7c678868a1ca807badefe5a8fd8327ab/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:22:13-58
+353            android:value="@integer/google_play_services_version" />
+353-->[com.google.android.gms:play-services-basement:18.1.0] /home/pankaj/.gradle/caches/transforms-3/7c678868a1ca807badefe5a8fd8327ab/transformed/jetified-play-services-basement-18.1.0/AndroidManifest.xml:23:13-66
+354
+355        <activity
+355-->[com.jakewharton:process-phoenix:2.1.2] /home/pankaj/.gradle/caches/transforms-3/30ba9b29cacc2d5e94ef4b7e4f864a48/transformed/jetified-process-phoenix-2.1.2/AndroidManifest.xml:8:9-12:75
+356            android:name="com.jakewharton.processphoenix.ProcessPhoenix"
+356-->[com.jakewharton:process-phoenix:2.1.2] /home/pankaj/.gradle/caches/transforms-3/30ba9b29cacc2d5e94ef4b7e4f864a48/transformed/jetified-process-phoenix-2.1.2/AndroidManifest.xml:9:13-73
+357            android:exported="false"
+357-->[com.jakewharton:process-phoenix:2.1.2] /home/pankaj/.gradle/caches/transforms-3/30ba9b29cacc2d5e94ef4b7e4f864a48/transformed/jetified-process-phoenix-2.1.2/AndroidManifest.xml:10:13-37
+358            android:process=":phoenix"
+358-->[com.jakewharton:process-phoenix:2.1.2] /home/pankaj/.gradle/caches/transforms-3/30ba9b29cacc2d5e94ef4b7e4f864a48/transformed/jetified-process-phoenix-2.1.2/AndroidManifest.xml:11:13-39
+359            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+359-->[com.jakewharton:process-phoenix:2.1.2] /home/pankaj/.gradle/caches/transforms-3/30ba9b29cacc2d5e94ef4b7e4f864a48/transformed/jetified-process-phoenix-2.1.2/AndroidManifest.xml:12:13-72
+360    </application>
+361
+362</manifest>
