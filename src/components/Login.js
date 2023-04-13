@@ -9,6 +9,8 @@ import { Pressable,Linking } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { backendUrl } from '../utils/backendUrl';
 import { BackHandler } from 'react-native';
+
+import messaging from '@react-native-firebase/messaging';
 export default function Login() {
 
   const [email, setEmail] = useState('');
@@ -17,6 +19,7 @@ export default function Login() {
   const [showModal, setShowModal] = useState(false);
   const [message, setMessage] = useState(0);
   const [loginClicked, setLoginClicked] = useState(false);
+  const [notificationToken,setNotificationToken]=useState('');
   const navigation = useNavigation();
 
   const storeData = async(data) => {
@@ -56,6 +59,19 @@ export default function Login() {
     }
   };
   useEffect(() => {
+    messaging().requestPermission().then((permission) => {
+      if (permission) {
+        console.log('Notification permission granted');
+        messaging().getToken().then((token) => {
+          console.log('FCM Token:', token);
+          setNotificationToken(token);
+        });
+      } else {
+        console.log('Notification permission denied');
+      }
+    });
+  }, [])
+  useEffect(() => {
     const backHandler = BackHandler.addEventListener(
       'hardwareBackPress',
       handleBackButtonPress
@@ -77,7 +93,7 @@ export default function Login() {
   const handleLogin = async() => {
     setLoginClicked(true);
     await axios
-      .post(backendUrl + 'Login/login', {email: email, password: password})
+      .post(backendUrl + 'Login/login', {email: email, password: password,notificationToken:notificationToken,})
       .then(
         async response => {
           setLoginClicked(false);

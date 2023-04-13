@@ -23,6 +23,10 @@ import org.reactnative.maskedview.RNCMaskedViewPackage;
 import com.reactnativecommunity.netinfo.NetInfoPackage;
 // @react-native-community/progress-bar-android
 import com.reactnativecommunity.androidprogressbar.RNCProgressBarPackage;
+// @react-native-firebase/app
+import io.invertase.firebase.app.ReactNativeFirebaseAppPackage;
+// @react-native-firebase/messaging
+import io.invertase.firebase.messaging.ReactNativeFirebaseMessagingPackage;
 // @react-native-picker/picker
 import com.reactnativecommunity.picker.RNCPickerPackage;
 // lottie-react-native
@@ -116,6 +120,8 @@ public class PackageList {
       new RNCMaskedViewPackage(),
       new NetInfoPackage(),
       new RNCProgressBarPackage(),
+      new ReactNativeFirebaseAppPackage(),
+      new ReactNativeFirebaseMessagingPackage(),
       new RNCPickerPackage(),
       new LottiePackage(),
       new RNReactNativeABeepPackage(),

@@ -69,6 +69,7 @@ import HandoverShipmentRTO from './src/components/newSeller/HandoverShipmentRTO'
 import {LogBox} from 'react-native';
 import MyTrip from './src/components/MyTrip';
 import {backendUrl} from './src/utils/backendUrl';
+import messaging from '@react-native-firebase/messaging';
 const db = openDatabase({name: 'rn_sqlite'});
 
 const Stack = createStackNavigator();
@@ -114,6 +115,18 @@ function StackNavigators({navigation}) {
         console.log('Storage permission denied');
       }
 
+      
+      messaging().requestPermission().then((permission) => {
+        if (permission) {
+          console.log('Notification permission granted');
+          // messaging().getToken().then((token) => {
+            // console.log('FCM Token:', token);
+          // });
+        } else {
+          console.log('Notification permission denied');
+        }
+      });
+
       const locationPermission = await PermissionsAndroid.request(
         PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
         {
@@ -151,6 +164,15 @@ function StackNavigators({navigation}) {
       console.log(e);
     }
   };
+
+  useEffect(() => {
+    const unsubscribe = messaging().onMessage(async remoteMessage => {
+      Alert.alert(remoteMessage.notification.title, remoteMessage.notification.body);
+    });
+  
+    return unsubscribe;
+  }, []);
+  
 
   useEffect(() => {
     // This useEffect  is use to hide warnings in mobile screen .
